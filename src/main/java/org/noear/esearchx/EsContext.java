@@ -73,6 +73,8 @@ public class EsContext {
     }
 
     public String execAsBody(EsCommand cmd) throws IOException {
+        lastCommand = cmd;
+
         if (PriUtils.isEmpty(cmd.dsl)) {
             return getHttp(cmd.path).execAsBody(cmd.method);
         } else {
@@ -81,6 +83,8 @@ public class EsContext {
     }
 
     public int execAsCode(EsCommand cmd) throws IOException {
+        lastCommand = cmd;
+
         if (PriUtils.isEmpty(cmd.dsl)) {
             return getHttp(cmd.path).execAsCode(cmd.method);
         } else {
