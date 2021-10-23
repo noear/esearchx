@@ -5,6 +5,7 @@ import org.junit.runner.RunWith;
 import org.noear.esearchx.EsContext;
 import org.noear.snack.ONode;
 import org.noear.solon.Utils;
+import org.noear.solon.annotation.Inject;
 import org.noear.solon.test.SolonJUnit4ClassRunner;
 
 import java.io.IOException;
@@ -21,7 +22,11 @@ public class Test0 {
     final String indice = "water$water_log_api_202110";
     final String alias = "water$water_log_api";
 
-    EsContext context = new EsContext("eshost:30480,eshost:30480");
+
+    @Inject("${test.esx}")
+    EsContext context;
+    //EsContext context = new EsContext("eshost:30480"); //直接实例化
+
 
     @Test
     public void test0() throws Exception {

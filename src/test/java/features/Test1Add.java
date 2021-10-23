@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.noear.esearchx.EsContext;
 import org.noear.solon.Utils;
+import org.noear.solon.annotation.Inject;
 import org.noear.solon.test.SolonJUnit4ClassRunner;
 
 import java.time.LocalDateTime;
@@ -22,7 +23,10 @@ public class Test1Add {
     final String indice = "water$water_log_api_202110";
     final String indice2 = "water$water_log_api_202109";
 
-    EsContext context = new EsContext("eshost:30480,eshost:30480");
+
+    @Inject("${test.esx}")
+    EsContext context;
+    //EsContext context = new EsContext("eshost:30480"); //直接实例化
 
 
     @Test

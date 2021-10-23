@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.noear.esearchx.EsContext;
 import org.noear.esearchx.model.EsPage;
+import org.noear.solon.annotation.Inject;
 import org.noear.solon.test.SolonJUnit4ClassRunner;
 
 /**
@@ -18,7 +19,10 @@ public class Test2SelectPlus {
 
     final String indice = "water$water_log_api";
 
-    EsContext context = new EsContext("eshost:30480,eshost:30480");
+
+    @Inject("${test.esx}")
+    EsContext context;
+    //EsContext context = new EsContext("eshost:30480"); //直接实例化
 
 
     @Test
