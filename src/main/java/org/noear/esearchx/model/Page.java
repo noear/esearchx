@@ -9,9 +9,14 @@ import java.util.List;
 public class Page<T> implements Serializable {
     final long total;
     final List<T> list;
+    final double maxScore;
 
     public long getTotal() {
         return total;
+    }
+
+    public double getMaxScore() {
+        return maxScore;
     }
 
     public List<T> getList() {
@@ -26,16 +31,18 @@ public class Page<T> implements Serializable {
         }
     }
 
-    public Page(long total, List<T> list) {
+    public Page(long total, double maxScore, List<T> list) {
         this.total = total;
+        this.maxScore = maxScore;
         this.list = list;
     }
 
     @Override
     public String toString() {
-        return "EsResult{" +
+        return "Page{" +
                 "total=" + total +
                 ", list=" + list +
+                ", maxScore=" + maxScore +
                 '}';
     }
 }

@@ -65,7 +65,6 @@ public class EsTableQuery {
     //
 
 
-
     ////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //
@@ -236,6 +235,7 @@ public class EsTableQuery {
         ONode oHits = ONode.loadStr(json).get("hits");
 
         long total = oHits.get("total").get("value").getLong();
+        double max_score = oHits.get("oHits").getDouble();
 
         oHits.get("hits").forEach(n -> {
             n.setAll(n.get("_source"));
@@ -243,6 +243,6 @@ public class EsTableQuery {
 
         List<T> list = oHits.get("hits").toObjectList(clz);
 
-        return new Page<>(total, list);
+        return new Page<>(total, max_score, list);
     }
 }

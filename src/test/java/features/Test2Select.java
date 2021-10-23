@@ -16,9 +16,7 @@ import org.noear.solon.test.SolonJUnit4ClassRunner;
 @RunWith(SolonJUnit4ClassRunner.class)
 public class Test2Select {
 
-    final String indiceNoExit = "water$water_log_api";
-    final String indiceNew = "water$water_log_api_new";
-    final String indice = "water$water_log_api_202110";
+    final String indice = "water$water_log_api";
 
     EsContext context = new EsContext("eshost:30480,eshost:30480");
 
@@ -39,6 +37,17 @@ public class Test2Select {
                 .select(LogDo.class);
 
         assert result.getListSize() == 10;
+    }
+
+    @Test
+    public void test10_1() throws Exception {
+
+        Page<LogDo> result = context.table(indice)
+                .where(c -> c.term("tag2", "list1"))
+                .limit(0, 10)
+                .select(LogDo.class);
+
+        assert result.getListSize() == 0;
     }
 
     @Test
