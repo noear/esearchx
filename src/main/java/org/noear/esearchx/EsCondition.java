@@ -99,11 +99,19 @@ public class EsCondition {
         return this;
     }
 
+    /**
+     * match_phrase
+     */
+    public EsCondition matchPhrase(String field, Object value) {
+        filterSet("match_phrase", field, value);
+        return this;
+    }
+
 
     /**
      * match_phrase_prefix
      */
-    public EsCondition matchPrefix(String field, Object value) {
+    public EsCondition matchPhrasePrefix(String field, Object value) {
         filterSet("match_phrase_prefix", field, value);
         return this;
     }

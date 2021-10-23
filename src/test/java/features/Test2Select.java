@@ -22,7 +22,7 @@ public class Test2Select {
 
 
     @Test
-    public void test1() throws Exception {
+    public void test_selectById() throws Exception {
         LogDo logDo = context.table("water$water_log_api_202110").selectById("1", LogDo.class);
         assert logDo != null;
         assert logDo.log_id == 1;
@@ -33,7 +33,7 @@ public class Test2Select {
     }
 
     @Test
-    public void test10() throws Exception {
+    public void test_term() throws Exception {
 
         EsPage<LogDo> result = context.table(indice)
                 .where(c -> c.term("tag", "list1"))
@@ -44,21 +44,10 @@ public class Test2Select {
     }
 
     @Test
-    public void test10_1() throws Exception {
+    public void test_terms() throws Exception {
 
         EsPage<LogDo> result = context.table(indice)
-                .where(c -> c.term("tag2", "list1"))
-                .limit(0, 10)
-                .select(LogDo.class);
-
-        assert result.getListSize() == 0;
-    }
-
-    @Test
-    public void test10_2() throws Exception {
-
-        EsPage<LogDo> result = context.table(indice)
-                .where(c -> c.terms("tag", "list1"))
+                .where(c -> c.terms("tag", "list1", "map1"))
                 .limit(0, 10)
                 .select(LogDo.class);
 
@@ -66,10 +55,10 @@ public class Test2Select {
     }
 
     @Test
-    public void test11() throws Exception {
+    public void test_prefix() throws Exception {
 
         EsPage<LogDo> result = context.table(indice)
-                .where(c -> c.must().term("tag", "list1").term("level", 3))
+                .where(c -> c.prefix("tag", "m"))
                 .limit(0, 10)
                 .select(LogDo.class);
 
@@ -77,132 +66,47 @@ public class Test2Select {
         assert result.getList().get(0).log_id > 0;
     }
 
+
+
     @Test
-    public void test20() throws Exception {
+    public void test_match() throws Exception {
 
         EsPage<LogDo> result = context.table(indice)
                 .where(c -> c.match("tag", "list1"))
                 .limit(0, 10)
                 .select(LogDo.class);
 
-        assert result.getListSize() == 10;
-        assert result.getList().get(0).log_id > 0;
-    }
-
-    @Test
-    public void test21() throws Exception {
-
-        EsPage<LogDo> result = context.table(indice)
-                .where(c -> c.must().match("tag", "list1").term("level", 3))
-                .limit(0, 10)
-                .select(LogDo.class);
-
-        assert result.getListSize() == 10;
-        assert result.getList().get(0).log_id > 0;
-    }
-
-    @Test
-    public void test22() throws Exception {
-
-        EsPage<LogDo> result = context.table(indice)
-                .where(c -> c.must()
-                        .match("tag", "list1")
-                        .term("level", 3)
-                        .add(c1 -> c1.mustNot()
-                                .matchPrefix("summary", "${")
-                                .matchPrefix("summary", "#{")))
-                .limit(0, 10)
-                .orderByDesc("log_id")
-                .select(LogDo.class);
-
         System.out.println(result);
-        assert result.getListSize() == 10;
-        assert result.getList().get(0).log_id > 0;
-    }
-
-    @Test
-    public void test30() throws Exception {
-        //输出字段控制（选择模式）
-        EsPage<LogDo> result = context.table(indice)
-                .where(c -> c.term("tag", "list1"))
-                .limit(0, 10)
-                .select("log_id,trace_id", LogDo.class);
 
         assert result.getListSize() == 10;
         assert result.getList().get(0).log_id > 0;
-        assert result.getList().get(0).tag == null;
     }
 
     @Test
-    public void test31() throws Exception {
-        //输出字段控制（排除模式）
+    public void test_matchPhrase() throws Exception {
+
         EsPage<LogDo> result = context.table(indice)
-                .where(c -> c.term("tag", "list1"))
+                .where(c -> c.matchPhrase("tag", "list1"))
                 .limit(0, 10)
-                .select("!log_id,trace_id", LogDo.class);
-
-        assert result.getListSize() == 10;
-        assert result.getList().get(0).log_id == 0;
-        assert result.getList().get(0).tag != null;
-    }
-
-    @Test
-    public void test40() throws Exception {
-        //输出字段控制（选择模式）
-        EsPage<LogDo> result = context.table(indice)
-                .where(c -> c.term("tag", "list1"))
-                .limit(5)
-                .orderByAsc("log_id")
-                .onAfter(239467464128819200l)
                 .select(LogDo.class);
 
         System.out.println(result);
 
-        assert result.getListSize() == 5;
-        assert result.getList().get(0).log_id < result.getList().get(1).log_id;
+        assert result.getListSize() == 10;
+        assert result.getList().get(0).log_id > 0;
     }
 
     @Test
-    public void test41() throws Exception {
-        //输出字段控制（选择模式）
+    public void test_matchPhrasePrefix() throws Exception {
+
         EsPage<LogDo> result = context.table(indice)
-                .where(c -> c.term("tag", "list1"))
+                .where(c -> c.matchPhrasePrefix("tag", "list1"))
                 .limit(0, 10)
-                .orderByDesc("log_id")
                 .select(LogDo.class);
 
-        assert result.getListSize() == 10;
-        assert result.getList().get(0).log_id > result.getList().get(1).log_id;
-    }
-
-    @Test
-    public void test42() throws Exception {
-        //输出字段控制（选择模式）
-        EsPage<LogDo> result = context.table(indice)
-                .where(c -> c.term("tag", "list1"))
-                .limit(0, 10)
-                .orderByDesc("level")
-                .andByAsc("log_id")
-                .select(LogDo.class);
+        System.out.println(result);
 
         assert result.getListSize() == 10;
-        assert result.getList().get(0).log_id < result.getList().get(1).log_id;
-    }
-
-    @Test
-    public void test50() throws Exception {
-        //输出字段控制（选择模式）
-        EsPage<LogDo> result = context.table(indice)
-                .where(c -> c.must()
-                        .term("tag", "list1")
-                        .range("level", r -> r.gt(3)))
-                .limit(0, 10)
-                .orderByAsc("level")
-                .andByAsc("log_id")
-                .select(LogDo.class);
-
-        assert result.getListSize() == 10;
-        assert result.getList().get(0).level > 3;
-        assert result.getList().get(0).log_id < result.getList().get(1).log_id;
+        assert result.getList().get(0).log_id > 0;
     }
 }
