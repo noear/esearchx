@@ -85,7 +85,7 @@ public class EsContext {
     }
 
     /**
-     * 表创建
+     * 表结构创建
      *
      * @param indiceName 索引名字
      */
@@ -99,7 +99,7 @@ public class EsContext {
     }
 
     /**
-     * 表是否存在
+     * 表结构是否存在
      *
      * @param indiceName 索引名字
      */
@@ -110,7 +110,7 @@ public class EsContext {
     }
 
     /**
-     * 表删除
+     * 表结构删除
      *
      * @param indiceName 索引名字
      */
@@ -121,11 +121,11 @@ public class EsContext {
     }
 
     /**
-     * 表结构获取
+     * 表结构显示
      *
      * @param indiceName 索引名字
      */
-    public String tableGet(String indiceName) throws IOException {
+    public String tableShow(String indiceName) throws IOException {
         String tmp = getHttp(String.format("/%s", indiceName)).get();
 
         return tmp;

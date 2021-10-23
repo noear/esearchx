@@ -3,6 +3,7 @@ package features;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.noear.esearchx.EsContext;
+import org.noear.snack.ONode;
 import org.noear.solon.Utils;
 import org.noear.solon.test.SolonJUnit4ClassRunner;
 
@@ -58,7 +59,7 @@ public class EsTest {
     }
 
     @Test
-    public void test3() throws Exception{
+    public void test3() throws Exception {
         test2Create("water$water_log_api_202110");
         test2Create("water$water_log_api_202109");
         test2Create("water$water_log_api_202108");
@@ -68,13 +69,32 @@ public class EsTest {
     }
 
     @Test
-    public void test4() throws Exception{
-        context.tableAliases(a->a
+    public void test4() throws Exception {
+        context.tableAliases(a -> a
                 .add("water$water_log_api_202110", alias)
                 .add("water$water_log_api_202109", alias)
                 .add("water$water_log_api_202108", alias)
                 .add("water$water_log_api_202107", alias)
                 .add("water$water_log_api_202106", alias)
                 .add("water$water_log_api_202105", alias));
+    }
+
+    @Test
+    public void test5() throws Exception {
+        String json = context.tableShow(indice);
+        System.out.println(json);
+        ONode oNode = ONode.loadStr(json);
+
+        assert oNode.get(indice).contains("mappings");
+        assert oNode.get(indice).contains("settings");
+
+        ////
+
+        json = context.tableShow(indiceNoExit); //不存在会 404 错误
+        System.out.println(json);
+        oNode = ONode.loadStr(json);
+
+        assert oNode.get(indiceNoExit).contains("mappings") == false;
+        assert oNode.get(indiceNoExit).contains("settings") == false;
     }
 }
