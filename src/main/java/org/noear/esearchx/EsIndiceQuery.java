@@ -16,17 +16,17 @@ import java.util.function.Consumer;
  * @author noear
  * @since 1.0
  */
-public class EsTableQuery {
+public class EsIndiceQuery {
     private final EsContext context;
-    private final String table;
+    private final String indiceName;
 
     private ONode dslq;
     private ONode queryMatch;
     private ONode item;
 
-    protected EsTableQuery(EsContext context, String table) {
+    protected EsIndiceQuery(EsContext context, String indiceName) {
         this.context = context;
-        this.table = table;
+        this.indiceName = indiceName;
     }
 
     private PriHttpUtils getHttp(String path) {
@@ -50,7 +50,7 @@ public class EsTableQuery {
     }
 
 
-    public EsTableQuery set(String field, Object value) {
+    public EsIndiceQuery set(String field, Object value) {
         if (item == null) {
             item = new ONode();
         }
@@ -70,7 +70,7 @@ public class EsTableQuery {
         cmd.method = PriWw.method_post;
         cmd.dslType = PriWw.mime_json;
         cmd.dsl = doc.toJson();
-        cmd.path = String.format("/%s/_doc/", table);
+        cmd.path = String.format("/%s/_doc/", indiceName);
 
         String tmp = context.execAsBody(cmd); //需要 post
         //return: {"_index":"water$water_log_api_202110","_type":"_doc","_id":"eaeb3a43674a45ee8abf7cca379e4834","_version":1,"result":"created","_shards":{"total":2,"successful":1,"failed":0},"_seq_no":0,"_primary_term":1}
@@ -83,7 +83,7 @@ public class EsTableQuery {
         cmd.method = PriWw.method_put;
         cmd.dslType = PriWw.mime_json;
         cmd.dsl = doc.toJson();
-        cmd.path = String.format("/%s/_doc/%s", table, docId);
+        cmd.path = String.format("/%s/_doc/%s", indiceName, docId);
 
         String tmp = context.execAsBody(cmd);; //需要 put
         //return: {"_index":"water$water_log_api_202110","_type":"_doc","_id":"eaeb3a43674a45ee8abf7cca379e4834","_version":1,"result":"created","_shards":{"total":2,"successful":1,"failed":0},"_seq_no":0,"_primary_term":1}
@@ -114,7 +114,7 @@ public class EsTableQuery {
         cmd.method = PriWw.method_post;
         cmd.dslType = PriWw.mime_ndjson;
         cmd.dsl = docJson.toString();
-        cmd.path = String.format("/%s/_doc/_bulk", table);
+        cmd.path = String.format("/%s/_doc/_bulk", indiceName);
 
         String tmp = context.execAsBody(cmd); //需要 post
         //return: {"_index":"water$water_log_api_202110","_type":"_doc","_id":"eaeb3a43674a45ee8abf7cca379e4834","_version":1,"result":"created","_shards":{"total":2,"successful":1,"failed":0},"_seq_no":0,"_primary_term":1}
@@ -142,7 +142,7 @@ public class EsTableQuery {
         cmd.method = PriWw.method_post;
         cmd.dslType = PriWw.mime_ndjson;
         cmd.dsl = docJson.toString();
-        cmd.path = String.format("/%s/_doc/_bulk", table);
+        cmd.path = String.format("/%s/_doc/_bulk", indiceName);
 
         String tmp = context.execAsBody(cmd); //需要 post
         //return: {"_index":"water$water_log_api_202110","_type":"_doc","_id":"eaeb3a43674a45ee8abf7cca379e4834","_version":1,"result":"created","_shards":{"total":2,"successful":1,"failed":0},"_seq_no":0,"_primary_term":1}
@@ -154,20 +154,20 @@ public class EsTableQuery {
     //
     // select
     //
-    public EsTableQuery where(Consumer<EsCondition> condition) {
+    public EsIndiceQuery where(Consumer<EsCondition> condition) {
         EsCondition c = new EsCondition();
         condition.accept(c);
         getDslq().set("query", c.oNode);
         return this;
     }
 
-    public EsTableQuery limit(int start, int size) {
+    public EsIndiceQuery limit(int start, int size) {
         getDslq().set("from", start);
         getDslq().set("size", size);
         return this;
     }
 
-    public EsTableQuery limit(int size) {
+    public EsIndiceQuery limit(int size) {
         getDslq().set("size", size);
         return this;
     }
@@ -176,22 +176,22 @@ public class EsTableQuery {
     //排序
     //
 
-    public EsTableQuery orderByAsc(String field) {
+    public EsIndiceQuery orderByAsc(String field) {
         getDslq().getOrNew("sort").getOrNew(field).set("order", "asc");
         return this;
     }
 
-    public EsTableQuery orderByDesc(String field) {
+    public EsIndiceQuery orderByDesc(String field) {
         getDslq().getOrNew("sort").getOrNew(field).set("order", "desc");
         return this;
     }
 
-    public EsTableQuery andByAsc(String field) {
+    public EsIndiceQuery andByAsc(String field) {
         getDslq().getOrNew("sort").getOrNew(field).set("order", "asc");
         return this;
     }
 
-    public EsTableQuery andByDesc(String field) {
+    public EsIndiceQuery andByDesc(String field) {
         getDslq().getOrNew("sort").getOrNew(field).set("order", "desc");
         return this;
     }
@@ -199,7 +199,7 @@ public class EsTableQuery {
     /**
      * search_after
      */
-    public EsTableQuery onAfter(Object... values) {
+    public EsIndiceQuery onAfter(Object... values) {
         getDslq().getOrNew("search_after").addAll(Arrays.asList(values));
         return this;
     }
@@ -207,7 +207,7 @@ public class EsTableQuery {
     /**
      * min_score
      * */
-    public EsTableQuery minScore(Object value){
+    public EsIndiceQuery minScore(Object value){
         getDslq().getOrNew("min_score").val(value);
         return this;
     }
@@ -242,7 +242,7 @@ public class EsTableQuery {
         cmd.method = PriWw.method_post;
         cmd.dslType = PriWw.mime_json;
         cmd.dsl = getDslq().toJson();
-        cmd.path = String.format("/%s/_search", table);
+        cmd.path = String.format("/%s/_search", indiceName);
 
 
         String json = context.execAsBody(cmd);
@@ -275,7 +275,7 @@ public class EsTableQuery {
             cmd.method = PriWw.method_post;
             cmd.dslType = PriWw.mime_json;
             cmd.dsl = oNode.toJson();
-            cmd.path = String.format("/%s/_search", table);
+            cmd.path = String.format("/%s/_search", indiceName);
 
             String json = context.execAsBody(cmd);
 
@@ -298,7 +298,7 @@ public class EsTableQuery {
         try {
             EsCommand cmd = new EsCommand();
             cmd.method = PriWw.method_get;
-            cmd.path = String.format("/%s/_doc/%s", table, docId);
+            cmd.path = String.format("/%s/_doc/%s", indiceName, docId);
 
             String tmp = context.execAsBody(cmd);
 
@@ -331,7 +331,7 @@ public class EsTableQuery {
         cmd.method = PriWw.method_post;
         cmd.dslType = PriWw.mime_json;
         cmd.dsl = getDslq().toJson();;
-        cmd.path = String.format("/%s/_delete_by_query", table);
+        cmd.path = String.format("/%s/_delete_by_query", indiceName);
 
         String tmp = context.execAsBody(cmd);
 
@@ -342,7 +342,7 @@ public class EsTableQuery {
     public boolean deleteById(String docId) throws IOException {
         EsCommand cmd = new EsCommand();
         cmd.method = PriWw.method_delete;
-        cmd.path = String.format("/%s/_doc/%s", table, docId);
+        cmd.path = String.format("/%s/_doc/%s", indiceName, docId);
 
 
         try {

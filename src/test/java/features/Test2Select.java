@@ -26,18 +26,18 @@ public class Test2Select {
 
     @Test
     public void test_selectById() throws Exception {
-        LogDo logDo = context.table("water$water_log_api_202110").selectById(LogDo.class, "1");
+        LogDo logDo = context.indice("water$water_log_api_202110").selectById(LogDo.class, "1");
         assert logDo != null;
         assert logDo.log_id == 1;
 
 
-        logDo = context.table("water$water_log_api_202106").selectById(LogDo.class,"1");
+        logDo = context.indice("water$water_log_api_202106").selectById(LogDo.class,"1");
         assert logDo == null;
     }
 
     @Test
     public void test_selectByIds() throws Exception {
-        List<LogDo> result = context.table(indice)
+        List<LogDo> result = context.indice(indice)
                 .selectByIds(LogDo.class, Arrays.asList("1","2"));
 
         System.out.println(result);
@@ -49,7 +49,7 @@ public class Test2Select {
     @Test
     public void test_term() throws Exception {
 
-        EsPage<LogDo> result = context.table(indice)
+        EsPage<LogDo> result = context.indice(indice)
                 .where(c -> c.term("tag", "list1"))
                 .limit(10)
                 .select(LogDo.class);
@@ -60,7 +60,7 @@ public class Test2Select {
     @Test
     public void test_term_score() throws Exception {
 
-        EsPage<LogDo> result = context.table(indice)
+        EsPage<LogDo> result = context.indice(indice)
                 .where(c -> c.useScore().term("tag", "list1"))
                 .limit(10)
                 .select(LogDo.class);
@@ -71,7 +71,7 @@ public class Test2Select {
     @Test
     public void test_terms() throws Exception {
 
-        EsPage<LogDo> result = context.table(indice)
+        EsPage<LogDo> result = context.indice(indice)
                 .where(c -> c.terms("tag", "list1", "map1"))
                 .limit(0, 10)
                 .select(LogDo.class);
@@ -82,7 +82,7 @@ public class Test2Select {
     @Test
     public void test_prefix() throws Exception {
 
-        EsPage<LogDo> result = context.table(indice)
+        EsPage<LogDo> result = context.indice(indice)
                 .where(c -> c.prefix("tag", "m"))
                 .limit(0, 10)
                 .select(LogDo.class);
@@ -95,7 +95,7 @@ public class Test2Select {
     @Test
     public void test_match() throws Exception {
 
-        EsPage<LogDo> result = context.table(indice)
+        EsPage<LogDo> result = context.indice(indice)
                 .where(c -> c.match("tag", "list1"))
                 .limit(0, 10)
                 .select(LogDo.class);
@@ -109,7 +109,7 @@ public class Test2Select {
     @Test
     public void test_matchPhrase() throws Exception {
 
-        EsPage<LogDo> result = context.table(indice)
+        EsPage<LogDo> result = context.indice(indice)
                 .where(c -> c.matchPhrase("tag", "list1"))
                 .limit(0, 10)
                 .select(LogDo.class);
@@ -123,7 +123,7 @@ public class Test2Select {
     @Test
     public void test_matchPhrasePrefix() throws Exception {
 
-        EsPage<LogDo> result = context.table(indice)
+        EsPage<LogDo> result = context.indice(indice)
                 .where(c -> c.matchPhrasePrefix("tag", "list1"))
                 .limit(0, 10)
                 .select(LogDo.class);
@@ -137,7 +137,7 @@ public class Test2Select {
     @Test
     public void test_range() throws Exception {
 
-        EsPage<LogDo> result = context.table(indice)
+        EsPage<LogDo> result = context.indice(indice)
                 .where(c -> c.range("level", r -> r.gt(3)))
                 .limit(0, 10)
                 .select(LogDo.class);
@@ -151,7 +151,7 @@ public class Test2Select {
     @Test
     public void test_wildcard() throws Exception {
 
-        EsPage<LogDo> result = context.table(indice)
+        EsPage<LogDo> result = context.indice(indice)
                 .where(c -> c.wildcard("tag", "l*"))
                 .limit(10)
                 .select(LogDo.class);
@@ -162,7 +162,7 @@ public class Test2Select {
     @Test
     public void test_regexp() throws Exception {
 
-        EsPage<LogDo> result = context.table(indice)
+        EsPage<LogDo> result = context.indice(indice)
                 .where(c -> c.regexp("tag", "l.*?"))
                 .limit(10)
                 .select(LogDo.class);

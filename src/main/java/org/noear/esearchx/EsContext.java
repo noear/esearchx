@@ -93,20 +93,18 @@ public class EsContext {
     }
 
     /**
-     * 获取表操作
+     * 获取索引操作
      */
-    public EsTableQuery table(String table) {
-        return new EsTableQuery(this, table);
+    public EsIndiceQuery indice(String indiceName) {
+        return new EsIndiceQuery(this, indiceName);
     }
 
     /**
-     * 表结构创建
+     * 索引创建
      *
      * @param indiceName 索引名字
      */
-    public String tableCreate(String indiceName, String dsl) throws IOException {
-        PriHttpUtils http = getHttp(String.format("/%s", indiceName));
-
+    public String indiceCreate(String indiceName, String dsl) throws IOException {
         EsCommand cmd = new EsCommand();
         cmd.method = PriWw.method_put;
         cmd.path = String.format("/%s", indiceName);
@@ -120,11 +118,11 @@ public class EsContext {
     }
 
     /**
-     * 表结构是否存在
+     * 索引是否存在
      *
      * @param indiceName 索引名字
      */
-    public boolean tableExist(String indiceName) throws IOException {
+    public boolean indiceExist(String indiceName) throws IOException {
         EsCommand cmd = new EsCommand();
         cmd.method = PriWw.method_head;
         cmd.path = String.format("/%s", indiceName);
@@ -135,11 +133,11 @@ public class EsContext {
     }
 
     /**
-     * 表结构删除
+     * 索引删除
      *
      * @param indiceName 索引名字
      */
-    public String tableDrop(String indiceName) throws IOException {
+    public String indiceDrop(String indiceName) throws IOException {
         EsCommand cmd = new EsCommand();
         cmd.method = PriWw.method_delete;
         cmd.path = String.format("/%s", indiceName);
@@ -150,11 +148,11 @@ public class EsContext {
     }
 
     /**
-     * 表结构显示
+     * 索引结构显示
      *
      * @param indiceName 索引名字
      */
-    public String tableShow(String indiceName) throws IOException {
+    public String indiceShow(String indiceName) throws IOException {
         EsCommand cmd = new EsCommand();
         cmd.method = PriWw.method_get;
         cmd.path = String.format("/%s", indiceName);
@@ -168,9 +166,9 @@ public class EsContext {
     /////////////////
 
     /**
-     * 表别名处理
+     * 索引别名处理
      */
-    public String tableAliases(Consumer<EsAliases> aliases) throws IOException {
+    public String indiceAliases(Consumer<EsAliases> aliases) throws IOException {
         EsAliases e = new EsAliases();
         aliases.accept(e);
 

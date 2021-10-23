@@ -25,32 +25,32 @@ public class Test0 {
 
     @Test
     public void test0() throws Exception {
-        assert context.tableExist(indiceNoExit) == false;
+        assert context.indiceExist(indiceNoExit) == false;
     }
 
     @Test
     public void test1() throws Exception {
-        if (context.tableExist(indiceNew)) {
-            context.tableDrop(indiceNew);
+        if (context.indiceExist(indiceNew)) {
+            context.indiceDrop(indiceNew);
         }
 
-        assert context.tableExist(indiceNew) == false;
+        assert context.indiceExist(indiceNew) == false;
 
         String dsl = Utils.getResourceAsString("demo/log.json", "utf-8");
-        context.tableCreate(indiceNew, dsl);
+        context.indiceCreate(indiceNew, dsl);
 
 
-        assert context.tableExist(indiceNew) == true;
+        assert context.indiceExist(indiceNew) == true;
     }
 
 
     private void test2Create(String name) throws IOException {
-        if (context.tableExist(name) == false) {
+        if (context.indiceExist(name) == false) {
             String dsl = Utils.getResourceAsString("demo/log.json", "utf-8");
-            context.tableCreate(name, dsl);
+            context.indiceCreate(name, dsl);
         }
 
-        assert context.tableExist(name) == true;
+        assert context.indiceExist(name) == true;
     }
 
     @Test
@@ -70,7 +70,7 @@ public class Test0 {
 
     @Test
     public void test4() throws Exception {
-        context.tableAliases(a -> a
+        context.indiceAliases(a -> a
                 .add("water$water_log_api_202110", alias)
                 .add("water$water_log_api_202109", alias)
                 .add("water$water_log_api_202108", alias)
@@ -81,7 +81,7 @@ public class Test0 {
 
     @Test
     public void test5() throws Exception {
-        String json = context.tableShow(indice);
+        String json = context.indiceShow(indice);
         System.out.println(json);
         ONode oNode = ONode.loadStr(json);
 
@@ -90,7 +90,7 @@ public class Test0 {
 
         ////
         try {
-            context.tableShow(indiceNoExit); //不存在会 404 错误
+            context.indiceShow(indiceNoExit); //不存在会 404 错误
             assert false;
         } catch (Exception e) {
             assert true;

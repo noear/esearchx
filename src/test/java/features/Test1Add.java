@@ -42,7 +42,7 @@ public class Test1Add {
         logDo.log_fulltime = new Date();
 
 
-        context.table(indice).upsert(Utils.guid(), logDo);
+        context.indice(indice).upsert(Utils.guid(), logDo);
     }
 
     private void test3_do(long id, String json) throws Exception {
@@ -58,7 +58,7 @@ public class Test1Add {
         logDo.log_date = LocalDateTime.now().toLocalDate().getDayOfYear();
         logDo.log_fulltime = new Date();
 
-        context.table(indice).upsert(String.valueOf(id), logDo);
+        context.indice(indice).upsert(String.valueOf(id), logDo);
     }
 
     @Test
@@ -88,7 +88,7 @@ public class Test1Add {
         logDo.log_date = LocalDateTime.now().toLocalDate().getDayOfYear();
         logDo.log_fulltime = new Date();
 
-        context.table(indice).insert(logDo);
+        context.indice(indice).insert(logDo);
     }
 
     @Test
@@ -113,7 +113,7 @@ public class Test1Add {
             docs.put(Utils.guid(), logDo);
         }
 
-        context.table(indice2).upsertList(docs);
+        context.indice(indice2).upsertList(docs);
     }
 
     @Test
@@ -138,6 +138,6 @@ public class Test1Add {
             docs.add(logDo);
         }
 
-        context.table(indice2).insertList(docs);
+        context.indice(indice2).insertList(docs);
     }
 }

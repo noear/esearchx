@@ -23,7 +23,7 @@ public class Test3Del {
 
     @Test
     public void test0() throws Exception {
-        if (context.table(indice).deleteById("5")) {
+        if (context.indice(indice).deleteById("5")) {
             assert true;
         } else {
             assert false;
@@ -32,7 +32,7 @@ public class Test3Del {
 
     @Test
     public void test1() throws Exception {
-        String tmp = context.table(indice).where(q->q.term("level", 1)).delete();
+        String tmp = context.indice(indice).where(q->q.term("level", 1)).delete();
 
         System.out.println(tmp);
     }
