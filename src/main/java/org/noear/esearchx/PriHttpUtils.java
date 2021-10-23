@@ -2,6 +2,7 @@ package org.noear.esearchx;
 
 import okhttp3.*;
 import org.noear.esearchx.exception.NoExistException;
+import org.noear.esearchx.exception.RequestException;
 
 import java.io.IOException;
 import java.rmi.ServerException;
@@ -114,7 +115,7 @@ class PriHttpUtils {
         } else if (code >= 500) {
             throw new ServerException(text);
         } else {
-            throw new IllegalArgumentException(text);
+            throw new RequestException(text);
         }
     }
 
