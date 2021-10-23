@@ -22,19 +22,19 @@ public class EsContext {
     private final String paasword;
 
     public EsContext(Properties prop) {
-        this(prop.getProperty("server"), prop.getProperty("username"), prop.getProperty("paasword"));
+        this(prop.getProperty("url"), prop.getProperty("username"), prop.getProperty("paasword"));
     }
 
-    public EsContext(String server) {
-        this(server, null, null);
+    public EsContext(String url) {
+        this(url, null, null);
     }
 
-    public EsContext(String server, String username, String paasword) {
+    public EsContext(String url, String username, String paasword) {
         this.username = username;
         this.paasword = paasword;
 
         List<String> urlAry = new ArrayList<>();
-        for (String ser : server.split(",")) {
+        for (String ser : url.split(",")) {
             if (ser.contains("://")) {
                 urlAry.add(ser);
             } else {
