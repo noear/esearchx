@@ -195,6 +195,14 @@ public class EsTableQuery {
         return this;
     }
 
+    /**
+     * min_score
+     * */
+    public EsTableQuery minScore(Object value){
+        getDslq().getOrNew("min_score").val(value);
+        return this;
+    }
+
     //
     // select
     //

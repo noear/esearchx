@@ -22,6 +22,8 @@ public class LogDo {
     public int log_date;
     public Date log_fulltime;
 
+    public Double _score;
+
     @Override
     public String toString() {
         return "LogDo{" +
@@ -40,6 +42,7 @@ public class LogDo {
                 ", from='" + from + '\'' +
                 ", log_date=" + log_date +
                 ", log_fulltime=" + log_fulltime +
+                ", _score=" + _score +
                 '}';
     }
 }

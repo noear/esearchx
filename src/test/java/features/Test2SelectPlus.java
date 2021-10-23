@@ -179,6 +179,26 @@ public class Test2SelectPlus {
                 .limit(0, 10)
                 .orderByAsc("level")
                 .andByAsc("log_id")
+                .minScore(1)
+                .select(LogDo.class);
+
+        System.out.println(result);
+
+        assert result.getListSize() == 10;
+        assert result.getList().get(0).level > 3;
+        assert result.getList().get(0).log_id < result.getList().get(1).log_id;
+    }
+
+    @Test
+    public void test11() throws Exception {
+        //输出字段控制（选择模式）
+        EsPage<LogDo> result = context.table(indice)
+                .where(c -> c.filter()
+                        .term("tag", "list1")
+                        .range("level", r -> r.gt(3)))
+                .limit(0, 10)
+                .orderByAsc("level")
+                .andByAsc("log_id")
                 .select(LogDo.class);
 
         assert result.getListSize() == 10;
