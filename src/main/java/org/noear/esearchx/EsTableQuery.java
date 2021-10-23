@@ -185,6 +185,11 @@ public class EsTableQuery {
         return this;
     }
 
+    public EsTableQuery limit( int size) {
+        getDslq().set("size", size);
+        return this;
+    }
+
     public EsTableQuery orderByAsc(String field) {
         getDslq().getOrNew("sort").getOrNew(field).set("order", "asc");
         return this;

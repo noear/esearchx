@@ -33,7 +33,7 @@ public class Test2Select {
 
         EsPage<LogDo> result = context.table(indice)
                 .where(c -> c.term("tag", "list1"))
-                .limit(0, 10)
+                .limit(10)
                 .select(LogDo.class);
 
         assert result.getListSize() == 10;
