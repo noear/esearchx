@@ -30,6 +30,8 @@
 ```
 
 ```java
+import java.util.ArrayList;
+
 //
 // 更多的示例，可以查看 src/test/ 下的相关单测
 //
@@ -49,23 +51,32 @@ public class DemoApp {
                 .add("user_log_20200101", "user_log")
                 .add("user_log_20200102", "user_log")
                 .add("user_log_20200103", "user_log"));
-
+        
         //删除索引（如果存在就删了；当然也可以直接删）
         if (esx.indiceExist("user_log_20200101")) {
             esx.indiceDrop("user_log_20200101");
         }
         
+        //批量插入
+        List<LogDo> list = new ArrayList<>();
+        list.add(new LogDo());
+        esx.indice("user_log").insertList(list);
+        
+        //批量插入或更新
+        Map<String, LogDo> list = new LinkedHashMap<>();
+        list.put("...",new LogDo());
+        esx.indice("user_log").upsertList(list);
+        
         //一个简单的查询
         LogDo result = esx.indice("user_log").selectById("1");
-
+        
         //一个带条件的查询
         EsPage<LogDo> result = esx.indice("user_log")
                 .where(r -> r.term("level", 5))
                 .orderByDesc("log_id")
                 .limit(50)
                 .select(LogDo.class);
-
-
+        
         //一个复杂些的查询
         EsPage<LogDo> result = esx.indice(indice)
                 .where(c -> c.useScore().must()
