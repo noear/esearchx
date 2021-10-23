@@ -1,6 +1,7 @@
 package org.noear.esearchx;
 
 
+import org.noear.esearchx.exception.NoExistException;
 import org.noear.snack.ONode;
 
 import java.io.IOException;
@@ -137,14 +138,17 @@ public class EsContext {
      *
      * @param indiceName 索引名字
      */
-    public String indiceDrop(String indiceName) throws IOException {
+    public boolean indiceDrop(String indiceName) throws IOException {
         EsCommand cmd = new EsCommand();
         cmd.method = PriWw.method_delete;
         cmd.path = String.format("/%s", indiceName);
 
-        String tmp = execAsBody(cmd);
-
-        return tmp;
+        try {
+            execAsBody(cmd);
+            return true;
+        } catch (NoExistException e) {
+            return true;
+        }
     }
 
     /**

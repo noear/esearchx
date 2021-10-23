@@ -48,6 +48,11 @@ public class Test0 {
         assert context.indiceExist(indiceNew) == true;
     }
 
+    @Test
+    public void test1Drop() throws Exception {
+        context.indiceDrop(indiceNew);
+    }
+
 
     private void test2Create(String name) throws IOException {
         if (context.indiceExist(name) == false) {
