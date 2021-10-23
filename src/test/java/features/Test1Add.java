@@ -16,7 +16,7 @@ import java.util.*;
  * @author noear 2021/10/22 created
  */
 @RunWith(SolonJUnit4ClassRunner.class)
-public class EsAddTest {
+public class Test1Add {
     final String indiceNoExit = "water$water_log_api";
     final String indiceNew = "water$water_log_api_new";
     final String indice = "water$water_log_api_202110";

@@ -15,7 +15,7 @@ import java.io.IOException;
  * @author noear 2021/10/22 created
  */
 @RunWith(SolonJUnit4ClassRunner.class)
-public class EsTest {
+public class Test0 {
     final String indiceNoExit = "water$water_log_apix";
     final String indiceNew = "water$water_log_api_new";
     final String indice = "water$water_log_api_202110";
@@ -89,12 +89,11 @@ public class EsTest {
         assert oNode.get(indice).contains("settings");
 
         ////
-
-        json = context.tableShow(indiceNoExit); //不存在会 404 错误
-        System.out.println(json);
-        oNode = ONode.loadStr(json);
-
-        assert oNode.get(indiceNoExit).contains("mappings") == false;
-        assert oNode.get(indiceNoExit).contains("settings") == false;
+        try {
+            context.tableShow(indiceNoExit); //不存在会 404 错误
+            assert false;
+        } catch (Exception e) {
+            assert true;
+        }
     }
 }

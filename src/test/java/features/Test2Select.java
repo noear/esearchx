@@ -14,7 +14,7 @@ import org.noear.solon.test.SolonJUnit4ClassRunner;
  */
 
 @RunWith(SolonJUnit4ClassRunner.class)
-public class EsSelectTest {
+public class Test2Select {
 
     final String indiceNoExit = "water$water_log_api";
     final String indiceNew = "water$water_log_api_new";
