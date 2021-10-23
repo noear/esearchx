@@ -14,6 +14,14 @@
 
 **演示：**
 
+```xml
+<dependency>
+    <groupId>org.noear</groupId>
+    <artifactId>esearchx</artifactId>
+    <version>1.0</version>
+</dependency>
+```
+
 ```java
 public class DemoApp {
     String tableCreateDsl = "...";
