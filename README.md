@@ -47,16 +47,18 @@ public class DemoApp {
         if (esx.indiceExist("user_log_20200101")) {
             esx.indiceDrop("user_log_20200101");
         }
+        
+        //一个简单的查询
+        LogDo result = esx.indice("user_log").selectById("1");
 
-
-        //一个简单查询
+        //一个带条件的查询
         EsPage<LogDo> result = esx.indice("user_log")
                 .where(r -> r.term("level", 5))
                 .limit(50)
                 .select(LogDo.class);
 
 
-        //一个复杂点的查询
+        //一个复杂些的查询
         EsPage<LogDo> result = context.indice(indice)
                 .where(c -> c.useScore().must()
                         .term("tag", "list1")
