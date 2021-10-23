@@ -17,9 +17,6 @@ import java.util.function.Consumer;
  * @since 1.0
  */
 public class EsTableQuery {
-    protected static final String mime_json = "application/json";
-    protected static final String mime_ndjson = "application/x-ndjson";
-
     private final EsContext context;
     private final String table;
 
@@ -69,22 +66,26 @@ public class EsTableQuery {
     //
 
     private String insertDo(ONode doc) throws IOException {
-        String docJson = doc.toJson();
+        EsCommand cmd = new EsCommand();
+        cmd.method = PriWw.method_post;
+        cmd.dslType = PriWw.mime_json;
+        cmd.dsl = doc.toJson();
+        cmd.path = String.format("/%s/_doc/", table);
 
-        PriHttpUtils http = getHttp(String.format("/%s/_doc/", table));
-
-        String tmp = http.bodyTxt(docJson, mime_json).post(); //需要 post
+        String tmp = context.execAsBody(cmd); //需要 post
         //return: {"_index":"water$water_log_api_202110","_type":"_doc","_id":"eaeb3a43674a45ee8abf7cca379e4834","_version":1,"result":"created","_shards":{"total":2,"successful":1,"failed":0},"_seq_no":0,"_primary_term":1}
 
         return tmp;
     }
 
     private String upsertDo(String docId, ONode doc) throws IOException {
-        String docJson = doc.toJson();
+        EsCommand cmd = new EsCommand();
+        cmd.method = PriWw.method_put;
+        cmd.dslType = PriWw.mime_json;
+        cmd.dsl = doc.toJson();
+        cmd.path = String.format("/%s/_doc/%s", table, docId);
 
-        PriHttpUtils http = getHttp(String.format("/%s/_doc/%s", table, docId));
-
-        String tmp = http.bodyTxt(docJson, mime_json).put(); //需要 put
+        String tmp = context.execAsBody(cmd);; //需要 put
         //return: {"_index":"water$water_log_api_202110","_type":"_doc","_id":"eaeb3a43674a45ee8abf7cca379e4834","_version":1,"result":"created","_shards":{"total":2,"successful":1,"failed":0},"_seq_no":0,"_primary_term":1}
 
         return tmp;
@@ -109,9 +110,13 @@ public class EsTableQuery {
             docJson.append(ONode.loadObj(doc).toJson()).append("\n");
         });
 
-        PriHttpUtils http = getHttp(String.format("/%s/_doc/_bulk", table));
+        EsCommand cmd = new EsCommand();
+        cmd.method = PriWw.method_post;
+        cmd.dslType = PriWw.mime_ndjson;
+        cmd.dsl = docJson.toString();
+        cmd.path = String.format("/%s/_doc/_bulk", table);
 
-        String tmp = http.bodyTxt(docJson.toString(), mime_ndjson).post();
+        String tmp = context.execAsBody(cmd); //需要 post
         //return: {"_index":"water$water_log_api_202110","_type":"_doc","_id":"eaeb3a43674a45ee8abf7cca379e4834","_version":1,"result":"created","_shards":{"total":2,"successful":1,"failed":0},"_seq_no":0,"_primary_term":1}
 
         return tmp;
@@ -133,9 +138,13 @@ public class EsTableQuery {
             docJson.append(ONode.loadObj(doc).toJson()).append("\n");
         });
 
-        PriHttpUtils http = getHttp(String.format("/%s/_doc/_bulk", table));
+        EsCommand cmd = new EsCommand();
+        cmd.method = PriWw.method_post;
+        cmd.dslType = PriWw.mime_ndjson;
+        cmd.dsl = docJson.toString();
+        cmd.path = String.format("/%s/_doc/_bulk", table);
 
-        String tmp = http.bodyTxt(docJson.toString(), mime_ndjson).post(); //需要 post
+        String tmp = context.execAsBody(cmd); //需要 post
         //return: {"_index":"water$water_log_api_202110","_type":"_doc","_id":"eaeb3a43674a45ee8abf7cca379e4834","_version":1,"result":"created","_shards":{"total":2,"successful":1,"failed":0},"_seq_no":0,"_primary_term":1}
 
         return tmp;
@@ -229,9 +238,14 @@ public class EsTableQuery {
             getDslq().set("_source", s.oNode);
         }
 
-        String dsl = getDslq().toJson();
-        String json = getHttp(String.format("/%s/_search", table)).bodyTxt(dsl, mime_json).post();
+        EsCommand cmd = new EsCommand();
+        cmd.method = PriWw.method_post;
+        cmd.dslType = PriWw.mime_json;
+        cmd.dsl = getDslq().toJson();
+        cmd.path = String.format("/%s/_search", table);
 
+
+        String json = context.execAsBody(cmd);
 
         ONode oHits = ONode.loadStr(json).get("hits");
 
@@ -257,10 +271,13 @@ public class EsTableQuery {
             ONode oNode = new ONode();
             oNode.getOrNew("query").getOrNew("ids").getOrNew("values").addAll(docIds);
 
-            String dsl = oNode.toJson();
+            EsCommand cmd = new EsCommand();
+            cmd.method = PriWw.method_post;
+            cmd.dslType = PriWw.mime_json;
+            cmd.dsl = oNode.toJson();
+            cmd.path = String.format("/%s/_search", table);
 
-            String json = getHttp(String.format("/%s/_search", table))
-                    .bodyTxt(dsl, mime_json).post();
+            String json = context.execAsBody(cmd);
 
             ONode oHits = ONode.loadStr(json).get("hits");
 
@@ -279,7 +296,11 @@ public class EsTableQuery {
     //
     public <T> T selectById(Class<T> clz, String docId) throws IOException {
         try {
-            String tmp = getHttp(String.format("/%s/_doc/%s", table, docId)).get();
+            EsCommand cmd = new EsCommand();
+            cmd.method = PriWw.method_get;
+            cmd.path = String.format("/%s/_doc/%s", table, docId);
+
+            String tmp = context.execAsBody(cmd);
 
             ONode oItem = ONode.loadStr(tmp);
             oItem.setAll(oItem.get("_source"));
@@ -305,17 +326,27 @@ public class EsTableQuery {
         }
 
         String dsl = getDslq().toJson();
-        String tmp = getHttp(String.format("/%s/_delete_by_query", table)).bodyTxt(dsl, mime_json).post();
+
+        EsCommand cmd = new EsCommand();
+        cmd.method = PriWw.method_post;
+        cmd.dslType = PriWw.mime_json;
+        cmd.dsl = getDslq().toJson();;
+        cmd.path = String.format("/%s/_delete_by_query", table);
+
+        String tmp = context.execAsBody(cmd);
 
         return tmp;
     }
 
 
     public boolean deleteById(String docId) throws IOException {
-        PriHttpUtils http = getHttp(String.format("/%s/_doc/%s", table, docId));
+        EsCommand cmd = new EsCommand();
+        cmd.method = PriWw.method_delete;
+        cmd.path = String.format("/%s/_doc/%s", table, docId);
+
 
         try {
-            http.delete();
+            context.execAsBody(cmd);
             return true;
         } catch (NoExistException e) {
             return true;

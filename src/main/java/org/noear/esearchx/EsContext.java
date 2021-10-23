@@ -21,6 +21,9 @@ public class EsContext {
     private final String username;
     private final String paasword;
 
+    @Deprecated
+    public EsCommand lastCommand;
+
     public EsContext(Properties prop) {
         this(prop.getProperty("url"), prop.getProperty("username"), prop.getProperty("paasword"));
     }
@@ -69,11 +72,19 @@ public class EsContext {
         return http;
     }
 
-    public String exec(String method, String path, String dsl) throws IOException {
-        if (PriUtils.isEmpty(dsl)) {
-            return getHttp(path).execAsBody(method);
+    public String execAsBody(EsCommand cmd) throws IOException {
+        if (PriUtils.isEmpty(cmd.dsl)) {
+            return getHttp(cmd.path).execAsBody(cmd.method);
         } else {
-            return getHttp(path).bodyTxt(dsl, EsTableQuery.mime_json).execAsBody(method);
+            return getHttp(cmd.path).bodyTxt(cmd.dsl, cmd.dslType).execAsBody(cmd.method);
+        }
+    }
+
+    public int execAsCode(EsCommand cmd) throws IOException {
+        if (PriUtils.isEmpty(cmd.dsl)) {
+            return getHttp(cmd.path).execAsCode(cmd.method);
+        } else {
+            return getHttp(cmd.path).bodyTxt(cmd.dsl, cmd.dslType).execAsCode(cmd.method);
         }
     }
 
@@ -92,7 +103,7 @@ public class EsContext {
     public String tableCreate(String indiceName, String dsl) throws IOException {
         PriHttpUtils http = getHttp(String.format("/%s", indiceName));
 
-        String tmp = http.bodyTxt(dsl, EsTableQuery.mime_json).put();
+        String tmp = http.bodyTxt(dsl, PriWw.mime_json).put();
         //return: {"acknowledged":true,"shards_acknowledged":true,"index":"water$water_log_api_202110"}
 
         return tmp;
@@ -145,7 +156,7 @@ public class EsContext {
         ONode oNode = new ONode().build(n -> n.set("actions", e.oNode));
 
         String dsl = oNode.toJson();
-        String tmp = http.bodyTxt(dsl, EsTableQuery.mime_json).post();
+        String tmp = http.bodyTxt(dsl, PriWw.mime_json).post();
 
         return tmp;
     }
