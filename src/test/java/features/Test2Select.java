@@ -4,7 +4,7 @@ import features.model.LogDo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.noear.esearchx.EsContext;
-import org.noear.esearchx.model.Page;
+import org.noear.esearchx.model.EsPage;
 import org.noear.solon.test.SolonJUnit4ClassRunner;
 
 /**
@@ -31,7 +31,7 @@ public class Test2Select {
     @Test
     public void test10() throws Exception {
 
-        Page<LogDo> result = context.table(indice)
+        EsPage<LogDo> result = context.table(indice)
                 .where(c -> c.term("tag", "list1"))
                 .limit(0, 10)
                 .select(LogDo.class);
@@ -42,7 +42,7 @@ public class Test2Select {
     @Test
     public void test10_1() throws Exception {
 
-        Page<LogDo> result = context.table(indice)
+        EsPage<LogDo> result = context.table(indice)
                 .where(c -> c.term("tag2", "list1"))
                 .limit(0, 10)
                 .select(LogDo.class);
@@ -53,7 +53,7 @@ public class Test2Select {
     @Test
     public void test10_2() throws Exception {
 
-        Page<LogDo> result = context.table(indice)
+        EsPage<LogDo> result = context.table(indice)
                 .where(c -> c.termsIn("tag", "list1"))
                 .limit(0, 10)
                 .select(LogDo.class);
@@ -64,7 +64,7 @@ public class Test2Select {
     @Test
     public void test11() throws Exception {
 
-        Page<LogDo> result = context.table(indice)
+        EsPage<LogDo> result = context.table(indice)
                 .where(c -> c.must().term("tag", "list1").term("level", 3))
                 .limit(0, 10)
                 .select(LogDo.class);
@@ -76,7 +76,7 @@ public class Test2Select {
     @Test
     public void test20() throws Exception {
 
-        Page<LogDo> result = context.table(indice)
+        EsPage<LogDo> result = context.table(indice)
                 .where(c -> c.match("tag", "list1"))
                 .limit(0, 10)
                 .select(LogDo.class);
@@ -88,7 +88,7 @@ public class Test2Select {
     @Test
     public void test21() throws Exception {
 
-        Page<LogDo> result = context.table(indice)
+        EsPage<LogDo> result = context.table(indice)
                 .where(c -> c.must().match("tag", "list1").term("level", 3))
                 .limit(0, 10)
                 .select(LogDo.class);
@@ -100,7 +100,7 @@ public class Test2Select {
     @Test
     public void test22() throws Exception {
 
-        Page<LogDo> result = context.table(indice)
+        EsPage<LogDo> result = context.table(indice)
                 .where(c -> c.must()
                         .match("tag", "list1")
                         .term("level", 3)
@@ -119,7 +119,7 @@ public class Test2Select {
     @Test
     public void test30() throws Exception {
         //输出字段控制（选择模式）
-        Page<LogDo> result = context.table(indice)
+        EsPage<LogDo> result = context.table(indice)
                 .where(c -> c.term("tag", "list1"))
                 .limit(0, 10)
                 .select("log_id,trace_id", LogDo.class);
@@ -132,7 +132,7 @@ public class Test2Select {
     @Test
     public void test31() throws Exception {
         //输出字段控制（排除模式）
-        Page<LogDo> result = context.table(indice)
+        EsPage<LogDo> result = context.table(indice)
                 .where(c -> c.term("tag", "list1"))
                 .limit(0, 10)
                 .select("!log_id,trace_id", LogDo.class);
@@ -145,7 +145,7 @@ public class Test2Select {
     @Test
     public void test40() throws Exception {
         //输出字段控制（选择模式）
-        Page<LogDo> result = context.table(indice)
+        EsPage<LogDo> result = context.table(indice)
                 .where(c -> c.term("tag", "list1"))
                 .limit(0, 10)
                 .orderByAsc("log_id")
@@ -158,7 +158,7 @@ public class Test2Select {
     @Test
     public void test41() throws Exception {
         //输出字段控制（选择模式）
-        Page<LogDo> result = context.table(indice)
+        EsPage<LogDo> result = context.table(indice)
                 .where(c -> c.term("tag", "list1"))
                 .limit(0, 10)
                 .orderByDesc("log_id")
@@ -171,7 +171,7 @@ public class Test2Select {
     @Test
     public void test42() throws Exception {
         //输出字段控制（选择模式）
-        Page<LogDo> result = context.table(indice)
+        EsPage<LogDo> result = context.table(indice)
                 .where(c -> c.term("tag", "list1"))
                 .limit(0, 10)
                 .orderByDesc("level")
@@ -185,7 +185,7 @@ public class Test2Select {
     @Test
     public void test50() throws Exception {
         //输出字段控制（选择模式）
-        Page<LogDo> result = context.table(indice)
+        EsPage<LogDo> result = context.table(indice)
                 .where(c -> c.must()
                         .term("tag", "list1")
                         .range("level", r -> r.gt(3)))

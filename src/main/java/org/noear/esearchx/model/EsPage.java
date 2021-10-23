@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * @author noear 2021/10/22 created
  */
-public class Page<T> implements Serializable {
+public class EsPage<T> implements Serializable {
     final long total;
     final List<T> list;
     final double maxScore;
@@ -31,7 +31,7 @@ public class Page<T> implements Serializable {
         }
     }
 
-    public Page(long total, double maxScore, List<T> list) {
+    public EsPage(long total, double maxScore, List<T> list) {
         this.total = total;
         this.maxScore = maxScore;
         this.list = list;

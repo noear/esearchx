@@ -1,6 +1,6 @@
 package org.noear.esearchx;
 
-import org.noear.esearchx.model.Page;
+import org.noear.esearchx.model.EsPage;
 import org.noear.snack.ONode;
 
 import java.io.IOException;
@@ -206,11 +206,11 @@ public class EsTableQuery {
     }
 
     //
-    public <T> Page<T> select(Class<T> clz) throws IOException {
+    public <T> EsPage<T> select(Class<T> clz) throws IOException {
         return select(null, clz);
     }
 
-    public <T> Page<T> select(String fields, Class<T> clz) throws IOException {
+    public <T> EsPage<T> select(String fields, Class<T> clz) throws IOException {
         if (queryMatch != null) {
             if (queryMatch.count() > 1) {
                 getDslq().getOrNew("query").set("multi_match", queryMatch);
@@ -243,6 +243,6 @@ public class EsTableQuery {
 
         List<T> list = oHits.get("hits").toObjectList(clz);
 
-        return new Page<>(total, max_score, list);
+        return new EsPage<>(total, max_score, list);
     }
 }
