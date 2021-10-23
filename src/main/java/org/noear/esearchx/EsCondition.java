@@ -17,7 +17,9 @@ public class EsCondition {
     String score_mode = null;
 
 
-
+    /**
+     * 设置过滤风格
+     * */
     private void filterStyleSet(String name) {
         if (score_mode == null) {
             oNodeArray = oNode.getOrNew("bool").getOrNew(name).asArray();
@@ -31,7 +33,14 @@ public class EsCondition {
         }
     }
 
+    /**
+     * 设置过滤风格
+     * */
     private void filterSet(String type, String field, Object value) {
+        if(value == null){
+            throw new IllegalArgumentException("value");
+        }
+
         if (oNodeArray == null) {
             if (score_mode == null) {
                 oNode.getOrNew(type).set(field, value);
@@ -48,6 +57,8 @@ public class EsCondition {
     }
 
     /**
+     * 启用评分定制
+     *
      * function_score/..
      */
     public EsCondition useScore() {
@@ -55,6 +66,8 @@ public class EsCondition {
     }
 
     /**
+     * 启用评分定制
+     *
      * function_score/..
      */
     public EsCondition useScore(String mode) {
@@ -67,7 +80,21 @@ public class EsCondition {
         return this;
     }
 
+
+
     /**
+     * 只过滤，不参与打分
+     *
+     * bool/filter
+     */
+    public EsCondition filter() {
+        filterStyleSet("filter");
+        return this;
+    }
+
+    /**
+     * 如果有多个条件，这些条件都必须满足 and与
+     *
      * bool/must
      */
     public EsCondition must() {
@@ -76,6 +103,8 @@ public class EsCondition {
     }
 
     /**
+     * 如果有多个条件，满足一个或多个即可 or或
+     *
      * bool/should
      */
     public EsCondition should() {
@@ -84,18 +113,12 @@ public class EsCondition {
     }
 
     /**
+     * 和must相反，必须都不满足条件才可以匹配到 ！非
+     *
      * bool/mustNot
      */
     public EsCondition mustNot() {
         filterStyleSet("must_not");
-        return this;
-    }
-
-    /**
-     * bool/filter
-     */
-    public EsCondition filter() {
-        filterStyleSet("filter");
         return this;
     }
 
@@ -182,6 +205,9 @@ public class EsCondition {
     }
 
 
+    /**
+     * 添加下级条件
+     * */
     public EsCondition add(Consumer<EsCondition> condition) {
         EsCondition c = new EsCondition();
         condition.accept(c);
@@ -195,14 +221,3 @@ public class EsCondition {
         return this;
     }
 }
-
-
-//todo: https://www.cnblogs.com/juncaoit/p/12664109.html
-//todo: https://www.jianshu.com/p/2abd2e344dcb
-
-/**
- * filter:过滤，不参与打分
- * must:如果有多个条件，这些条件都必须满足 and与
- * should:如果有多个条件，满足一个或多个即可 or或
- * must_not:和must相反，必须都不满足条件才可以匹配到 ！非
- * */
