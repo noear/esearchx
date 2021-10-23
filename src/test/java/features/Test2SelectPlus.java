@@ -173,7 +173,7 @@ public class Test2SelectPlus {
     public void test10() throws Exception {
         //输出字段控制（选择模式）
         EsPage<LogDo> result = context.table(indice)
-                .where(c -> c.must()
+                .where(c -> c.useScore().must()
                         .term("tag", "list1")
                         .range("level", r -> r.gt(3)))
                 .limit(0, 10)
