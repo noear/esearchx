@@ -97,7 +97,7 @@ public class Test1Add {
 
         Map<String, LogDo> docs = new LinkedHashMap<>();
 
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 200; i++) {
             LogDo logDo = new LogDo();
             logDo.logger = "waterapi";
             logDo.log_id = SnowflakeUtils.genId();
@@ -122,7 +122,7 @@ public class Test1Add {
 
         List<LogDo> docs = new ArrayList<>();
 
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 100; i++) {
             LogDo logDo = new LogDo();
             logDo.logger = "waterapi";
             logDo.log_id = SnowflakeUtils.genId();
