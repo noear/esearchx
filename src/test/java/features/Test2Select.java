@@ -58,6 +58,17 @@ public class Test2Select {
     }
 
     @Test
+    public void test_term_score() throws Exception {
+
+        EsPage<LogDo> result = context.table(indice)
+                .where(c -> c.score().term("tag", "list1"))
+                .limit(10)
+                .select(LogDo.class);
+
+        assert result.getListSize() == 10;
+    }
+
+    @Test
     public void test_terms() throws Exception {
 
         EsPage<LogDo> result = context.table(indice)
