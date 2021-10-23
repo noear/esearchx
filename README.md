@@ -1,4 +1,9 @@
-# esearchx
+[![Maven Central](https://img.shields.io/maven-central/v/org.noear/esearchx.svg)](https://mvnrepository.com/search?q=esearchx)
+
+` QQ交流群：22200020 `
+
+
+# EsearchX for java
 
 基于 okhttp + snack3 开发，是一个代码直白和简单的 Elasticsearch ORM 框架
 
