@@ -3,7 +3,6 @@ package org.noear.esearchx;
 import okhttp3.*;
 
 import java.io.IOException;
-import java.net.HttpRetryException;
 import java.rmi.ServerException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
@@ -102,7 +101,7 @@ class PriHttpUtils {
     }
 
     //@XNote("执行请求，返回字符串")
-    public String exec2(String mothod) throws IOException {
+    public String execAsBody(String mothod) throws IOException {
         Response tmp = exec(mothod);
 
         int code = tmp.code();
@@ -117,38 +116,38 @@ class PriHttpUtils {
     }
 
     //@XNote("执行请求，返回状态码")
-    public int exec3(String mothod) throws IOException {
+    public int execAsCode(String mothod) throws IOException {
         return exec(mothod).code();
     }
 
 
     //@XNote("发起GET请求，返回字符串（RESTAPI.select 从服务端获取一或多项资源）")
     public String get() throws IOException {
-        return exec2("GET");
+        return execAsBody("GET");
     }
 
     //@XNote("发起POST请求，返回字符串（RESTAPI.create 在服务端新建一项资源）")
     public String post() throws IOException {
-        return exec2("POST");
+        return execAsBody("POST");
     }
 
 
     //@XNote("发起PUT请求，返回字符串（RESTAPI.update 客户端提供改变后的完整资源）")
     public String put() throws IOException {
-        return exec2("PUT");
+        return execAsBody("PUT");
     }
 
     //@XNote("发起PATCH请求，返回字符串（RESTAPI.update 客户端提供改变的属性）")
     public String patch() throws IOException {
-        return exec2("PATCH");
+        return execAsBody("PATCH");
     }
 
     //@XNote("发起DELETE请求，返回字符串（RESTAPI.delete 从服务端删除资源）")
     public String delete() throws IOException {
-        return exec2("DELETE");
+        return execAsBody("DELETE");
     }
 
     public int head() throws IOException {
-        return exec3("HEAD");
+        return execAsCode("HEAD");
     }
 }

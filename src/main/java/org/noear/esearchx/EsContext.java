@@ -71,9 +71,9 @@ public class EsContext {
 
     public String exec(String method, String path, String dsl) throws IOException {
         if (PriUtils.isEmpty(dsl)) {
-            return getHttp(path).exec2(method);
+            return getHttp(path).execAsBody(method);
         } else {
-            return getHttp(path).bodyTxt(dsl, EsTableQuery.mime_json).exec2(method);
+            return getHttp(path).bodyTxt(dsl, EsTableQuery.mime_json).execAsBody(method);
         }
     }
 

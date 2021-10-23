@@ -15,7 +15,7 @@ import java.io.IOException;
  */
 @RunWith(SolonJUnit4ClassRunner.class)
 public class EsTest {
-    final String indiceNoExit = "water$water_log_api";
+    final String indiceNoExit = "water$water_log_apix";
     final String indiceNew = "water$water_log_api_new";
     final String indice = "water$water_log_api_202110";
     final String alias = "water$water_log_api";
