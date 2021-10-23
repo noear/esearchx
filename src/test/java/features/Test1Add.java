@@ -26,7 +26,7 @@ public class Test1Add {
 
 
     @Test
-    public void test3() throws Exception {
+    public void test2() throws Exception {
         String json = Utils.getResourceAsString("demo/log.json", "utf-8");
 
         LogDo logDo = new LogDo();
@@ -43,13 +43,12 @@ public class Test1Add {
 
 
         context.table(indice).upsert(Utils.guid(), logDo);
+    }
 
-
-        /////////////
-
-         logDo = new LogDo();
+    private void test3_do(long id, String json) throws Exception {
+        LogDo logDo = new LogDo();
         logDo.logger = "waterapi";
-        logDo.log_id = 1;
+        logDo.log_id = id;
         logDo.trace_id = Utils.guid();
         logDo.class_name = this.getClass().getName();
         logDo.thread_name = Thread.currentThread().getName();
@@ -59,7 +58,17 @@ public class Test1Add {
         logDo.log_date = LocalDateTime.now().toLocalDate().getDayOfYear();
         logDo.log_fulltime = new Date();
 
-        context.table(indice).upsert("1", logDo);
+        context.table(indice).upsert(String.valueOf(id), logDo);
+    }
+
+    public void test3() throws Exception {
+        String json = Utils.getResourceAsString("demo/log.json", "utf-8");
+
+        test3_do(1, json);
+        test3_do(2, json);
+        test3_do(3, json);
+        test3_do(4, json);
+        test3_do(5, json);
     }
 
     @Test

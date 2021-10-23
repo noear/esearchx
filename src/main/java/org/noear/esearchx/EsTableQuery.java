@@ -153,21 +153,6 @@ public class EsTableQuery {
         return tmp;
     }
 
-    //
-    // selectById
-    //
-    public <T> T selectById(Class<T> clz, String docId) throws IOException {
-        try {
-            String tmp = getHttp(String.format("/%s/_doc/%s", table, docId)).get();
-
-            ONode oItem = ONode.loadStr(tmp);
-            oItem.setAll(oItem.get("_source"));
-
-            return oItem.toObject(clz);
-        } catch (NoExistException e) {
-            return null;
-        }
-    }
 
     //
     // select
@@ -251,6 +236,7 @@ public class EsTableQuery {
         String dsl = getDslq().toJson();
         String json = getHttp(String.format("/%s/_search", table)).bodyTxt(dsl, mime_json).post();
 
+
         ONode oHits = ONode.loadStr(json).get("hits");
 
         long total = oHits.get("total").get("value").getLong();
@@ -264,4 +250,45 @@ public class EsTableQuery {
 
         return new EsPage<>(total, max_score, list);
     }
+
+
+    //
+    // selectByIds
+    //
+    public <T> List<T> selectByIds(Class<T> clz, List<String> docIds) throws IOException {
+        try {
+
+            ONode oNode = new ONode();
+            oNode.getOrNew("query").getOrNew("ids").getOrNew("values").addAll(docIds);
+
+            String dsl = oNode.toJson();
+
+            String json = getHttp(String.format("/%s/_search", table))
+                    .bodyTxt(dsl, mime_json).post();
+
+            ONode oHits = ONode.loadStr(json).get("hits");
+
+            return oHits.get("hits").toObjectList(clz);
+        } catch (NoExistException e) {
+            return null;
+        }
+    }
+
+    //
+    // selectById
+    //
+    public <T> T selectById(Class<T> clz, String docId) throws IOException {
+        try {
+            String tmp = getHttp(String.format("/%s/_doc/%s", table, docId)).get();
+
+            ONode oItem = ONode.loadStr(tmp);
+            oItem.setAll(oItem.get("_source"));
+
+            return oItem.toObject(clz);
+        } catch (NoExistException e) {
+            return null;
+        }
+    }
+
+
 }

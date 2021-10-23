@@ -7,6 +7,9 @@ import org.noear.esearchx.EsContext;
 import org.noear.esearchx.model.EsPage;
 import org.noear.solon.test.SolonJUnit4ClassRunner;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * ElasticSearch 测试
  *
@@ -30,6 +33,17 @@ public class Test2Select {
 
         logDo = context.table("water$water_log_api_202106").selectById(LogDo.class,"1");
         assert logDo == null;
+    }
+
+    @Test
+    public void test_selectByIds() throws Exception {
+        List<LogDo> result = context.table(indice)
+                .selectByIds(LogDo.class, Arrays.asList("1","2"));
+
+        System.out.println(result);
+
+        assert result != null;
+        assert result.size() == 2;
     }
 
     @Test
