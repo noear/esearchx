@@ -12,7 +12,7 @@ import org.noear.solon.test.SolonJUnit4ClassRunner;
  * @author noear 2021/10/22 created
  */
 @RunWith(SolonJUnit4ClassRunner.class)
-public class EsTest {
+public class EsIndiceTest {
     final String indiceNoExit = "water$water_log_api";
     final String indiceNew = "water$water_log_api_new";
     final String indice = "water$water_log_api_202110";
@@ -48,5 +48,4 @@ public class EsTest {
 
         assert context.tableExist(indice) == true;
     }
-
 }

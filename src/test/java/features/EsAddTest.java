@@ -58,9 +58,7 @@ public class EsAddTest {
         logDo.log_date = LocalDateTime.now().toLocalDate().getDayOfYear();
         logDo.log_fulltime = new Date();
 
-
         context.table(indice).upsert("1", logDo);
-
     }
 
     @Test
@@ -78,7 +76,6 @@ public class EsAddTest {
         logDo.content = json;
         logDo.log_date = LocalDateTime.now().toLocalDate().getDayOfYear();
         logDo.log_fulltime = new Date();
-
 
         context.table(indice).insert(logDo);
     }
@@ -105,7 +102,6 @@ public class EsAddTest {
             docs.put(Utils.guid(), logDo);
         }
 
-
         context.table(indice).upsertList(docs);
     }
 
@@ -131,8 +127,6 @@ public class EsAddTest {
             docs.add(logDo);
         }
 
-
         context.table(indice).insertList(docs);
     }
-
 }
