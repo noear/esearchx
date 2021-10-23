@@ -108,9 +108,9 @@ public class EsCondition {
      * */
     public EsCondition termsLike(String field, Object... values) {
         if (oNodeArray == null) {
-            oNode.getOrNew("constant_score").getOrNew("filter").getOrNew("terms").getOrNew(field).addAll(Arrays.asList(values));
+            oNode.getOrNew("terms").getOrNew(field).addAll(Arrays.asList(values));
         } else {
-            oNodeArray.add(new ONode().build(n -> n.getOrNew("constant_score").getOrNew("filter").getOrNew("terms").getOrNew(field).addAll(Arrays.asList(values))));
+            oNodeArray.add(new ONode().build(n -> n.getOrNew("terms").getOrNew(field).addAll(Arrays.asList(values))));
         }
         return this;
     }
@@ -123,10 +123,11 @@ public class EsCondition {
         range.accept(r);
 
         if (oNodeArray == null) {
-            oNode.getOrNew("constant_score").getOrNew("filter").getOrNew("range").set(field, r.oNode);
+            oNode.getOrNew("range").set(field, r.oNode);
         } else {
-            oNodeArray.add(new ONode().build(n -> n.getOrNew("constant_score").getOrNew("filter").getOrNew("range").set(field, r.oNode)));
+            oNodeArray.add(new ONode().build(n -> n.getOrNew("range").set(field, r.oNode)));
         }
+
         return this;
     }
 
