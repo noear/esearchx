@@ -3,6 +3,8 @@ package org.noear.esearchx;
 import okhttp3.*;
 
 import java.io.IOException;
+import java.net.HttpRetryException;
+import java.rmi.ServerException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
@@ -107,8 +109,10 @@ class PriHttpUtils {
         String text = tmp.body().string();
         if (code >= 200 && code <= 300) {
             return text;
+        } else if (code >= 500) {
+            throw new ServerException(text);
         } else {
-            return text;
+            throw new IllegalArgumentException(text);
         }
     }
 

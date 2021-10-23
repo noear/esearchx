@@ -1,10 +1,13 @@
 package org.noear.esearchx;
 
 
+import org.noear.snack.ONode;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.function.Consumer;
 
 /**
  * ElasticSearch 上下文（只支持 7.x +）
@@ -124,6 +127,25 @@ public class EsContext {
      */
     public String tableGet(String indiceName) throws IOException {
         String tmp = getHttp(String.format("/%s", indiceName)).get();
+
+        return tmp;
+    }
+
+    /////////////////
+
+    /**
+     * 表别名处理
+     */
+    public String tableAliases(Consumer<EsActions> aliases) throws IOException {
+        EsActions e = new EsActions();
+        aliases.accept(e);
+
+        PriHttpUtils http = getHttp("/_aliases");
+
+        ONode oNode = new ONode().build(n -> n.set("actions", e.oNode));
+
+        String dsl = oNode.toJson();
+        String tmp = http.bodyTxt(dsl, EsTableQuery.mime_json).post();
 
         return tmp;
     }
