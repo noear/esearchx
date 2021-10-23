@@ -147,4 +147,26 @@ public class Test2Select {
         assert result.getListSize() == 10;
         assert result.getList().get(0).log_id > 0;
     }
+
+    @Test
+    public void test_wildcard() throws Exception {
+
+        EsPage<LogDo> result = context.table(indice)
+                .where(c -> c.wildcard("tag", "l*"))
+                .limit(10)
+                .select(LogDo.class);
+
+        assert result.getListSize() == 10;
+    }
+
+    @Test
+    public void test_regexp() throws Exception {
+
+        EsPage<LogDo> result = context.table(indice)
+                .where(c -> c.regexp("tag", "l.*?"))
+                .limit(10)
+                .select(LogDo.class);
+
+        assert result.getListSize() == 10;
+    }
 }
