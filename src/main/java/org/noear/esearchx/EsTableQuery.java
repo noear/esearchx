@@ -141,18 +141,6 @@ public class EsTableQuery {
         return tmp;
     }
 
-    //
-    // delete
-    //
-    public String deleteByIds(String... docIds) throws IOException {
-        String docIdsStr = String.join(",", docIds);
-
-        PriHttpUtils http = getHttp(String.format("/%s/_doc/%s", table, docIdsStr));
-        String tmp = http.delete();
-
-        return tmp;
-    }
-
 
     //
     // select
@@ -295,4 +283,34 @@ public class EsTableQuery {
     }
 
 
+    //
+    // delete
+    //
+
+    public String delete() throws IOException {
+        if (queryMatch != null) {
+            if (queryMatch.count() > 1) {
+                getDslq().getOrNew("query").set("multi_match", queryMatch);
+            } else {
+                getDslq().getOrNew("query").set("match", queryMatch);
+            }
+        }
+
+        String dsl = getDslq().toJson();
+        String tmp = getHttp(String.format("/%s/_delete_by_query", table)).bodyTxt(dsl, mime_json).post();
+
+        return tmp;
+    }
+
+
+    public boolean deleteById(String docId) throws IOException {
+        PriHttpUtils http = getHttp(String.format("/%s/_doc/%s", table, docId));
+
+        try {
+            http.delete();
+            return true;
+        } catch (NoExistException e) {
+            return true;
+        }
+    }
 }
