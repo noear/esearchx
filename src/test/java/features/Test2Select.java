@@ -147,7 +147,7 @@ public class Test2Select {
         //输出字段控制（选择模式）
         EsPage<LogDo> result = context.table(indice)
                 .where(c -> c.term("tag", "list1"))
-                .limit(0, 5)
+                .limit(5)
                 .orderByAsc("log_id")
                 .onAfter(239467464128819200l)
                 .select(LogDo.class);
