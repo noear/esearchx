@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 /**
- * ElasticSearch 查询器
+ * ElasticSearch 查询构建器
  *
  * @author noear
  * @since 1.0

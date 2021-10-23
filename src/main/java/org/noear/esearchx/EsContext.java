@@ -10,7 +10,7 @@ import java.util.Properties;
 import java.util.function.Consumer;
 
 /**
- * ElasticSearch 上下文（只支持 7.x +）
+ * ElasticSearch 执行上下文（只支持 7.x +）
  *
  * @author noear
  * @since 1.0
