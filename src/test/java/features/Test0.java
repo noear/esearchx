@@ -53,6 +53,11 @@ public class Test0 {
         context.indiceDrop(indiceNew);
     }
 
+    @Test
+    public void test1Exist() throws Exception {
+        context.indiceExist(indiceNew);
+    }
+
 
     private void test2Create(String name) throws IOException {
         if (context.indiceExist(name) == false) {
