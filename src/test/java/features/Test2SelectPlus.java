@@ -31,7 +31,7 @@ public class Test2SelectPlus {
         EsPage<LogDo> result = context.indice(indice)
                 .where(c -> c.must().term("tag", "list1").term("level", 3))
                 .limit(0, 10)
-                .select(LogDo.class);
+                .selectList(LogDo.class);
 
         assert result.getListSize() == 10;
         assert result.getList().get(0).log_id > 0;
@@ -43,7 +43,7 @@ public class Test2SelectPlus {
         EsPage<LogDo> result = context.indice(indice)
                 .where(c -> c.filter().term("tag", "list1").term("level", 3))
                 .limit(0, 10)
-                .select(LogDo.class);
+                .selectList(LogDo.class);
 
         assert result.getListSize() == 10;
         assert result.getList().get(0).log_id > 0;
@@ -55,7 +55,7 @@ public class Test2SelectPlus {
         EsPage<LogDo> result = context.indice(indice)
                 .where(c -> c.useScore().must().term("tag", "list1").term("level", 3))
                 .limit(0, 10)
-                .select(LogDo.class);
+                .selectList(LogDo.class);
 
         assert result.getListSize() == 10;
         assert result.getList().get(0).log_id > 0;
@@ -67,7 +67,7 @@ public class Test2SelectPlus {
         EsPage<LogDo> result = context.indice(indice)
                 .where(c -> c.match("tag", "list1"))
                 .limit(0, 10)
-                .select(LogDo.class);
+                .selectList(LogDo.class);
 
         assert result.getListSize() == 10;
         assert result.getList().get(0).log_id > 0;
@@ -79,7 +79,7 @@ public class Test2SelectPlus {
         EsPage<LogDo> result = context.indice(indice)
                 .where(c -> c.must().match("tag", "list1").term("level", 3))
                 .limit(0, 10)
-                .select(LogDo.class);
+                .selectList(LogDo.class);
 
         assert result.getListSize() == 10;
         assert result.getList().get(0).log_id > 0;
@@ -97,7 +97,7 @@ public class Test2SelectPlus {
                                 .matchPhrasePrefix("summary", "#{")))
                 .limit(0, 10)
                 .orderByDesc("log_id")
-                .select(LogDo.class);
+                .selectList(LogDo.class);
 
         System.out.println(result);
         assert result.getListSize() == 10;
@@ -110,7 +110,7 @@ public class Test2SelectPlus {
         EsPage<LogDo> result = context.indice(indice)
                 .where(c -> c.term("tag", "list1"))
                 .limit(0, 10)
-                .select(LogDo.class, "log_id,trace_id");
+                .selectList(LogDo.class, "log_id,trace_id");
 
         assert result.getListSize() == 10;
         assert result.getList().get(0).log_id > 0;
@@ -123,7 +123,7 @@ public class Test2SelectPlus {
         EsPage<LogDo> result = context.indice(indice)
                 .where(c -> c.term("tag", "list1"))
                 .limit(0, 10)
-                .select(LogDo.class, "!log_id,trace_id");
+                .selectList(LogDo.class, "!log_id,trace_id");
 
         assert result.getListSize() == 10;
         assert result.getList().get(0).log_id == 0;
@@ -138,7 +138,7 @@ public class Test2SelectPlus {
                 .limit(5)
                 .orderByAsc("log_id")
                 .onAfter(239467464128819200l)
-                .select(LogDo.class);
+                .selectList(LogDo.class);
 
         System.out.println(result);
 
@@ -153,7 +153,7 @@ public class Test2SelectPlus {
                 .where(c -> c.term("tag", "list1"))
                 .limit(0, 10)
                 .orderByDesc("log_id")
-                .select(LogDo.class);
+                .selectList(LogDo.class);
 
         assert result.getListSize() == 10;
         assert result.getList().get(0).log_id > result.getList().get(1).log_id;
@@ -167,7 +167,7 @@ public class Test2SelectPlus {
                 .limit(0, 10)
                 .orderByDesc("level")
                 .andByAsc("log_id")
-                .select(LogDo.class);
+                .selectList(LogDo.class);
 
         assert result.getListSize() == 10;
         assert result.getList().get(0).log_id < result.getList().get(1).log_id;
@@ -184,7 +184,7 @@ public class Test2SelectPlus {
                 .orderByAsc("level")
                 .andByAsc("log_id")
                 .minScore(1)
-                .select(LogDo.class);
+                .selectList(LogDo.class);
 
         System.out.println(result);
 
@@ -203,7 +203,7 @@ public class Test2SelectPlus {
                 .limit(0, 10)
                 .orderByAsc("level")
                 .andByAsc("log_id")
-                .select(LogDo.class);
+                .selectList(LogDo.class);
 
         assert result.getListSize() == 10;
         assert result.getList().get(0).level > 3;

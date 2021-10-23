@@ -55,7 +55,7 @@ public class Test2Select {
         EsPage<LogDo> result = context.indice(indice)
                 .where(c -> c.term("tag", "list1"))
                 .limit(10)
-                .select(LogDo.class);
+                .selectList(LogDo.class);
 
         assert result.getListSize() == 10;
     }
@@ -66,7 +66,7 @@ public class Test2Select {
         EsPage<LogDo> result = context.indice(indice)
                 .where(c -> c.useScore().term("tag", "list1"))
                 .limit(10)
-                .select(LogDo.class);
+                .selectList(LogDo.class);
 
         assert result.getListSize() == 10;
     }
@@ -77,7 +77,7 @@ public class Test2Select {
         EsPage<LogDo> result = context.indice(indice)
                 .where(c -> c.terms("tag", "list1", "map1"))
                 .limit(0, 10)
-                .select(LogDo.class);
+                .selectList(LogDo.class);
 
         assert result.getListSize() == 10;
     }
@@ -88,7 +88,7 @@ public class Test2Select {
         EsPage<LogDo> result = context.indice(indice)
                 .where(c -> c.prefix("tag", "m"))
                 .limit(0, 10)
-                .select(LogDo.class);
+                .selectList(LogDo.class);
 
         assert result.getListSize() == 10;
         assert result.getList().get(0).log_id > 0;
@@ -101,7 +101,7 @@ public class Test2Select {
         EsPage<LogDo> result = context.indice(indice)
                 .where(c -> c.match("tag", "list1"))
                 .limit(0, 10)
-                .select(LogDo.class);
+                .selectList(LogDo.class);
 
         System.out.println(result);
 
@@ -115,7 +115,7 @@ public class Test2Select {
         EsPage<LogDo> result = context.indice(indice)
                 .where(c -> c.matchPhrase("tag", "list1"))
                 .limit(0, 10)
-                .select(LogDo.class);
+                .selectList(LogDo.class);
 
         System.out.println(result);
 
@@ -129,7 +129,7 @@ public class Test2Select {
         EsPage<LogDo> result = context.indice(indice)
                 .where(c -> c.matchPhrasePrefix("tag", "list1"))
                 .limit(0, 10)
-                .select(LogDo.class);
+                .selectList(LogDo.class);
 
         System.out.println(result);
 
@@ -143,7 +143,7 @@ public class Test2Select {
         EsPage<LogDo> result = context.indice(indice)
                 .where(c -> c.range("level", r -> r.gt(3)))
                 .limit(0, 10)
-                .select(LogDo.class);
+                .selectList(LogDo.class);
 
         System.out.println(result);
 
@@ -157,7 +157,7 @@ public class Test2Select {
         EsPage<LogDo> result = context.indice(indice)
                 .where(c -> c.wildcard("tag", "l*"))
                 .limit(10)
-                .select(LogDo.class);
+                .selectList(LogDo.class);
 
         assert result.getListSize() == 10;
     }
@@ -168,7 +168,7 @@ public class Test2Select {
         EsPage<LogDo> result = context.indice(indice)
                 .where(c -> c.regexp("tag", "l.*?"))
                 .limit(10)
-                .select(LogDo.class);
+                .selectList(LogDo.class);
 
         assert result.getListSize() == 10;
     }

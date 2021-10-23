@@ -85,7 +85,8 @@ public class EsIndiceQuery {
         cmd.dsl = doc.toJson();
         cmd.path = String.format("/%s/_doc/%s", indiceName, docId);
 
-        String tmp = context.execAsBody(cmd);; //需要 put
+        String tmp = context.execAsBody(cmd);
+        ; //需要 put
         //return: {"_index":"water$water_log_api_202110","_type":"_doc","_id":"eaeb3a43674a45ee8abf7cca379e4834","_version":1,"result":"created","_shards":{"total":2,"successful":1,"failed":0},"_seq_no":0,"_primary_term":1}
 
         return tmp;
@@ -206,8 +207,8 @@ public class EsIndiceQuery {
 
     /**
      * min_score
-     * */
-    public EsIndiceQuery minScore(Object value){
+     */
+    public EsIndiceQuery minScore(Object value) {
         getDslq().getOrNew("min_score").val(value);
         return this;
     }
@@ -215,11 +216,31 @@ public class EsIndiceQuery {
     //
     // select
     //
-    public <T> EsPage<T> select(Class<T> clz) throws IOException {
-        return select(clz, null);
+    public <T> T selectOne(Class<T> clz) throws IOException {
+        limit(1);
+        EsPage<T> page = selectList(clz, null);
+        if (page.getListSize() > 0) {
+            return page.getList().get(0);
+        } else {
+            return null;
+        }
     }
 
-    public <T> EsPage<T> select(Class<T> clz, String fields) throws IOException {
+    public <T> T selectOne(Class<T> clz, String fields) throws IOException {
+        limit(1);
+        EsPage<T> page = selectList(clz, fields);
+        if (page.getListSize() > 0) {
+            return page.getList().get(0);
+        } else {
+            return null;
+        }
+    }
+
+    public <T> EsPage<T> selectList(Class<T> clz) throws IOException {
+        return selectList(clz, null);
+    }
+
+    public <T> EsPage<T> selectList(Class<T> clz, String fields) throws IOException {
         if (queryMatch != null) {
             if (queryMatch.count() > 1) {
                 getDslq().getOrNew("query").set("multi_match", queryMatch);
@@ -330,7 +351,8 @@ public class EsIndiceQuery {
         EsCommand cmd = new EsCommand();
         cmd.method = PriWw.method_post;
         cmd.dslType = PriWw.mime_json;
-        cmd.dsl = getDslq().toJson();;
+        cmd.dsl = getDslq().toJson();
+        ;
         cmd.path = String.format("/%s/_delete_by_query", indiceName);
 
         String tmp = context.execAsBody(cmd);
@@ -343,7 +365,6 @@ public class EsIndiceQuery {
         EsCommand cmd = new EsCommand();
         cmd.method = PriWw.method_delete;
         cmd.path = String.format("/%s/_doc/%s", indiceName, docId);
-
 
         try {
             context.execAsBody(cmd);
