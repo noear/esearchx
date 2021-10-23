@@ -4,6 +4,7 @@ import org.noear.esearchx.model.EsPage;
 import org.noear.snack.ONode;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -190,6 +191,10 @@ public class EsTableQuery {
         return this;
     }
 
+    //
+    //排序
+    //
+
     public EsTableQuery orderByAsc(String field) {
         getDslq().getOrNew("sort").getOrNew(field).set("order", "asc");
         return this;
@@ -210,6 +215,16 @@ public class EsTableQuery {
         return this;
     }
 
+    /**
+     * search_after
+     * */
+    public EsTableQuery onAfter(Object... values) {
+        getDslq().getOrNew("search_after").addAll(Arrays.asList(values));
+        return this;
+    }
+
+    //
+    // select
     //
     public <T> EsPage<T> select(Class<T> clz) throws IOException {
         return select(null, clz);
