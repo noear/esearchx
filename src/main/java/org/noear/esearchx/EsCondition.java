@@ -92,6 +92,16 @@ public class EsCondition {
     }
 
     /**
+     * bool/filter
+     */
+    public EsCondition filter() {
+        filterStyleSet("filter");
+        return this;
+    }
+
+
+
+    /**
      * match
      */
     public EsCondition match(String field, Object value) {

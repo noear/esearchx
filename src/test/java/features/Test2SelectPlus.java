@@ -34,6 +34,18 @@ public class Test2SelectPlus {
     }
 
     @Test
+    public void test1_filter() throws Exception {
+
+        EsPage<LogDo> result = context.table(indice)
+                .where(c -> c.filter().term("tag", "list1").term("level", 3))
+                .limit(0, 10)
+                .select(LogDo.class);
+
+        assert result.getListSize() == 10;
+        assert result.getList().get(0).log_id > 0;
+    }
+
+    @Test
     public void test1_score() throws Exception {
 
         EsPage<LogDo> result = context.table(indice)
