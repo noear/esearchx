@@ -136,13 +136,13 @@ public class EsCondition {
     }
 
     /**
-     * constant_score/filter/range
+     * range
      */
     public EsCondition range(String field, Consumer<EsRange> range) {
         EsRange r = new EsRange();
         range.accept(r);
 
-        filterSet("prefix", field, r.oNode);
+        filterSet("range", field, r.oNode);
         return this;
     }
 
