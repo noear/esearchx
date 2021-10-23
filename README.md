@@ -1,6 +1,6 @@
 # esearchx
 
-基于 okhttp + snack3 开发，是一个代码直白且轻巧的 Elasticsearch ORM 框架
+基于 okhttp + snack3 开发，是一个代码直白和简单的 Elasticsearch ORM 框架
 
 项目里有3个关键的对象概念：
 
