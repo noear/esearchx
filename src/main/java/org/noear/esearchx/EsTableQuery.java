@@ -268,6 +268,10 @@ public class EsTableQuery {
 
             ONode oHits = ONode.loadStr(json).get("hits");
 
+            oHits.get("hits").forEach(n -> {
+                n.setAll(n.get("_source"));
+            });
+
             return oHits.get("hits").toObjectList(clz);
         } catch (NoExistException e) {
             return null;

@@ -61,6 +61,7 @@ public class Test1Add {
         context.table(indice).upsert(String.valueOf(id), logDo);
     }
 
+    @Test
     public void test3() throws Exception {
         String json = Utils.getResourceAsString("demo/log.json", "utf-8");
 
