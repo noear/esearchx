@@ -43,7 +43,7 @@ public class DemoApp {
                 .add("user_log_20200102", "user_log")
                 .add("user_log_20200103", "user_log"));
 
-        //删除索引（如果存在就删了）
+        //删除索引（如果存在就删了；当然也可以直接删）
         if (esx.indiceExist("user_log_20200101")) {
             esx.indiceDrop("user_log_20200101");
         }
