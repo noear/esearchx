@@ -54,7 +54,7 @@ public class Test2Select {
     public void test10_2() throws Exception {
 
         EsPage<LogDo> result = context.table(indice)
-                .where(c -> c.termsIn("tag", "list1"))
+                .where(c -> c.terms("tag", "list1"))
                 .limit(0, 10)
                 .select(LogDo.class);
 

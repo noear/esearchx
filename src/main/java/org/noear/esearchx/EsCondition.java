@@ -13,134 +13,145 @@ import java.util.function.Consumer;
  */
 public class EsCondition {
     protected final ONode oNode = new ONode();
-    ONode oNodeArray;
+    ONode oNodeArray = null;
+    String score_mode = null;
+
+
+
+    private void filterStyleSet(String name) {
+        if (score_mode == null) {
+            oNodeArray = oNode.getOrNew("bool").getOrNew(name).asArray();
+        } else {
+            //使用评分模式
+            oNodeArray = oNode.getOrNew("function_score").getOrNew("query").getOrNew("bool").getOrNew(name).asArray();
+
+            if (score_mode.length() > 0) {
+                oNode.getOrNew("function_score").set("score_mode", score_mode);
+            }
+        }
+    }
+
+    private void filterSet(String type, String field, Object value) {
+        if (oNodeArray == null) {
+            if (score_mode == null) {
+                oNode.getOrNew(type).set(field, value);
+            }else{
+                //使用评分模式
+                oNode.getOrNew("function_score").getOrNew("query").getOrNew(type).set(field, value);
+                if (score_mode.length() > 0) {
+                    oNode.getOrNew("function_score").set("score_mode", score_mode);
+                }
+            }
+        } else {
+            oNodeArray.add(new ONode().build(n -> n.getOrNew(type).set(field, value)));
+        }
+    }
+
+    /**
+     * function_score/..
+     */
+    public EsCondition score() {
+        return score(null);
+    }
+
+    /**
+     * function_score/..
+     */
+    public EsCondition score(String mode) {
+        if (mode == null) {
+            score_mode = "";
+        } else {
+            score_mode = null;
+        }
+
+        return this;
+    }
 
     /**
      * bool/must
-     * */
+     */
     public EsCondition must() {
-        oNodeArray = oNode.getOrNew("bool").getOrNew("must").asArray();
+        filterStyleSet("must");
         return this;
     }
 
     /**
      * bool/should
-     * */
+     */
     public EsCondition should() {
-        oNodeArray = oNode.getOrNew("bool").getOrNew("should").asArray();
+        filterStyleSet("should");
         return this;
     }
 
     /**
      * bool/mustNot
-     * */
+     */
     public EsCondition mustNot() {
-        oNodeArray = oNode.getOrNew("bool").getOrNew("must_not").asArray();
+        filterStyleSet("must_not");
         return this;
     }
 
     /**
      * match
-     * */
+     */
     public EsCondition match(String field, Object value) {
-        if (oNodeArray == null) {
-            oNode.getOrNew("match").set(field, value);
-        } else {
-            oNodeArray.add(new ONode().build(n -> n.getOrNew("match").set(field, value)));
-        }
+        filterSet("match", field, value);
         return this;
     }
 
 
     /**
      * match_phrase_prefix
-     * */
+     */
     public EsCondition matchPrefix(String field, Object value) {
-        if (oNodeArray == null) {
-            oNode.getOrNew("match_phrase_prefix").set(field, value);
-        } else {
-            oNodeArray.add(new ONode().build(n -> n.getOrNew("match_phrase_prefix").set(field, value)));
-        }
+        filterSet("match_phrase_prefix", field, value);
         return this;
     }
 
 
     /**
      * ids
-     * */
+     */
     public EsCondition ids(String field, Object... values) {
-        if (oNodeArray == null) {
-            oNode.getOrNew("ids").getOrNew(field).addAll(Arrays.asList(values));
-        } else {
-            oNodeArray.add(new ONode().build(n -> n.getOrNew("ids").getOrNew(field).addAll(Arrays.asList(values))));
-        }
+        filterSet("ids", field, new ONode().addAll(Arrays.asList(values)));
         return this;
     }
 
 
     /**
      * term
-     * */
+     */
     public EsCondition term(String field, Object value) {
-        if (oNodeArray == null) {
-            oNode.getOrNew("term").set(field, value);
-        } else {
-            oNodeArray.add(new ONode().build(n -> n.getOrNew("term").set(field, value)));
-        }
+        filterSet("term", field, value);
         return this;
     }
 
 
     /**
      * terms
-     * */
-    public EsCondition termsIn(String field, Object... values) {
-        if (oNodeArray == null) {
-            oNode.getOrNew("terms").getOrNew(field).addAll(Arrays.asList(values));
-        } else {
-            oNodeArray.add(new ONode().build(n -> n.getOrNew("terms").getOrNew(field).addAll(Arrays.asList(values))));
-        }
-        return this;
-    }
-
-    /**
-     * constant_score/filter/terms
-     * */
-    public EsCondition termsLike(String field, Object... values) {
-        if (oNodeArray == null) {
-            oNode.getOrNew("terms").getOrNew(field).addAll(Arrays.asList(values));
-        } else {
-            oNodeArray.add(new ONode().build(n -> n.getOrNew("terms").getOrNew(field).addAll(Arrays.asList(values))));
-        }
+     */
+    public EsCondition terms(String field, Object... values) {
+        filterSet("terms", field, new ONode().addAll(Arrays.asList(values)));
         return this;
     }
 
     /**
      * constant_score/filter/range
-     * */
+     */
     public EsCondition range(String field, Consumer<EsRange> range) {
         EsRange r = new EsRange();
         range.accept(r);
 
-        if (oNodeArray == null) {
-            oNode.getOrNew("range").set(field, r.oNode);
-        } else {
-            oNodeArray.add(new ONode().build(n -> n.getOrNew("range").set(field, r.oNode)));
-        }
-
+        filterSet("prefix", field, r.oNode);
         return this;
     }
 
 
     /**
      * prefix
-     * */
+     */
     public EsCondition prefix(String field, String value) {
-        if (oNodeArray == null) {
-            oNode.getOrNew("prefix").set(field, value);
-        } else {
-            oNodeArray.add(new ONode().build(n -> n.getOrNew("prefix").set(field, value)));
-        }
+        filterSet("prefix", field, value);
         return this;
     }
 
@@ -148,31 +159,19 @@ public class EsCondition {
      * wildcard
      *
      * @param value *表示任意字符，?表示任意单个字符(
-     * */
+     */
     public EsCondition wildcard(String field, String value) {
-        if (oNodeArray == null) {
-            oNode.getOrNew("wildcard").set(field, value);
-        } else {
-            oNodeArray.add(new ONode().build(n -> n.getOrNew("wildcard").set(field, value)));
-        }
+        filterSet("wildcard", field, value);
         return this;
     }
 
     /**
      * regexp
-     * */
+     */
     public EsCondition regexp(String field, String value) {
-        if (oNodeArray == null) {
-            oNode.getOrNew("regexp").set(field, value);
-        } else {
-            oNodeArray.add(new ONode().build(n -> n.getOrNew("regexp").set(field, value)));
-        }
+        filterSet("regexp", field, value);
         return this;
     }
-    //todo: https://www.cnblogs.com/juncaoit/p/12664109.html
-    //todo: https://www.jianshu.com/p/2abd2e344dcb
-
-
 
 
     public EsCondition add(Consumer<EsCondition> condition) {
@@ -189,6 +188,9 @@ public class EsCondition {
     }
 }
 
+
+//todo: https://www.cnblogs.com/juncaoit/p/12664109.html
+//todo: https://www.jianshu.com/p/2abd2e344dcb
 
 /**
  * filter:过滤，不参与打分
