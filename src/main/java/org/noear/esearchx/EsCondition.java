@@ -37,10 +37,6 @@ public class EsCondition {
      * 设置过滤风格
      * */
     private void filterSet(String type, String field, Object value) {
-        if(value == null){
-            throw new IllegalArgumentException("value");
-        }
-
         if (oNodeArray == null) {
             if (score_mode == null) {
                 oNode.getOrNew(type).set(field, value);
