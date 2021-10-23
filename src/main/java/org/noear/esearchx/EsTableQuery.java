@@ -1,5 +1,6 @@
 package org.noear.esearchx;
 
+import org.noear.esearchx.exception.NoExistException;
 import org.noear.esearchx.model.EsPage;
 import org.noear.snack.ONode;
 
@@ -162,12 +163,16 @@ public class EsTableQuery {
     //
 
     public <T> T selectById(String docId, Class<?> clz) throws IOException {
-        String tmp = getHttp(String.format("/%s/_doc/%s", table, docId)).get();
+        try {
+            String tmp = getHttp(String.format("/%s/_doc/%s", table, docId)).get();
 
-        ONode oItem = ONode.loadStr(tmp);
-        oItem.setAll(oItem.get("_source"));
+            ONode oItem = ONode.loadStr(tmp);
+            oItem.setAll(oItem.get("_source"));
 
-        return oItem.toObject(clz);
+            return oItem.toObject(clz);
+        } catch (NoExistException e) {
+            return null;
+        }
     }
 
     //

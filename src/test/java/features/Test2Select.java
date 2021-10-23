@@ -23,9 +23,13 @@ public class Test2Select {
 
     @Test
     public void test1() throws Exception {
-        LogDo logDo = context.table(indice).selectById("1", LogDo.class);
+        LogDo logDo = context.table("water$water_log_api_202110").selectById("1", LogDo.class);
         assert logDo != null;
         assert logDo.log_id == 1;
+
+
+        logDo = context.table("water$water_log_api_202106").selectById("1", LogDo.class);
+        assert logDo == null;
     }
 
     @Test

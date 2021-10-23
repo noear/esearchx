@@ -20,6 +20,7 @@ public class Test1Add {
     final String indiceNoExit = "water$water_log_api";
     final String indiceNew = "water$water_log_api_new";
     final String indice = "water$water_log_api_202110";
+    final String indice2 = "water$water_log_api_202109";
 
     EsContext context = new EsContext("eshost:30480,eshost:30480");
 
@@ -102,7 +103,7 @@ public class Test1Add {
             docs.put(Utils.guid(), logDo);
         }
 
-        context.table(indice).upsertList(docs);
+        context.table(indice2).upsertList(docs);
     }
 
     @Test
@@ -127,6 +128,6 @@ public class Test1Add {
             docs.add(logDo);
         }
 
-        context.table(indice).insertList(docs);
+        context.table(indice2).insertList(docs);
     }
 }
