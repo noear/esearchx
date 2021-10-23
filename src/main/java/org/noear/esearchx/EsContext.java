@@ -136,8 +136,8 @@ public class EsContext {
     /**
      * 表别名处理
      */
-    public String tableAliases(Consumer<EsActions> aliases) throws IOException {
-        EsActions e = new EsActions();
+    public String tableAliases(Consumer<EsAliases> aliases) throws IOException {
+        EsAliases e = new EsAliases();
         aliases.accept(e);
 
         PriHttpUtils http = getHttp("/_aliases");
