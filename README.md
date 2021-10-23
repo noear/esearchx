@@ -25,7 +25,7 @@
 <dependency>
     <groupId>org.noear</groupId>
     <artifactId>esearchx</artifactId>
-    <version>1.0</version>
+    <version>1.0.1</version>
 </dependency>
 ```
 
@@ -75,7 +75,7 @@ public class DemoApp {
                 .where(r -> r.term("level", 5))
                 .orderByDesc("log_id")
                 .limit(50)
-                .select(LogDo.class);
+                .selectList(LogDo.class);
         
         //一个复杂些的查询
         EsPage<LogDo> result = esx.indice(indice)
@@ -86,7 +86,7 @@ public class DemoApp {
                 .andByAsc("log_id")
                 .minScore(1)
                 .limit(50, 50)
-                .select(LogDo.class);
+                .selectList(LogDo.class);
     }
 }
 
