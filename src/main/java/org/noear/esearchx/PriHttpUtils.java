@@ -1,6 +1,7 @@
 package org.noear.esearchx;
 
 import okhttp3.*;
+import org.noear.esearchx.exception.NoExistException;
 
 import java.io.IOException;
 import java.rmi.ServerException;
@@ -108,6 +109,8 @@ class PriHttpUtils {
         String text = tmp.body().string();
         if (code >= 200 && code <= 300) {
             return text;
+        } else if (code == 404) {
+            throw new NoExistException(text);
         } else if (code >= 500) {
             throw new ServerException(text);
         } else {
