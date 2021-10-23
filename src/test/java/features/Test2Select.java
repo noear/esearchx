@@ -4,7 +4,7 @@ import features.model.LogDo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.noear.esearchx.EsContext;
-import org.noear.esearchx.model.EsPage;
+import org.noear.esearchx.EsData;
 import org.noear.solon.annotation.Inject;
 import org.noear.solon.test.SolonJUnit4ClassRunner;
 
@@ -52,7 +52,7 @@ public class Test2Select {
     @Test
     public void test_term() throws Exception {
 
-        EsPage<LogDo> result = context.indice(indice)
+        EsData<LogDo> result = context.indice(indice)
                 .where(c -> c.term("tag", "list1"))
                 .limit(10)
                 .selectList(LogDo.class);
@@ -63,7 +63,7 @@ public class Test2Select {
     @Test
     public void test_term_score() throws Exception {
 
-        EsPage<LogDo> result = context.indice(indice)
+        EsData<LogDo> result = context.indice(indice)
                 .where(c -> c.useScore().term("tag", "list1"))
                 .limit(10)
                 .selectList(LogDo.class);
@@ -74,7 +74,7 @@ public class Test2Select {
     @Test
     public void test_terms() throws Exception {
 
-        EsPage<LogDo> result = context.indice(indice)
+        EsData<LogDo> result = context.indice(indice)
                 .where(c -> c.terms("tag", "list1", "map1"))
                 .limit(0, 10)
                 .selectList(LogDo.class);
@@ -85,7 +85,7 @@ public class Test2Select {
     @Test
     public void test_prefix() throws Exception {
 
-        EsPage<LogDo> result = context.indice(indice)
+        EsData<LogDo> result = context.indice(indice)
                 .where(c -> c.prefix("tag", "m"))
                 .limit(0, 10)
                 .selectList(LogDo.class);
@@ -98,7 +98,7 @@ public class Test2Select {
     @Test
     public void test_match() throws Exception {
 
-        EsPage<LogDo> result = context.indice(indice)
+        EsData<LogDo> result = context.indice(indice)
                 .where(c -> c.match("tag", "list1"))
                 .limit(0, 10)
                 .selectList(LogDo.class);
@@ -112,7 +112,7 @@ public class Test2Select {
     @Test
     public void test_matchPhrase() throws Exception {
 
-        EsPage<LogDo> result = context.indice(indice)
+        EsData<LogDo> result = context.indice(indice)
                 .where(c -> c.matchPhrase("tag", "list1"))
                 .limit(0, 10)
                 .selectList(LogDo.class);
@@ -126,7 +126,7 @@ public class Test2Select {
     @Test
     public void test_matchPhrasePrefix() throws Exception {
 
-        EsPage<LogDo> result = context.indice(indice)
+        EsData<LogDo> result = context.indice(indice)
                 .where(c -> c.matchPhrasePrefix("tag", "list1"))
                 .limit(0, 10)
                 .selectList(LogDo.class);
@@ -140,7 +140,7 @@ public class Test2Select {
     @Test
     public void test_range() throws Exception {
 
-        EsPage<LogDo> result = context.indice(indice)
+        EsData<LogDo> result = context.indice(indice)
                 .where(c -> c.range("level", r -> r.gt(3)))
                 .limit(0, 10)
                 .selectList(LogDo.class);
@@ -154,7 +154,7 @@ public class Test2Select {
     @Test
     public void test_wildcard() throws Exception {
 
-        EsPage<LogDo> result = context.indice(indice)
+        EsData<LogDo> result = context.indice(indice)
                 .where(c -> c.wildcard("tag", "l*"))
                 .limit(10)
                 .selectList(LogDo.class);
@@ -165,7 +165,7 @@ public class Test2Select {
     @Test
     public void test_regexp() throws Exception {
 
-        EsPage<LogDo> result = context.indice(indice)
+        EsData<LogDo> result = context.indice(indice)
                 .where(c -> c.regexp("tag", "l.*?"))
                 .limit(10)
                 .selectList(LogDo.class);

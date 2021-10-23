@@ -71,14 +71,14 @@ public class DemoApp {
         LogDo result = esx.indice("user_log").selectById("1");
         
         //一个带条件的查询
-        EsPage<LogDo> result = esx.indice("user_log")
+        EsData<LogDo> result = esx.indice("user_log")
                 .where(r -> r.term("level", 5))
                 .orderByDesc("log_id")
                 .limit(50)
                 .selectList(LogDo.class);
         
         //一个复杂些的查询
-        EsPage<LogDo> result = esx.indice(indice)
+        EsData<LogDo> result = esx.indice(indice)
                 .where(c -> c.useScore().must()
                         .term("tag", "list1")
                         .range("level", r -> r.gt(3)))

@@ -1,24 +1,36 @@
-package org.noear.esearchx.model;
+package org.noear.esearchx;
 
 import java.io.Serializable;
 import java.util.List;
 
 /**
- * @author noear 2021/10/22 created
+ * ElasticSearch 数据块
+ *
+ * @author noear
+ * @since 1.0
  */
-public class EsPage<T> implements Serializable {
+public class EsData<T> implements Serializable {
     final long total;
     final List<T> list;
     final double maxScore;
 
+    /**
+     * 获取总记录数
+     * */
     public long getTotal() {
         return total;
     }
 
+    /**
+     * 获取最大评分
+     * */
     public double getMaxScore() {
         return maxScore;
     }
 
+    /**
+     * 获取列表
+     * */
     public List<T> getList() {
         return list;
     }
@@ -31,7 +43,7 @@ public class EsPage<T> implements Serializable {
         }
     }
 
-    public EsPage(long total, double maxScore, List<T> list) {
+    public EsData(long total, double maxScore, List<T> list) {
         this.total = total;
         this.maxScore = maxScore;
         this.list = list;

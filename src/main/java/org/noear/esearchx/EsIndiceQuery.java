@@ -1,7 +1,6 @@
 package org.noear.esearchx;
 
 import org.noear.esearchx.exception.NoExistException;
-import org.noear.esearchx.model.EsPage;
 import org.noear.snack.ONode;
 
 import java.io.IOException;
@@ -218,7 +217,7 @@ public class EsIndiceQuery {
     //
     public <T> T selectOne(Class<T> clz) throws IOException {
         limit(1);
-        EsPage<T> page = selectList(clz, null);
+        EsData<T> page = selectList(clz, null);
         if (page.getListSize() > 0) {
             return page.getList().get(0);
         } else {
@@ -228,7 +227,7 @@ public class EsIndiceQuery {
 
     public <T> T selectOne(Class<T> clz, String fields) throws IOException {
         limit(1);
-        EsPage<T> page = selectList(clz, fields);
+        EsData<T> page = selectList(clz, fields);
         if (page.getListSize() > 0) {
             return page.getList().get(0);
         } else {
@@ -236,11 +235,11 @@ public class EsIndiceQuery {
         }
     }
 
-    public <T> EsPage<T> selectList(Class<T> clz) throws IOException {
+    public <T> EsData<T> selectList(Class<T> clz) throws IOException {
         return selectList(clz, null);
     }
 
-    public <T> EsPage<T> selectList(Class<T> clz, String fields) throws IOException {
+    public <T> EsData<T> selectList(Class<T> clz, String fields) throws IOException {
         if (queryMatch != null) {
             if (queryMatch.count() > 1) {
                 getDslq().getOrNew("query").set("multi_match", queryMatch);
@@ -279,7 +278,7 @@ public class EsIndiceQuery {
 
         List<T> list = oHits.get("hits").toObjectList(clz);
 
-        return new EsPage<>(total, max_score, list);
+        return new EsData<>(total, max_score, list);
     }
 
 
