@@ -37,7 +37,7 @@ public class Test2SelectPlus {
     public void test1_score() throws Exception {
 
         EsPage<LogDo> result = context.table(indice)
-                .where(c -> c.score().must().term("tag", "list1").term("level", 3))
+                .where(c -> c.useScore().must().term("tag", "list1").term("level", 3))
                 .limit(0, 10)
                 .select(LogDo.class);
 

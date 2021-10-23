@@ -50,14 +50,14 @@ public class EsCondition {
     /**
      * function_score/..
      */
-    public EsCondition score() {
-        return score(null);
+    public EsCondition useScore() {
+        return useScore(null);
     }
 
     /**
      * function_score/..
      */
-    public EsCondition score(String mode) {
+    public EsCondition useScore(String mode) {
         if (mode == null) {
             score_mode = "";
         } else {
