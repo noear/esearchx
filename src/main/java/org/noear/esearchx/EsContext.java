@@ -103,7 +103,13 @@ public class EsContext {
     public String tableCreate(String indiceName, String dsl) throws IOException {
         PriHttpUtils http = getHttp(String.format("/%s", indiceName));
 
-        String tmp = http.bodyTxt(dsl, PriWw.mime_json).put();
+        EsCommand cmd = new EsCommand();
+        cmd.method = PriWw.method_put;
+        cmd.path = String.format("/%s", indiceName);
+        cmd.dsl = dsl;
+        cmd.dslType = PriWw.mime_json;
+
+        String tmp = execAsBody(cmd);
         //return: {"acknowledged":true,"shards_acknowledged":true,"index":"water$water_log_api_202110"}
 
         return tmp;
@@ -115,7 +121,11 @@ public class EsContext {
      * @param indiceName 索引名字
      */
     public boolean tableExist(String indiceName) throws IOException {
-        int tmp = getHttp(String.format("/%s", indiceName)).head();
+        EsCommand cmd = new EsCommand();
+        cmd.method = PriWw.method_head;
+        cmd.path = String.format("/%s", indiceName);
+
+        int tmp = execAsCode(cmd);
 
         return tmp == 200; //404不存在
     }
@@ -126,7 +136,11 @@ public class EsContext {
      * @param indiceName 索引名字
      */
     public String tableDrop(String indiceName) throws IOException {
-        String tmp = getHttp(String.format("/%s", indiceName)).delete();
+        EsCommand cmd = new EsCommand();
+        cmd.method = PriWw.method_delete;
+        cmd.path = String.format("/%s", indiceName);
+
+        String tmp = execAsBody(cmd);
 
         return tmp;
     }
@@ -137,7 +151,12 @@ public class EsContext {
      * @param indiceName 索引名字
      */
     public String tableShow(String indiceName) throws IOException {
-        String tmp = getHttp(String.format("/%s", indiceName)).get();
+        EsCommand cmd = new EsCommand();
+        cmd.method = PriWw.method_get;
+        cmd.path = String.format("/%s", indiceName);
+
+
+        String tmp = execAsBody(cmd);
 
         return tmp;
     }
@@ -151,12 +170,15 @@ public class EsContext {
         EsAliases e = new EsAliases();
         aliases.accept(e);
 
-        PriHttpUtils http = getHttp("/_aliases");
-
         ONode oNode = new ONode().build(n -> n.set("actions", e.oNode));
 
-        String dsl = oNode.toJson();
-        String tmp = http.bodyTxt(dsl, PriWw.mime_json).post();
+        EsCommand cmd = new EsCommand();
+        cmd.method = PriWw.method_post;
+        cmd.dslType = PriWw.mime_json;
+        cmd.dsl = oNode.toJson();
+        cmd.path = "/_aliases";
+
+        String tmp = execAsBody(cmd);
 
         return tmp;
     }
