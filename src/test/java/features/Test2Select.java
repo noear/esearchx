@@ -23,12 +23,12 @@ public class Test2Select {
 
     @Test
     public void test_selectById() throws Exception {
-        LogDo logDo = context.table("water$water_log_api_202110").selectById("1", LogDo.class);
+        LogDo logDo = context.table("water$water_log_api_202110").selectById(LogDo.class, "1");
         assert logDo != null;
         assert logDo.log_id == 1;
 
 
-        logDo = context.table("water$water_log_api_202106").selectById("1", LogDo.class);
+        logDo = context.table("water$water_log_api_202106").selectById(LogDo.class,"1");
         assert logDo == null;
     }
 
@@ -67,7 +67,6 @@ public class Test2Select {
     }
 
 
-
     @Test
     public void test_match() throws Exception {
 
@@ -101,6 +100,20 @@ public class Test2Select {
 
         EsPage<LogDo> result = context.table(indice)
                 .where(c -> c.matchPhrasePrefix("tag", "list1"))
+                .limit(0, 10)
+                .select(LogDo.class);
+
+        System.out.println(result);
+
+        assert result.getListSize() == 10;
+        assert result.getList().get(0).log_id > 0;
+    }
+
+    @Test
+    public void test_range() throws Exception {
+
+        EsPage<LogDo> result = context.table(indice)
+                .where(c -> c.range("level", r -> r.gt(3)))
                 .limit(0, 10)
                 .select(LogDo.class);
 

@@ -82,7 +82,7 @@ public class Test2SelectPlus {
         EsPage<LogDo> result = context.table(indice)
                 .where(c -> c.term("tag", "list1"))
                 .limit(0, 10)
-                .select("log_id,trace_id", LogDo.class);
+                .select(LogDo.class, "log_id,trace_id");
 
         assert result.getListSize() == 10;
         assert result.getList().get(0).log_id > 0;
@@ -95,7 +95,7 @@ public class Test2SelectPlus {
         EsPage<LogDo> result = context.table(indice)
                 .where(c -> c.term("tag", "list1"))
                 .limit(0, 10)
-                .select("!log_id,trace_id", LogDo.class);
+                .select(LogDo.class, "!log_id,trace_id");
 
         assert result.getListSize() == 10;
         assert result.getList().get(0).log_id == 0;

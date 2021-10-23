@@ -62,11 +62,6 @@ public class EsTableQuery {
         return this;
     }
 
-    //
-    // aliase
-    //
-
-
     ////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //
@@ -161,8 +156,7 @@ public class EsTableQuery {
     //
     // selectById
     //
-
-    public <T> T selectById(String docId, Class<?> clz) throws IOException {
+    public <T> T selectById(Class<T> clz, String docId) throws IOException {
         try {
             String tmp = getHttp(String.format("/%s/_doc/%s", table, docId)).get();
 
@@ -191,7 +185,7 @@ public class EsTableQuery {
         return this;
     }
 
-    public EsTableQuery limit( int size) {
+    public EsTableQuery limit(int size) {
         getDslq().set("size", size);
         return this;
     }
@@ -222,7 +216,7 @@ public class EsTableQuery {
 
     /**
      * search_after
-     * */
+     */
     public EsTableQuery onAfter(Object... values) {
         getDslq().getOrNew("search_after").addAll(Arrays.asList(values));
         return this;
@@ -232,10 +226,10 @@ public class EsTableQuery {
     // select
     //
     public <T> EsPage<T> select(Class<T> clz) throws IOException {
-        return select(null, clz);
+        return select(clz, null);
     }
 
-    public <T> EsPage<T> select(String fields, Class<T> clz) throws IOException {
+    public <T> EsPage<T> select(Class<T> clz, String fields) throws IOException {
         if (queryMatch != null) {
             if (queryMatch.count() > 1) {
                 getDslq().getOrNew("query").set("multi_match", queryMatch);

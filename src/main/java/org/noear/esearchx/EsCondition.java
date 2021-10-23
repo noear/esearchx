@@ -116,16 +116,6 @@ public class EsCondition {
         return this;
     }
 
-
-    /**
-     * ids
-     */
-    public EsCondition ids(String field, Object... values) {
-        filterSet("ids", field, new ONode().addAll(Arrays.asList(values)));
-        return this;
-    }
-
-
     /**
      * term
      */
