@@ -65,7 +65,7 @@ public class DemoApp {
 
 
         //一个复杂些的查询
-        EsPage<LogDo> result = context.indice(indice)
+        EsPage<LogDo> result = esx.indice(indice)
                 .where(c -> c.useScore().must()
                         .term("tag", "list1")
                         .range("level", r -> r.gt(3)))
