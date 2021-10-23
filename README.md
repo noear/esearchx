@@ -54,6 +54,7 @@ public class DemoApp {
         //一个带条件的查询
         EsPage<LogDo> result = esx.indice("user_log")
                 .where(r -> r.term("level", 5))
+                .orderByDesc("log_id")
                 .limit(50)
                 .select(LogDo.class);
 
