@@ -215,6 +215,24 @@ public class EsIndiceQuery {
     //
     // select
     //
+    public Map selectMap() throws IOException {
+        return selectOne(Map.class);
+    }
+
+    public Map selectMap(String fields) throws IOException {
+        return selectOne(Map.class, fields);
+    }
+
+    public List<Map> selectMapList() throws IOException{
+        return selectList(Map.class).getList();
+    }
+
+    public List<Map> selectMapList(String fields) throws IOException{
+        return selectList(Map.class, fields).getList();
+    }
+
+
+
     public <T> T selectOne(Class<T> clz) throws IOException {
         limit(1);
         EsData<T> page = selectList(clz, null);
@@ -234,6 +252,7 @@ public class EsIndiceQuery {
             return null;
         }
     }
+
 
     public <T> EsData<T> selectList(Class<T> clz) throws IOException {
         return selectList(clz, null);
@@ -280,6 +299,9 @@ public class EsIndiceQuery {
 
         return new EsData<>(total, max_score, list);
     }
+
+
+
 
 
     //
@@ -345,13 +367,10 @@ public class EsIndiceQuery {
             }
         }
 
-        String dsl = getDslq().toJson();
-
         EsCommand cmd = new EsCommand();
         cmd.method = PriWw.method_post;
         cmd.dslType = PriWw.mime_json;
         cmd.dsl = getDslq().toJson();
-        ;
         cmd.path = String.format("/%s/_delete_by_query", indiceName);
 
         String tmp = context.execAsBody(cmd);

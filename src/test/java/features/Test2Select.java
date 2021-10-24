@@ -10,6 +10,7 @@ import org.noear.solon.test.SolonJUnit4ClassRunner;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * ElasticSearch 测试
@@ -221,5 +222,34 @@ public class Test2Select {
                 .selectList(LogDo.class);
 
         assert result.getListSize() == 10;
+    }
+
+
+
+    @Test
+    public void test_selectMapList() throws Exception {
+        List<Map> result = context.indice(indice)
+                .where(c -> c.term("tag", "list1"))
+                .limit(10)
+                .selectMapList();
+
+        System.out.println(result);
+
+        assert result.size() == 10;
+    }
+
+
+    @Test
+    public void test_selectMap() throws Exception {
+        Map result = context.indice(indice)
+                .where(c -> c.term("tag", "list1"))
+                .limit(1)
+                .selectMap();
+
+        assert result != null;
+
+        System.out.println(result);
+
+        assert result.size() >= 10;
     }
 }
