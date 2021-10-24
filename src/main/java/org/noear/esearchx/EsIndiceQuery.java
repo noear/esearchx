@@ -101,7 +101,6 @@ public class EsIndiceQuery {
         return insertDo(ONode.loadObj(doc));
     }
 
-
     public <T> String insertList(List<T> docs) throws IOException {
         StringBuilder docJson = new StringBuilder();
         docs.forEach((doc) -> {
