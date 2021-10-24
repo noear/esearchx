@@ -11,7 +11,7 @@ import java.util.Properties;
 import java.util.function.Consumer;
 
 /**
- * ElasticSearch 执行上下文（只支持 7.x +）
+ * ElasticSearch 执行上下文（支持 7.x +）
  *
  * @author noear
  * @since 1.0
@@ -149,6 +149,25 @@ public class EsContext {
         } catch (NoExistException e) {
             return true;
         }
+    }
+
+    /**
+     * 索引设置修改
+     *
+     * @param indiceName 索引名字
+     */
+    public String indiceSettings(String indiceName, Consumer<EsSetting> setting) throws IOException {
+        EsSetting s = new EsSetting();
+        setting.accept(s);
+
+        EsCommand cmd = new EsCommand();
+        cmd.method = PriWw.method_put;
+        cmd.path = String.format("/%s/_settings", indiceName);
+        cmd.dsl = s.oNode.toJson();
+
+        String tmp = execAsBody(cmd);
+
+        return tmp;
     }
 
     /**
