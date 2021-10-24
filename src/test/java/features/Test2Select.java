@@ -110,6 +110,20 @@ public class Test2Select {
     }
 
     @Test
+    public void test_match2() throws Exception {
+
+        EsData<LogDo> result = context.indice(indice)
+                .where(c -> c.match("content", "class_name"))
+                .limit(0, 10)
+                .selectList(LogDo.class);
+
+        System.out.println(result);
+
+        assert result.getListSize() == 10;
+        assert result.getList().get(0).log_id > 0;
+    }
+
+    @Test
     public void test_matchPhrase() throws Exception {
 
         EsData<LogDo> result = context.indice(indice)
