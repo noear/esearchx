@@ -18,10 +18,8 @@ import java.util.*;
  */
 @RunWith(SolonJUnit4ClassRunner.class)
 public class Test1Add {
-    final String indiceNoExit = "water$water_log_api";
-    final String indiceNew = "water$water_log_api_new";
-    final String indice = "water$water_log_api_202110";
-    final String indice2 = "water$water_log_api_202109";
+    final String indice = "test-user_log_202110";
+    final String indice2 = "test-user_log_202109";
 
 
     @Inject("${test.esx}")

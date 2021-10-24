@@ -113,7 +113,6 @@ public class EsContext {
         cmd.dslType = PriWw.mime_json;
 
         String tmp = execAsBody(cmd);
-        //return: {"acknowledged":true,"shards_acknowledged":true,"index":"water$water_log_api_202110"}
 
         return tmp;
     }

@@ -15,10 +15,7 @@ import org.noear.solon.test.SolonJUnit4ClassRunner;
 @RunWith(SolonJUnit4ClassRunner.class)
 public class Test3Del {
 
-    final String indiceNoExit = "water$water_log_apix";
-    final String indiceNew = "water$water_log_api_new";
-    final String indice = "water$water_log_api_202110";
-    final String alias = "water$water_log_api";
+    final String indice = "test-user_log_202110";
 
 
     @Inject("${test.esx}")

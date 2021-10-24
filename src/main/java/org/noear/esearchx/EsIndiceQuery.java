@@ -72,7 +72,6 @@ public class EsIndiceQuery {
         cmd.path = String.format("/%s/_doc/", indiceName);
 
         String tmp = context.execAsBody(cmd); //需要 post
-        //return: {"_index":"water$water_log_api_202110","_type":"_doc","_id":"eaeb3a43674a45ee8abf7cca379e4834","_version":1,"result":"created","_shards":{"total":2,"successful":1,"failed":0},"_seq_no":0,"_primary_term":1}
 
         return tmp;
     }
@@ -85,7 +84,6 @@ public class EsIndiceQuery {
         cmd.path = String.format("/%s/_doc/%s", indiceName, docId);
 
         String tmp = context.execAsBody(cmd);//需要 put
-        //return: {"_index":"water$water_log_api_202110","_type":"_doc","_id":"eaeb3a43674a45ee8abf7cca379e4834","_version":1,"result":"created","_shards":{"total":2,"successful":1,"failed":0},"_seq_no":0,"_primary_term":1}
 
         return tmp;
     }
@@ -115,7 +113,6 @@ public class EsIndiceQuery {
         cmd.path = String.format("/%s/_doc/_bulk", indiceName);
 
         String tmp = context.execAsBody(cmd); //需要 post
-        //return: {"_index":"water$water_log_api_202110","_type":"_doc","_id":"eaeb3a43674a45ee8abf7cca379e4834","_version":1,"result":"created","_shards":{"total":2,"successful":1,"failed":0},"_seq_no":0,"_primary_term":1}
 
         return tmp;
     }
@@ -143,7 +140,6 @@ public class EsIndiceQuery {
         cmd.path = String.format("/%s/_doc/_bulk", indiceName);
 
         String tmp = context.execAsBody(cmd); //需要 post
-        //return: {"_index":"water$water_log_api_202110","_type":"_doc","_id":"eaeb3a43674a45ee8abf7cca379e4834","_version":1,"result":"created","_shards":{"total":2,"successful":1,"failed":0},"_seq_no":0,"_primary_term":1}
 
         return tmp;
     }

@@ -17,10 +17,10 @@ import java.io.IOException;
  */
 @RunWith(SolonJUnit4ClassRunner.class)
 public class Test0 {
-    final String indiceNoExit = "water$water_log_apix";
-    final String indiceNew = "water$water_log_api_new";
-    final String indice = "water$water_log_api_202110";
-    final String alias = "water$water_log_api";
+    final String indiceNoExit = "test-user_logx";
+    final String indiceNew = "test-user_log_new";
+    final String indice = "test-user_log_202110";
+    final String alias = "test-user_log";
 
 
     @Inject("${test.esx}")
@@ -77,23 +77,23 @@ public class Test0 {
 
     @Test
     public void test3() throws Exception {
-        test2Create("water$water_log_api_202110");
-        test2Create("water$water_log_api_202109");
-        test2Create("water$water_log_api_202108");
-        test2Create("water$water_log_api_202107");
-        test2Create("water$water_log_api_202106");
-        test2Create("water$water_log_api_202105");
+        test2Create("test-user_log_202110");
+        test2Create("test-user_log_202109");
+        test2Create("test-user_log_202108");
+        test2Create("test-user_log_202107");
+        test2Create("test-user_log_202106");
+        test2Create("test-user_log_202105");
     }
 
     @Test
     public void test4() throws Exception {
         context.indiceAliases(a -> a
-                .add("water$water_log_api_202110", alias)
-                .add("water$water_log_api_202109", alias)
-                .add("water$water_log_api_202108", alias)
-                .add("water$water_log_api_202107", alias)
-                .add("water$water_log_api_202106", alias)
-                .add("water$water_log_api_202105", alias));
+                .add("test-user_log_202110", alias)
+                .add("test-user_log_202109", alias)
+                .add("test-user_log_202108", alias)
+                .add("test-user_log_202107", alias)
+                .add("test-user_log_202106", alias)
+                .add("test-user_log_202105", alias));
     }
 
     @Test

@@ -17,7 +17,7 @@ import org.noear.solon.test.SolonJUnit4ClassRunner;
 @RunWith(SolonJUnit4ClassRunner.class)
 public class Test2SelectPlus {
 
-    final String indice = "water$water_log_api";
+    final String indice = "test-user_log";
 
 
     @Inject("${test.esx}")

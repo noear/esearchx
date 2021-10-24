@@ -21,7 +21,7 @@ import java.util.Map;
 @RunWith(SolonJUnit4ClassRunner.class)
 public class Test2Select {
 
-    final String indice = "water$water_log_api";
+    final String indice = "test-user_log";
 
 
     @Inject("${test.esx}")
@@ -30,12 +30,12 @@ public class Test2Select {
 
     @Test
     public void test_selectById() throws Exception {
-        LogDo logDo = context.indice("water$water_log_api_202110").selectById(LogDo.class, "1");
+        LogDo logDo = context.indice("test-user_log_202110").selectById(LogDo.class, "1");
         assert logDo != null;
         assert logDo.log_id == 1;
 
 
-        logDo = context.indice("water$water_log_api_202106").selectById(LogDo.class,"1");
+        logDo = context.indice("test-user_log_202106").selectById(LogDo.class,"1");
         assert logDo == null;
     }
 
