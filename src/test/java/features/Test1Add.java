@@ -107,7 +107,7 @@ public class Test1Add {
             logDo.class_name = this.getClass().getName();
             logDo.thread_name = Thread.currentThread().getName();
             logDo.tag = "map1";
-            logDo.level = 4;
+            logDo.level = 2;
             logDo.content = json;
             logDo.log_date = LocalDateTime.now().toLocalDate().getDayOfYear();
             logDo.log_fulltime = new Date();
