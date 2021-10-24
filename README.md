@@ -30,8 +30,6 @@
 ```
 
 ```java
-import java.util.ArrayList;
-
 //
 // 更多的示例，可以查看 src/test/ 下的相关单测
 //
