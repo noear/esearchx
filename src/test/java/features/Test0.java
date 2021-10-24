@@ -71,6 +71,8 @@ public class Test0 {
     @Test
     public void test2() throws Exception {
         test2Create(indice);
+
+        context.indiceSettings(indice, s->s.setRefreshInterval("5s"));
     }
 
     @Test
