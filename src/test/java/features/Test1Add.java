@@ -27,6 +27,8 @@ public class Test1Add {
     //EsContext context = new EsContext("eshost:30480"); //直接实例化
 
 
+    Random random = new Random();
+
     @Test
     public void test2() throws Exception {
         String json = Utils.getResourceAsString("demo/log.json", "utf-8");
@@ -85,7 +87,7 @@ public class Test1Add {
         logDo.class_name = this.getClass().getName();
         logDo.thread_name = Thread.currentThread().getName();
         logDo.tag = "test2";
-        logDo.level = 3;
+        logDo.level =  (random.nextInt() % 5) + 1;
         logDo.content = json;
         logDo.log_date = LocalDateTime.now().toLocalDate().getDayOfYear();
         logDo.log_fulltime = new Date();
@@ -107,7 +109,7 @@ public class Test1Add {
             logDo.class_name = this.getClass().getName();
             logDo.thread_name = Thread.currentThread().getName();
             logDo.tag = "map1";
-            logDo.level = 2;
+            logDo.level =  (random.nextInt() % 5) + 1;
             logDo.content = json;
             logDo.log_date = LocalDateTime.now().toLocalDate().getDayOfYear();
             logDo.log_fulltime = new Date();
@@ -124,7 +126,7 @@ public class Test1Add {
 
         List<LogDo> docs = new ArrayList<>();
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 200; i++) {
             LogDo logDo = new LogDo();
             logDo.logger = "waterapi";
             logDo.log_id = SnowflakeUtils.genId();
@@ -132,7 +134,7 @@ public class Test1Add {
             logDo.class_name = this.getClass().getName();
             logDo.thread_name = Thread.currentThread().getName();
             logDo.tag = "list1";
-            logDo.level = 5;
+            logDo.level = (random.nextInt() % 5) + 1;
             logDo.content = json;
             logDo.log_date = LocalDateTime.now().toLocalDate().getDayOfYear();
             logDo.log_fulltime = new Date();
