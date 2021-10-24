@@ -10,19 +10,23 @@ public class EsSetting {
     protected ONode oNode = new ONode();
 
     public EsSetting set(String name, Object value) {
-        oNode.set(name, value);
+        oNode.getOrNew("settings").set(name, value);
         return this;
     }
-//这个不参修改
-//    public EsSetting numberOfShards(int value) {
-//        return set("number_of_shards", value);
-//    }
 
-    public EsSetting numberOfReplicas(int value) {
-        return set("number_of_replicas", value);
+    /**
+     * 设置副本数
+     * */
+    public EsSetting setNumberOfReplicas(int value) {
+        return set("index.number_of_replicas", value);
     }
 
-    public EsSetting refreshInterval(Object value) {
-        return set("refresh_interval", value);
+    /**
+     * 设置刷新时间
+     *
+     * @param value 例：5000,"5s"
+     * */
+    public EsSetting setRefreshInterval(Object value) {
+        return set("index.refresh_interval", value);
     }
 }
