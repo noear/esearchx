@@ -138,10 +138,10 @@ public class Test2Select {
     }
 
     @Test
-    public void test_matchPhrasePrefix() throws Exception {
+    public void test_matchPhraseSolp() throws Exception {
 
         EsData<LogDo> result = context.indice(indice)
-                .where(c -> c.matchPhrasePrefix("tag", "list1"))
+                .where(c -> c.matchPhrase("tag", "list1", 2))
                 .limit(0, 10)
                 .selectList(LogDo.class);
 
@@ -149,6 +149,42 @@ public class Test2Select {
 
         assert result.getListSize() == 10;
         assert result.getList().get(0).log_id > 0;
+    }
+
+    @Test
+    public void test_matchPhrasePrefix() throws Exception {
+
+        EsData<LogDo> result = context.indice(indice)
+                .where(c -> c.matchPhrasePrefix("content", "class"))
+                .limit(0, 10)
+                .selectList(LogDo.class);
+
+        System.out.println(result);
+
+        assert result.getListSize() == 10;
+    }
+
+    @Test
+    public void test_matchPhrasePrefixSolp() throws Exception {
+
+        EsData<LogDo> result = context.indice(indice)
+                .where(c -> c.matchPhrasePrefix("content", "name tag", 2))
+                .limit(0, 10)
+                .selectList(LogDo.class);
+
+        System.out.println(result);
+
+        assert result.getListSize() == 0;
+
+
+        result = context.indice(indice)
+                .where(c -> c.matchPhrasePrefix("content", "key", 2))
+                .limit(0, 10)
+                .selectList(LogDo.class);
+
+        System.out.println(result);
+
+        assert result.getListSize() == 10;
     }
 
     @Test

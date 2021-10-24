@@ -136,12 +136,36 @@ public class EsCondition {
         return this;
     }
 
+    /**
+     * match_phrase slop
+     */
+    public EsCondition matchPhrase(String field, Object value, int slop) {
+        ONode oNode = new ONode();
+        oNode.set("query", value);
+        oNode.set("slop", slop);
+
+        filterSet("match_phrase", field, oNode);
+        return this;
+    }
+
 
     /**
      * match_phrase_prefix
      */
     public EsCondition matchPhrasePrefix(String field, Object value) {
         filterSet("match_phrase_prefix", field, value);
+        return this;
+    }
+
+    /**
+     * match_phrase_prefix slop
+     */
+    public EsCondition matchPhrasePrefix(String field, Object value, int slop) {
+        ONode oNode = new ONode();
+        oNode.set("query", value);
+        oNode.set("slop", slop);
+
+        filterSet("match_phrase_prefix", field, oNode);
         return this;
     }
 
