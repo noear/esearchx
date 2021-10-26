@@ -124,6 +124,13 @@ public class EsCondition {
     }
 
 
+    /**
+     * match_all
+     */
+    public void matchAll(){
+        oNode.getOrNew("match_all").asObject();
+    }
+
 
     /**
      * match

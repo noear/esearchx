@@ -145,13 +145,19 @@ public class EsAggs {
         return this;
     }
 
-//    /**
-//     * filter，聚合
-//     * */
-//    public EsAggs range(String asField) {
-//
-//        return this;
-//    }
+    /**
+     * range，聚合
+     * */
+    public EsAggs range(String field, Consumer<EsRanges> ranges) {
+        ONode oNode1 = oNode.getOrNew(field + "_range").getOrNew("range");
+
+        oNode1.set("field", field);
+
+        EsRanges t = new EsRanges(oNode.getOrNew("ranges").asArray());
+        ranges.accept(t);
+
+        return this;
+    }
 
     /**
      * terms，聚合
