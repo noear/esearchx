@@ -14,7 +14,16 @@ public class EsRanges {
     }
 
     public EsRanges add(Object from, Object to) {
-        oNode.addNew().set("from", from).set("to", to);
+        ONode oNode1 = oNode.addNew();
+
+        if (from != null) {
+            oNode1.set("from", from);
+        }
+
+        if (to != null) {
+            oNode1.set("to", to);
+        }
+
         return this;
     }
 }

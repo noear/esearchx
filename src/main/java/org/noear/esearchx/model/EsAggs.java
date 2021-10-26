@@ -160,7 +160,7 @@ public class EsAggs {
 
         oNode1.set("field", field);
 
-        EsRanges t = new EsRanges(oNode.getOrNew("ranges").asArray());
+        EsRanges t = new EsRanges(oNode1.getOrNew("ranges").asArray());
         ranges.accept(t);
 
         return this;

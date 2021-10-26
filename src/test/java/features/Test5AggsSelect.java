@@ -83,7 +83,7 @@ public class Test5AggsSelect {
 
         System.out.println(oNode.toJson());
 
-         assert (oNode.get("log_id_count").get("value").getLong()) > 0;
+        assert (oNode.get("log_id_count").get("value").getLong()) > 0;
     }
 
     @Test
@@ -146,7 +146,7 @@ public class Test5AggsSelect {
         String tmp = context.indice(indice)
                 .limit(0)
                 .aggs(a -> a.terms("level", t -> t.size(20))
-                            .aggs(a1 -> a1.topHits(2, s -> s.addByAes("log_fulltime"))))
+                        .aggs(a1 -> a1.topHits(2, s -> s.addByAes("log_fulltime"))))
                 .selectJson();
 
         System.out.println(tmp);
@@ -157,8 +157,8 @@ public class Test5AggsSelect {
         String tmp = context.indice(indice)
                 .limit(0)
                 .aggs(a -> a.terms("tag")
-                            .aggs(a1 -> a1.percentiles("level", new Integer[]{50, 90})
-                                          .avg("level")))
+                        .aggs(a1 -> a1.percentiles("level", new Integer[]{50, 90})
+                                .avg("level")))
                 .selectAggs().toJson();
 
         System.out.println(tmp);
@@ -181,6 +181,19 @@ public class Test5AggsSelect {
         String tmp = context.indice(indice)
                 .limit(0)
                 .aggs(a -> a.cardinality("level"))
+                .selectJson();
+
+        System.out.println(tmp);
+    }
+
+    @Test
+    public void test_range() throws Exception {
+        String tmp = context.indice(indice)
+                .limit(0)
+                .aggs(a -> a.range("level", r -> r
+                        .add(null, 3)
+                        .add(3, 4)
+                        .add(4, null)))
                 .selectJson();
 
         System.out.println(tmp);
