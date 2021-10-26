@@ -227,7 +227,6 @@ public class EsIndiceQuery {
     //
     // select
     //
-
     public String select(String dsl) throws IOException {
         EsCommand cmd = new EsCommand();
         cmd.method = PriWw.method_post;
@@ -239,6 +238,21 @@ public class EsIndiceQuery {
         String json = context.execAsBody(cmd);
 
         return json;
+    }
+
+
+    public String selectJson() throws IOException{
+        return select(getDslq().toJson());
+    }
+
+    public ONode selectNode() throws IOException {
+        String json = select(getDslq().toJson());
+
+        return ONode.loadStr(json);
+    }
+
+    public ONode selectAggs() throws IOException {
+        return selectNode().getOrNew("aggregations");
     }
 
 
