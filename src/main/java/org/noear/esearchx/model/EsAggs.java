@@ -20,11 +20,16 @@ public class EsAggs {
         oNode.getOrNew(asField).getOrNew(funName).set("field", field);
     }
 
+
+    //
+    //============ Metrics =============
+    //
+
     /**
      * sum，求合
      */
     public EsAggs sum(String field) {
-        funSet("$sum", field, "sum");
+        funSet(field + "_sum", field, "sum");
         return this;
     }
 
@@ -32,7 +37,7 @@ public class EsAggs {
      * avg，求平均值
      */
     public EsAggs avg(String field) {
-        funSet("$avg", field, "avg");
+        funSet(field + "_avg", field, "avg");
         return this;
     }
 
@@ -40,7 +45,7 @@ public class EsAggs {
      * max，求最大值
      */
     public EsAggs max(String field) {
-        funSet("$max", field, "max");
+        funSet(field + "_max", field, "max");
         return this;
     }
 
@@ -48,7 +53,7 @@ public class EsAggs {
      * min，求最小值
      */
     public EsAggs min(String field) {
-        funSet("$min", field, "min");
+        funSet(field + "_min", field, "min");
         return this;
     }
 
@@ -56,7 +61,7 @@ public class EsAggs {
      * count，值计数
      */
     public EsAggs count(String field) {
-        funSet("$count", field, "value_count");
+        funSet(field + "_count", field, "value_count");
         return this;
     }
 
@@ -82,10 +87,18 @@ public class EsAggs {
     }
 
     /**
-     * percentiles，百分比
+     * cardinality，求基数（先去重再求和）
+     */
+    public EsAggs cardinality(String field) {
+        funSet(field + "_cardinality", field, "cardinality");
+        return this;
+    }
+
+    /**
+     * percentiles，多值聚合求百分比
      */
     public EsAggs percentiles(String field, int[] percents) {
-        ONode oNode1 = oNode.getOrNew("$percentiles").getOrNew("percentiles");
+        ONode oNode1 = oNode.getOrNew(field + "_percentiles").getOrNew("percentiles");
         oNode1.set("field", field);
         oNode1.getOrNew("percents").addAll(Arrays.asList(percents));
         return this;
@@ -95,19 +108,23 @@ public class EsAggs {
      * percentiles rank
      */
     public EsAggs percentilesRank(String field, int[] values) {
-        ONode oNode1 = oNode.getOrNew("$percentilesRank").getOrNew("percentile_ranks");
+        ONode oNode1 = oNode.getOrNew(field + "_percentilesRank").getOrNew("percentile_ranks");
         oNode1.set("field", field);
         oNode1.getOrNew("values").addAll(Arrays.asList(values));
         return this;
     }
 
     /**
-     * cardinality，先去重再求和
+     * stats
      */
-    public EsAggs cardinality(String field) {
-        funSet("$cardinality", field, "cardinality");
+    public EsAggs stats(String field) {
+        funSet(field + "_stats", field, "stats");
         return this;
     }
+
+    //
+    //============ Bucket =============
+    //
 
     /**
      * filter，聚合
@@ -142,7 +159,7 @@ public class EsAggs {
     }
 
     public EsAggs terms(String field, int size, Consumer<EsSort> sort) {
-        ONode oNode1 = oNode.getOrNew("$terms").getOrNew("terms");
+        ONode oNode1 = oNode.getOrNew(field + "_terms").getOrNew("terms");
 
         oNode1.set("field", field);
 

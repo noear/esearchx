@@ -31,7 +31,7 @@ public class Test5AggsSelect {
 
         System.out.println(oNode.toJson());
 
-        System.out.println(oNode.get("$sum").get("value").getDouble());
+        System.out.println(oNode.get("level_sum").get("value").getDouble());
     }
 
     @Test
