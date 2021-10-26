@@ -2,7 +2,6 @@ package org.noear.esearchx.model;
 
 import org.noear.snack.ONode;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.function.Consumer;
 
@@ -115,7 +114,7 @@ public class EsAggs {
     /**
      * percentiles rank
      */
-    public EsAggs percentilesRank(String field, int[] values) {
+    public EsAggs percentilesRank(String field, Number[] values) {
         ONode oNode1 = getLevl2Node(field + "_percentilesRank").getOrNew("percentile_ranks");
         oNode1.set("field", field);
         oNode1.getOrNew("values").addAll(Arrays.asList(values));
