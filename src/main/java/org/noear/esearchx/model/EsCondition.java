@@ -1,9 +1,8 @@
-package org.noear.esearchx;
+package org.noear.esearchx.model;
 
 import org.noear.snack.ONode;
 
 import java.util.Arrays;
-import java.util.Map;
 import java.util.function.Consumer;
 
 /**

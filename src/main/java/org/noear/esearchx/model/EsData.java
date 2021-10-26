@@ -1,4 +1,4 @@
-package org.noear.esearchx;
+package org.noear.esearchx.model;
 
 import java.io.Serializable;
 import java.util.List;

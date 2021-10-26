@@ -2,6 +2,8 @@ package org.noear.esearchx;
 
 
 import org.noear.esearchx.exception.NoExistException;
+import org.noear.esearchx.model.EsAliases;
+import org.noear.esearchx.model.EsSetting;
 import org.noear.snack.ONode;
 
 import java.io.IOException;

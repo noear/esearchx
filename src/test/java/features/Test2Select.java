@@ -4,7 +4,7 @@ import features.model.LogDo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.noear.esearchx.EsContext;
-import org.noear.esearchx.EsData;
+import org.noear.esearchx.model.EsData;
 import org.noear.solon.annotation.Inject;
 import org.noear.solon.test.SolonJUnit4ClassRunner;
 
