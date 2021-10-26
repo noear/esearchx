@@ -35,11 +35,70 @@ public class Test5AggsSelect {
     }
 
     @Test
+    public void test_avg() throws Exception {
+        ONode oNode = context.indice(indice)
+                .where(c -> c.range("level", r -> r.gte(3)))
+                .limit(0)
+                .aggs(a -> a.avg("level"))
+                .selectAggs();
+
+        System.out.println(oNode.toJson());
+
+        System.out.println(oNode.get("level_avg").get("value").getDouble());
+    }
+
+    @Test
+    public void test_min() throws Exception {
+        ONode oNode = context.indice(indice)
+                .where(c -> c.range("level", r -> r.gte(3)))
+                .limit(0)
+                .aggs(a -> a.min("level"))
+                .selectAggs();
+
+        System.out.println(oNode.toJson());
+
+        System.out.println(oNode.get("level_min").get("value").getDouble());
+    }
+
+    @Test
+    public void test_max() throws Exception {
+        ONode oNode = context.indice(indice)
+                .where(c -> c.range("level", r -> r.gte(3)))
+                .limit(0)
+                .aggs(a -> a.max("level"))
+                .selectAggs();
+
+        System.out.println(oNode.toJson());
+
+        System.out.println(oNode.get("level_max").get("value").getDouble());
+    }
+
+    @Test
     public void test_terms() throws Exception {
         String tmp = context.indice(indice)
                 .limit(0)
                 .aggs(a -> a.terms("level"))
                 .selectJson();
+
+        System.out.println(tmp);
+    }
+
+    @Test
+    public void test_stats() throws Exception {
+        String tmp = context.indice(indice)
+                .limit(0)
+                .aggs(a -> a.stats("level"))
+                .selectAggs().toJson();
+
+        System.out.println(tmp);
+    }
+
+    @Test
+    public void test_extendedStats() throws Exception {
+        String tmp = context.indice(indice)
+                .limit(0)
+                .aggs(a -> a.extendedStats("level"))
+                .selectAggs().toJson();
 
         System.out.println(tmp);
     }
