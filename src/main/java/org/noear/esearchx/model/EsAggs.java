@@ -27,14 +27,12 @@ public class EsAggs {
     }
 
     public void topHits(String asField,int size, Consumer<EsSort> sort) {
-        ONode oNode1 = PriUtils.newNode();
-        EsSort s = new EsSort(oNode1);
-        sort.accept(s);
-
         ONode top_hits = oNode.getOrNew(asField).getOrNew("top_hits");
 
         top_hits.set("size", size);
-        top_hits.set("sort", oNode1);
+
+        EsSort s = new EsSort(top_hits.getOrNew("sort").asArray());
+        sort.accept(s);
     }
 
     /**

@@ -173,11 +173,8 @@ public class EsIndiceQuery {
     //
 
     public EsIndiceQuery orderBy(Consumer<EsSort> sort) {
-        ONode oNode1 = new ONode();
-        EsSort s = new EsSort(oNode1);
+        EsSort s = new EsSort(getDslq().getOrNew("sort").asArray());
         sort.accept(s);
-
-        getDslq().set("sort", oNode1);
         return this;
     }
 

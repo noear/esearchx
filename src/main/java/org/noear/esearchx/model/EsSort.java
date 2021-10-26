@@ -13,13 +13,13 @@ public class EsSort {
         this.oNode = oNode;
     }
 
-    public EsSort andAes(String field) {
+    public EsSort addByAes(String field) {
         oNode.addNew().getOrNew(field).set("order", "asc");
 
         return this;
     }
 
-    public EsSort andDesc(String field) {
+    public EsSort addByDesc(String field) {
         oNode.addNew().getOrNew(field).set("order", "desc");
 
         return this;
