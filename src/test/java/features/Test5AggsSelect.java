@@ -198,4 +198,14 @@ public class Test5AggsSelect {
 
         System.out.println(tmp);
     }
+
+    @Test
+    public void test_filter_term() throws Exception {
+        String tmp = context.indice(indice)
+                .limit(0)
+                .aggs(a -> a.filter(f -> f.term("level", 3)))
+                .selectJson();
+
+        System.out.println(tmp);
+    }
 }

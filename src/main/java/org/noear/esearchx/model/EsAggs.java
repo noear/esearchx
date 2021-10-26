@@ -145,8 +145,7 @@ public class EsAggs {
      * filter，聚合
      */
     public EsAggs filter(Consumer<EsCondition> condition) {
-        EsCondition c = new EsCondition(oNode.getOrNew("$filter"));
-        c.filter();
+        EsCondition c = new EsCondition(getLevl2Node("$filter").getOrNew("filter"));
         condition.accept(c);
 
         return this;
