@@ -202,6 +202,7 @@ public class Test5AggsSelect {
     @Test
     public void test_filter_term() throws Exception {
         String tmp = context.indice(indice)
+                .where(w->w.term("tag","list1"))
                 .limit(0)
                 .aggs(a -> a.filter(f -> f.term("level", 3)))
                 .selectJson();

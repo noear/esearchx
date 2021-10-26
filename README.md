@@ -90,6 +90,7 @@ public class DemoApp {
         
         //聚合查询
         ONode result = esx.indice(indice)
+                .where(w->w.term("tag","list1"))
                 .limit(0)
                 .aggs(a -> a.terms("level", t -> t.size(20))
                             .aggs(a1 -> a1.topHits(2, s -> s.addByAes("log_fulltime"))))
