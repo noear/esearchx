@@ -224,6 +224,18 @@ public class Test2Select {
         assert result.getListSize() == 10;
     }
 
+    @Test
+    public void test_script() throws Exception {
+
+        EsData<LogDo> result = context.indice(indice)
+                .where(c -> c.script("doc['tag'].value.length() >= params.len", p->p.set("len",2)))
+                .limit(10)
+                .selectList(LogDo.class);
+
+        System.out.println(result);
+        assert result.getListSize() == 10;
+    }
+
 
 
     @Test

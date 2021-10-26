@@ -3,6 +3,7 @@ package org.noear.esearchx;
 import org.noear.snack.ONode;
 
 import java.util.Arrays;
+import java.util.Map;
 import java.util.function.Consumer;
 
 /**
@@ -221,6 +222,31 @@ public class EsCondition {
      */
     public EsCondition regexp(String field, String value) {
         filterSet("regexp", field, value);
+        return this;
+    }
+
+    /**
+     * script
+     */
+    public EsCondition script(String source,  Consumer<EsMap> params) {
+        return script(source, "painless", params);
+    }
+
+    /**
+     * script
+     */
+    public EsCondition script(String source, String lang, Consumer<EsMap> params) {
+        EsMap p = new EsMap();
+        params.accept(p);
+
+        ONode oNode = new ONode();
+        oNode.set("source", source);
+        oNode.set("lang", lang);
+        if (p.size() > 0) {
+            oNode.getOrNew("params").setAll(p);
+        }
+
+        filterSet("script", "script", oNode);
         return this;
     }
 
