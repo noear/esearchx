@@ -190,7 +190,7 @@ public class Test2SelectPlus {
 //                .orderBy(s -> s.andAes("level").andAes("log_id"))
                 .orderByAsc("level")
                 .andByAsc("log_id")
-                .minScore(1)
+                //.minScore(1)
                 .selectList(LogDo.class);
 
         System.out.println(result);
