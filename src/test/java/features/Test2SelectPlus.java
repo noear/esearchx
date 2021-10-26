@@ -185,9 +185,9 @@ public class Test2SelectPlus {
                         .term("tag", "list1")
                         .range("level", r -> r.gt(3)))
                 .limit(0, 10)
-                .orderBy(s -> s.andAes("level").andAes("log_id"))
-//                .orderByAsc("level")
-//                .andByAsc("log_id")
+//                .orderBy(s -> s.andAes("level").andAes("log_id"))
+                .orderByAsc("level")
+                .andByAsc("log_id")
                 .minScore(1)
                 .selectList(LogDo.class);
 
@@ -206,9 +206,9 @@ public class Test2SelectPlus {
                         .term("tag", "list1")
                         .range("level", r -> r.gt(3)))
                 .limit(0, 10)
-                .orderBy(s -> s.andAes("level").andAes("log_id"))
-//                .orderByAsc("level")
-//                .andByAsc("log_id")
+//                .orderBy(s -> s.andAes("level").andAes("log_id"))
+                .orderByAsc("level")
+                .andByAsc("log_id")
                 .selectList(LogDo.class);
 
         assert result.getListSize() == 10;

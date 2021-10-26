@@ -184,25 +184,25 @@ public class EsIndiceQuery {
         return this;
     }
 
-//    public EsIndiceQuery orderByAsc(String field) {
-//        getDslq().getOrNew("sort").getOrNew(field).set("order", "asc");
-//        return this;
-//    }
-//
-//    public EsIndiceQuery orderByDesc(String field) {
-//        getDslq().getOrNew("sort").getOrNew(field).set("order", "desc");
-//        return this;
-//    }
-//
-//    public EsIndiceQuery andByAsc(String field) {
-//        getDslq().getOrNew("sort").getOrNew(field).set("order", "asc");
-//        return this;
-//    }
-//
-//    public EsIndiceQuery andByDesc(String field) {
-//        getDslq().getOrNew("sort").getOrNew(field).set("order", "desc");
-//        return this;
-//    }
+    public EsIndiceQuery orderByAsc(String field) {
+        getDslq().getOrNew("sort").addNew().getOrNew(field).set("order", "asc");
+        return this;
+    }
+
+    public EsIndiceQuery orderByDesc(String field) {
+        getDslq().getOrNew("sort").addNew().getOrNew(field).set("order", "desc");
+        return this;
+    }
+
+    public EsIndiceQuery andByAsc(String field) {
+        getDslq().getOrNew("sort").addNew().getOrNew(field).set("order", "asc");
+        return this;
+    }
+
+    public EsIndiceQuery andByDesc(String field) {
+        getDslq().getOrNew("sort").addNew().getOrNew(field).set("order", "desc");
+        return this;
+    }
 
     /**
      * search_after
