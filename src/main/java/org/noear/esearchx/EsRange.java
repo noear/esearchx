@@ -7,7 +7,11 @@ import org.noear.snack.ONode;
  * @since 1.0
  */
 public class EsRange {
-    protected ONode oNode = new ONode();
+    private final ONode oNode;
+    public EsRange(ONode oNode){
+        this.oNode = oNode;
+    }
+
     public EsRange gt(Object value){
         oNode.set("gt",value);
         return this;

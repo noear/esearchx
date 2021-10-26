@@ -7,7 +7,10 @@ import org.noear.snack.ONode;
  * @since 1.2
  */
 public class EsAliases {
-    protected ONode oNode = new ONode();
+    private final ONode oNode;
+    public EsAliases(ONode oNode){
+        this.oNode = oNode;
+    }
 
     public EsAliases add(String indiceName, String alias) {
         oNode.addNew().getOrNew("add").set("index", indiceName).set("alias", alias);

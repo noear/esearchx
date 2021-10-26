@@ -149,9 +149,10 @@ public class EsIndiceQuery {
     // select
     //
     public EsIndiceQuery where(Consumer<EsCondition> condition) {
-        EsCondition c = new EsCondition();
+        ONode oNode1 = new ONode();
+        EsCondition c = new EsCondition(oNode1);
         condition.accept(c);
-        getDslq().set("query", c.oNode);
+        getDslq().set("query", oNode1);
         return this;
     }
 
@@ -203,6 +204,14 @@ public class EsIndiceQuery {
      */
     public EsIndiceQuery minScore(Object value) {
         getDslq().getOrNew("min_score").val(value);
+        return this;
+    }
+
+    //
+    //aggs
+    //
+
+    public EsIndiceQuery aggs(){
         return this;
     }
 
@@ -262,13 +271,14 @@ public class EsIndiceQuery {
         }
 
         if (PriUtils.isNotEmpty(fields)) {
-            EsSource s = new EsSource();
+            ONode oNode1 = new ONode();
+            EsSource s = new EsSource(oNode1);
             if (fields.startsWith("!")) {
                 s.excludes(fields.substring(1).split(","));
             } else {
                 s.includes(fields.split(","));
             }
-            getDslq().set("_source", s.oNode);
+            getDslq().set("_source", oNode1);
         }
 
         EsCommand cmd = new EsCommand();

@@ -11,7 +11,10 @@ import java.util.Arrays;
  * @since 1.0
  */
 public class EsSource {
-    protected final ONode oNode = new ONode();
+    private final ONode oNode;
+    public EsSource(ONode oNode){
+        this.oNode = oNode;
+    }
 
     public EsSource includes(String... includes) {
         oNode.getOrNew("includes").addAll(Arrays.asList(includes));

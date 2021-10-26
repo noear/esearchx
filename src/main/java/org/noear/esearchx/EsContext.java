@@ -156,13 +156,14 @@ public class EsContext {
      * @param indiceName 索引名字
      */
     public String indiceSettings(String indiceName, Consumer<EsSetting> setting) throws IOException {
-        EsSetting s = new EsSetting();
+        ONode oNode1 = new ONode();
+        EsSetting s = new EsSetting(oNode1);
         setting.accept(s);
 
         EsCommand cmd = new EsCommand();
         cmd.method = PriWw.method_put;
         cmd.path = String.format("/%s/_settings", indiceName);
-        cmd.dsl = s.oNode.toJson();
+        cmd.dsl = oNode1.toJson();
 
         String tmp = execAsBody(cmd);
 
@@ -191,10 +192,11 @@ public class EsContext {
      * 索引别名处理
      */
     public String indiceAliases(Consumer<EsAliases> aliases) throws IOException {
-        EsAliases e = new EsAliases();
+        ONode oNode1 = new ONode();
+        EsAliases e = new EsAliases(oNode1);
         aliases.accept(e);
 
-        ONode oNode = new ONode().build(n -> n.set("actions", e.oNode));
+        ONode oNode = new ONode().build(n -> n.set("actions", oNode1));
 
         EsCommand cmd = new EsCommand();
         cmd.method = PriWw.method_post;

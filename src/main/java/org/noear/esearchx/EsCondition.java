@@ -13,7 +13,11 @@ import java.util.function.Consumer;
  * @since 1.0
  */
 public class EsCondition {
-    protected final ONode oNode = new ONode();
+    private final ONode oNode;
+    public EsCondition(ONode oNode){
+        this.oNode = oNode;
+    }
+
     ONode oNodeArray = null;
     String score_mode = null;
 
@@ -191,10 +195,11 @@ public class EsCondition {
      * range
      */
     public EsCondition range(String field, Consumer<EsRange> range) {
-        EsRange r = new EsRange();
+        ONode oNode1 = new ONode();
+        EsRange r = new EsRange(oNode1);
         range.accept(r);
 
-        filterSet("range", field, r.oNode);
+        filterSet("range", field, oNode1);
         return this;
     }
 
@@ -255,11 +260,12 @@ public class EsCondition {
      * 添加下级条件
      * */
     public EsCondition add(Consumer<EsCondition> condition) {
-        EsCondition c = new EsCondition();
+        ONode oNode1 = new ONode();
+        EsCondition c = new EsCondition(oNode1);
         condition.accept(c);
 
         if (oNodeArray != null) {
-            oNodeArray.add(c.oNode);
+            oNodeArray.add(oNode1);
         } else {
             throw new IllegalArgumentException("Conditions lack combination types");
         }

@@ -7,7 +7,11 @@ import org.noear.snack.ONode;
  * @since 1.0.2
  */
 public class EsSetting {
-    protected ONode oNode = new ONode();
+    private final ONode oNode;
+    public EsSetting(ONode oNode){
+        this.oNode = oNode;
+    }
+
 
     public EsSetting set(String name, Object value) {
         oNode.getOrNew("settings").set(name, value);
