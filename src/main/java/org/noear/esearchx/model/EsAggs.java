@@ -37,6 +37,22 @@ public class EsAggs {
     }
 
     /**
+     * max，求最大值
+     */
+    public EsAggs max(String field) {
+        funSet("$max", field, "max");
+        return this;
+    }
+
+    /**
+     * min，求最小值
+     */
+    public EsAggs min(String field) {
+        funSet("$min", field, "min");
+        return this;
+    }
+
+    /**
      * count，值计数
      */
     public EsAggs count(String field) {
