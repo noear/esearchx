@@ -14,12 +14,14 @@ public class EsSort {
     }
 
     public EsSort andAes(String field) {
-        oNode.addNew().getOrNew(field).set("order", "aes");
+        oNode.addNew().getOrNew(field).set("order", "asc");
+
         return this;
     }
 
     public EsSort andDesc(String field) {
         oNode.addNew().getOrNew(field).set("order", "desc");
+
         return this;
     }
 }
