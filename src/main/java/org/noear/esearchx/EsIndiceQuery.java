@@ -242,17 +242,36 @@ public class EsIndiceQuery {
 
 
     public String selectJson() throws IOException {
+        return selectJson(null);
+    }
+
+    public String selectJson(String fields) throws IOException {
+        if(PriUtils.isNotEmpty(fields)) {
+            EsSource s = new EsSource(getDslq().getOrNew("_source"));
+            if (fields.startsWith("!")) {
+                s.excludes(fields.substring(1).split(","));
+            } else {
+                s.includes(fields.split(","));
+            }
+        }
+
         return select(getDslq().toJson());
     }
 
     public ONode selectNode() throws IOException {
-        String json = select(getDslq().toJson());
+        return ONode.loadStr(selectJson());
+    }
 
-        return ONode.loadStr(json);
+    public ONode selectNode(String fields) throws IOException {
+        return ONode.loadStr(selectJson(fields));
     }
 
     public ONode selectAggs() throws IOException {
         return selectNode().getOrNew("aggregations");
+    }
+
+    public ONode selectAggs(String fields) throws IOException {
+        return selectNode(fields).getOrNew("aggregations");
     }
 
 
@@ -299,16 +318,7 @@ public class EsIndiceQuery {
             }
         }
 
-        if(PriUtils.isNotEmpty(fields)) {
-            EsSource s = new EsSource(getDslq().getOrNew("_source"));
-            if (fields.startsWith("!")) {
-                s.excludes(fields.substring(1).split(","));
-            } else {
-                s.includes(fields.split(","));
-            }
-        }
-
-        String json = select(getDslq().toJson());
+        String json = selectJson(fields);
 
         ONode oHits = ONode.loadStr(json).get("hits");
 

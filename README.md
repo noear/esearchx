@@ -81,6 +81,12 @@ public class DemoApp {
                 .minScore(1)
                 .limit(50, 50)
                 .selectList(LogDo.class);
+
+        ONode result = esx.indice(indice)
+                .limit(0)
+                .aggs(a -> a.terms("level", t -> t.size(20))
+                        .aggs(a1 -> a1.topHits(2, s -> s.addByAes("log_fulltime"))))
+                .selectAggs();
     }
 }
 
