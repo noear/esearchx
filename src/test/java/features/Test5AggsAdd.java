@@ -10,7 +10,7 @@ import org.noear.solon.test.SolonJUnit4ClassRunner;
  *
  * @author noear 2021/10/26 created
  */
-@RunWith(SolonJUnit4ClassRunner.class)
+//@RunWith(SolonJUnit4ClassRunner.class)
 public class Test5AggsAdd {
     final String indice = "test-order";
 
