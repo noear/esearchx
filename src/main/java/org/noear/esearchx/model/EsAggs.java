@@ -4,7 +4,6 @@ import org.noear.snack.ONode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -13,13 +12,20 @@ import java.util.function.Consumer;
  */
 public class EsAggs {
     private final ONode oNode;
+    private ONode lastLevl2Node;
 
     public EsAggs(ONode oNode) {
         this.oNode = oNode;
     }
 
+
+    private ONode getLevl2Node(String name) {
+        lastLevl2Node = oNode.getOrNew(name);
+        return lastLevl2Node;
+    }
+
     private void funSet(String asField, String field, String funName) {
-        oNode.getOrNew(asField).getOrNew(funName).set("field", field);
+        getLevl2Node(asField).getOrNew(funName).set("field", field);
     }
 
 
@@ -100,7 +106,7 @@ public class EsAggs {
      * percentiles，多值聚合求百分比
      */
     public EsAggs percentiles(String field, int[] percents) {
-        ONode oNode1 = oNode.getOrNew(field + "_percentiles").getOrNew("percentiles");
+        ONode oNode1 = getLevl2Node(field + "_percentiles").getOrNew("percentiles");
         oNode1.set("field", field);
         oNode1.getOrNew("percents").addAll(Arrays.asList(percents));
         return this;
@@ -110,7 +116,7 @@ public class EsAggs {
      * percentiles rank
      */
     public EsAggs percentilesRank(String field, int[] values) {
-        ONode oNode1 = oNode.getOrNew(field + "_percentilesRank").getOrNew("percentile_ranks");
+        ONode oNode1 = getLevl2Node(field + "_percentilesRank").getOrNew("percentile_ranks");
         oNode1.set("field", field);
         oNode1.getOrNew("values").addAll(Arrays.asList(values));
         return this;
@@ -151,7 +157,7 @@ public class EsAggs {
      * range，聚合
      */
     public EsAggs range(String field, Consumer<EsRanges> ranges) {
-        ONode oNode1 = oNode.getOrNew(field + "_range").getOrNew("range");
+        ONode oNode1 = getLevl2Node(field + "_range").getOrNew("range");
 
         oNode1.set("field", field);
 
@@ -170,7 +176,7 @@ public class EsAggs {
     }
 
     public EsAggs terms(String field, Consumer<EsTerms> terms) {
-        ONode oNode1 = oNode.getOrNew(field + "_terms").getOrNew("terms");
+        ONode oNode1 = getLevl2Node(field + "_terms").getOrNew("terms");
 
         if (field.startsWith("$")) {
             oNode1.set("script", field.substring(1));
@@ -191,13 +197,11 @@ public class EsAggs {
      * 添加下级条件
      */
     public EsAggs aggs(Consumer<EsAggs> aggs) {
-        if (oNode.isObject() == false || oNode.count() == 0) {
-            throw new IllegalArgumentException();
+        if (lastLevl2Node == null) {
+            throw new IllegalArgumentException("There are no secondary nodes");
         }
 
-        String key = (String) oNode.obj().keySet().toArray()[0];
-
-        EsAggs c = new EsAggs(oNode.get(key).getOrNew("aggs"));
+        EsAggs c = new EsAggs(lastLevl2Node.getOrNew("aggs"));
         aggs.accept(c);
 
         return this;
