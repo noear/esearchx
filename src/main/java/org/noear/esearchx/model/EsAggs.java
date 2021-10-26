@@ -115,6 +115,14 @@ public class EsAggs {
     }
 
     /**
+     * extended_stats
+     */
+    public EsAggs extendedStats(String field) {
+        funSet(field + "_extendedStats", field, "extended_stats");
+        return this;
+    }
+
+    /**
      * stats
      */
     public EsAggs stats(String field) {
@@ -149,27 +157,22 @@ public class EsAggs {
      * terms，聚合
      */
     public EsAggs terms(String field) {
-        terms(field, 0, null);
+        terms(field, null);
         return this;
     }
 
-    public EsAggs terms(String field, int size) {
-        terms(field, size, null);
-        return this;
-    }
-
-    public EsAggs terms(String field, int size, Consumer<EsSort> sort) {
+    public EsAggs terms(String field,  Consumer<EsTerms> terms) {
         ONode oNode1 = oNode.getOrNew(field + "_terms").getOrNew("terms");
 
-        oNode1.set("field", field);
-
-        if (size > 0) {
-            oNode1.set("size", size);
+        if (field.startsWith("$")) {
+            oNode1.set("script", field.substring(1));
+        } else {
+            oNode1.set("field", field);
         }
 
-        if (sort != null) {
-            EsSort s = new EsSort(oNode1.getOrNew("sort").asArray());
-            sort.accept(s);
+        if (terms != null) {
+            EsTerms t = new EsTerms(oNode);
+            terms.accept(t);
         }
 
         return this;

@@ -44,6 +44,16 @@ public class Test5AggsSelect {
         System.out.println(tmp);
     }
 
+//    @Test
+//    public void test12() throws Exception {
+//        String tmp = context.indice(indice)
+//                .limit(0)
+//                .aggs(a -> a.terms("level", t->t.sort(s->s.addByAes("doc_count"))))
+//                .selectJson();
+//
+//        System.out.println(tmp);
+//    }
+
     @Test
     public void test2() throws Exception {
         String tmp = context.indice(indice)
