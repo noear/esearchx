@@ -31,7 +31,7 @@ public class Test5AggsSelect {
 
         System.out.println(oNode.toJson());
 
-        System.out.println(oNode.get("level_sum").get("value").getDouble());
+        assert (oNode.get("level_sum").get("value").getDouble()) > 0;
     }
 
     @Test
@@ -44,7 +44,7 @@ public class Test5AggsSelect {
 
         System.out.println(oNode.toJson());
 
-        System.out.println(oNode.get("level_avg").get("value").getDouble());
+        assert (oNode.get("level_avg").get("value").getDouble()) > 0l;
     }
 
     @Test
@@ -57,7 +57,7 @@ public class Test5AggsSelect {
 
         System.out.println(oNode.toJson());
 
-        System.out.println(oNode.get("level_min").get("value").getDouble());
+        assert (oNode.get("level_min").get("value").getDouble()) > 0l;
     }
 
     @Test
@@ -70,7 +70,33 @@ public class Test5AggsSelect {
 
         System.out.println(oNode.toJson());
 
-        System.out.println(oNode.get("level_max").get("value").getDouble());
+        assert (oNode.get("level_max").get("value").getDouble()) > 0l;
+    }
+
+    @Test
+    public void test_count() throws Exception {
+        ONode oNode = context.indice(indice)
+                .where(c -> c.range("level", r -> r.gte(3)))
+                .limit(0)
+                .aggs(a -> a.count("log_id"))
+                .selectAggs();
+
+        System.out.println(oNode.toJson());
+
+         assert (oNode.get("log_id_count").get("value").getLong()) > 0;
+    }
+
+    @Test
+    public void test_percentiles() throws Exception {
+        ONode oNode = context.indice(indice)
+                .where(c -> c.range("level", r -> r.gte(3)))
+                .limit(0)
+                .aggs(a -> a.percentiles("log_id", new Integer[]{50, 90}))
+                .selectAggs();
+
+        System.out.println(oNode.toJson());
+
+        assert (oNode.select("log_id_percentiles.values['50.0']").getLong()) > 0;
     }
 
     @Test

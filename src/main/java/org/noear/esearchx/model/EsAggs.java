@@ -105,7 +105,7 @@ public class EsAggs {
     /**
      * percentiles，多值聚合求百分比
      */
-    public EsAggs percentiles(String field, int[] percents) {
+    public EsAggs percentiles(String field, Number[] percents) {
         ONode oNode1 = getLevl2Node(field + "_percentiles").getOrNew("percentiles");
         oNode1.set("field", field);
         oNode1.getOrNew("percents").addAll(Arrays.asList(percents));
