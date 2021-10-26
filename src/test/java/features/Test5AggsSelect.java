@@ -153,6 +153,18 @@ public class Test5AggsSelect {
     }
 
     @Test
+    public void test_terms_aggs_percentiles_age() throws Exception {
+        String tmp = context.indice(indice)
+                .limit(0)
+                .aggs(a -> a.terms("tag")
+                            .aggs(a1 -> a1.percentiles("level", new Integer[]{50, 90})
+                                          .avg("level")))
+                .selectAggs().toJson();
+
+        System.out.println(tmp);
+    }
+
+    @Test
     public void test_cardinality() throws Exception {
         String tmp = context.indice(indice)
                 .limit(0)
