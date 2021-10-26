@@ -260,15 +260,13 @@ public class EsCondition {
      * 添加下级条件
      * */
     public EsCondition add(Consumer<EsCondition> condition) {
-        ONode oNode1 = PriUtils.newNode();
-        EsCondition c = new EsCondition(oNode1);
-        condition.accept(c);
-
-        if (oNodeArray != null) {
-            oNodeArray.add(oNode1);
-        } else {
+        if (oNodeArray == null) {
             throw new IllegalArgumentException("Conditions lack combination types");
         }
+
+        EsCondition c = new EsCondition(oNodeArray.addNew());
+        condition.accept(c);
+
 
         return this;
     }

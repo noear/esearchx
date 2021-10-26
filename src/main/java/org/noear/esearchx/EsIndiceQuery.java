@@ -1,10 +1,7 @@
 package org.noear.esearchx;
 
 import org.noear.esearchx.exception.NoExistException;
-import org.noear.esearchx.model.EsCondition;
-import org.noear.esearchx.model.EsData;
-import org.noear.esearchx.model.EsSort;
-import org.noear.esearchx.model.EsSource;
+import org.noear.esearchx.model.*;
 import org.noear.snack.ONode;
 
 import java.io.IOException;
@@ -224,7 +221,9 @@ public class EsIndiceQuery {
     //aggs
     //
 
-    public EsIndiceQuery aggs(){
+    public EsIndiceQuery aggs(Consumer<EsAggs> aggs){
+        EsAggs a = new EsAggs(getDslq().getOrNew("aggs"));
+        aggs.accept(a);
         return this;
     }
 

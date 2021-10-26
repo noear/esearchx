@@ -41,11 +41,8 @@ public class EsAggs {
      * 添加下级条件
      */
     public EsAggs add(Consumer<EsAggs> aggs) {
-        ONode oNode1 = PriUtils.newNode();
-        EsAggs c = new EsAggs(oNode1);
+        EsAggs c = new EsAggs(oNode.getOrNew("aggs"));
         aggs.accept(c);
-
-        oNode.getOrNew("aggs").val(oNode1);
 
         return this;
     }
