@@ -227,6 +227,21 @@ public class EsIndiceQuery {
     //
     // select
     //
+
+    public String select(String dsl) throws IOException {
+        EsCommand cmd = new EsCommand();
+        cmd.method = PriWw.method_post;
+        cmd.dslType = PriWw.mime_json;
+        cmd.dsl = dsl;
+        cmd.path = String.format("/%s/_search", indiceName);
+
+
+        String json = context.execAsBody(cmd);
+
+        return json;
+    }
+
+
     public Map selectMap() throws IOException {
         return selectOne(Map.class);
     }
@@ -290,14 +305,7 @@ public class EsIndiceQuery {
             getDslq().set("_source", oNode1);
         }
 
-        EsCommand cmd = new EsCommand();
-        cmd.method = PriWw.method_post;
-        cmd.dslType = PriWw.mime_json;
-        cmd.dsl = getDslq().toJson();
-        cmd.path = String.format("/%s/_search", indiceName);
-
-
-        String json = context.execAsBody(cmd);
+        String json = select(getDslq().toJson());
 
         ONode oHits = ONode.loadStr(json).get("hits");
 
@@ -326,13 +334,7 @@ public class EsIndiceQuery {
             ONode oNode = PriUtils.newNode();
             oNode.getOrNew("query").getOrNew("ids").getOrNew("values").addAll(docIds);
 
-            EsCommand cmd = new EsCommand();
-            cmd.method = PriWw.method_post;
-            cmd.dslType = PriWw.mime_json;
-            cmd.dsl = oNode.toJson();
-            cmd.path = String.format("/%s/_search", indiceName);
-
-            String json = context.execAsBody(cmd);
+            String json = select(oNode.toJson());
 
             ONode oHits = ONode.loadStr(json).get("hits");
 
