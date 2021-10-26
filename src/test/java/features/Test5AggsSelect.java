@@ -22,7 +22,7 @@ public class Test5AggsSelect {
     //EsContext context = new EsContext("eshost:30480"); //直接实例化
 
     @Test
-    public void test0() throws Exception {
+    public void test_sum() throws Exception {
         ONode oNode = context.indice(indice)
                 .where(c -> c.range("level", r -> r.gte(3)))
                 .limit(0)
@@ -35,7 +35,7 @@ public class Test5AggsSelect {
     }
 
     @Test
-    public void test1() throws Exception {
+    public void test_terms() throws Exception {
         String tmp = context.indice(indice)
                 .limit(0)
                 .aggs(a -> a.terms("level"))
@@ -44,28 +44,31 @@ public class Test5AggsSelect {
         System.out.println(tmp);
     }
 
-//    @Test
-//    public void test12() throws Exception {
-//        String tmp = context.indice(indice)
-//                .limit(0)
-//                .aggs(a -> a.terms("level", t->t.sort(s->s.addByAes("doc_count"))))
-//                .selectJson();
-//
-//        System.out.println(tmp);
-//    }
 
     @Test
-    public void test2() throws Exception {
+    public void test_terms_topHits() throws Exception {
         String tmp = context.indice(indice)
                 .limit(0)
-                .aggs(a -> a.terms("level").top(1))
+                .aggs(a -> a.terms("level").topHits(1))
+                .selectJson();
+
+        System.out.println(tmp);
+    }
+
+
+    @Test
+    public void test_terms_aggs_topHits() throws Exception {
+        String tmp = context.indice(indice)
+                .limit(0)
+                .aggs(a -> a.terms("level", t -> t.size(20))
+                        .aggs(a1 -> a1.topHits(2, s -> s.addByAes("log_fulltime"))))
                 .selectJson();
 
         System.out.println(tmp);
     }
 
     @Test
-    public void test3() throws Exception {
+    public void test_cardinality() throws Exception {
         String tmp = context.indice(indice)
                 .limit(0)
                 .aggs(a -> a.cardinality("level"))

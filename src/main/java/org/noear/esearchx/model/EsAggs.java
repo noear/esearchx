@@ -2,7 +2,9 @@ package org.noear.esearchx.model;
 
 import org.noear.snack.ONode;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -69,12 +71,12 @@ public class EsAggs {
     /**
      * top_hits，每一个聚合Bucket里面仅返回指定顺序的前N条数据。
      */
-    public EsAggs top(int size) {
-        return top(size, null);
+    public EsAggs topHits(int size) {
+        return topHits(size, null);
     }
 
-    public EsAggs top(int size, Consumer<EsSort> sort) {
-        ONode top_hits = oNode.getOrNew("$top").getOrNew("top_hits");
+    public EsAggs topHits(int size, Consumer<EsSort> sort) {
+        ONode top_hits = oNode.getOrNew("$topHits").getOrNew("top_hits");
 
         top_hits.set("size", size);
 
@@ -147,7 +149,7 @@ public class EsAggs {
 
     /**
      * range，聚合
-     * */
+     */
     public EsAggs range(String field, Consumer<EsRanges> ranges) {
         ONode oNode1 = oNode.getOrNew(field + "_range").getOrNew("range");
 
@@ -167,7 +169,7 @@ public class EsAggs {
         return this;
     }
 
-    public EsAggs terms(String field,  Consumer<EsTerms> terms) {
+    public EsAggs terms(String field, Consumer<EsTerms> terms) {
         ONode oNode1 = oNode.getOrNew(field + "_terms").getOrNew("terms");
 
         if (field.startsWith("$")) {
@@ -177,7 +179,7 @@ public class EsAggs {
         }
 
         if (terms != null) {
-            EsTerms t = new EsTerms(oNode);
+            EsTerms t = new EsTerms(oNode1);
             terms.accept(t);
         }
 
@@ -188,8 +190,14 @@ public class EsAggs {
     /**
      * 添加下级条件
      */
-    public EsAggs add(Consumer<EsAggs> aggs) {
-        EsAggs c = new EsAggs(oNode.getOrNew("aggs"));
+    public EsAggs aggs(Consumer<EsAggs> aggs) {
+        if (oNode.isObject() == false || oNode.count() == 0) {
+            throw new IllegalArgumentException();
+        }
+
+        String key = (String) oNode.obj().keySet().toArray()[0];
+
+        EsAggs c = new EsAggs(oNode.get(key).getOrNew("aggs"));
         aggs.accept(c);
 
         return this;

@@ -111,7 +111,8 @@ public class Test2SelectPlus {
         EsData<LogDo> result = context.indice(indice)
                 .where(c -> c.term("tag", "list1"))
                 .limit(0, 10)
-                .selectList(LogDo.class, "log_id,trace_id");
+                .sourceIncludes("log_id,trace_id")
+                .selectList(LogDo.class);
 
         assert result.getListSize() == 10;
         assert result.getList().get(0).log_id > 0;
@@ -124,7 +125,8 @@ public class Test2SelectPlus {
         EsData<LogDo> result = context.indice(indice)
                 .where(c -> c.term("tag", "list1"))
                 .limit(0, 10)
-                .selectList(LogDo.class, "!log_id,trace_id");
+                .sourceExcludes("log_id,trace_id")
+                .selectList(LogDo.class);
 
         assert result.getListSize() == 10;
         assert result.getList().get(0).log_id == 0;

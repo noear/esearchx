@@ -214,11 +214,25 @@ public class EsIndiceQuery {
         return this;
     }
 
+    public EsIndiceQuery sourceExcludes(String fields) {
+        EsSource s = new EsSource(getDslq().getOrNew("_source"));
+        s.excludes(fields.substring(1).split(","));
+
+        return this;
+    }
+
+    public EsIndiceQuery sourceIncludes(String fields) {
+        EsSource s = new EsSource(getDslq().getOrNew("_source"));
+        s.includes(fields.split(","));
+
+        return this;
+    }
+
     //
     //aggs
     //
 
-    public EsIndiceQuery aggs(Consumer<EsAggs> aggs){
+    public EsIndiceQuery aggs(Consumer<EsAggs> aggs) {
         EsAggs a = new EsAggs(getDslq().getOrNew("aggs"));
         aggs.accept(a);
         return this;
@@ -241,7 +255,7 @@ public class EsIndiceQuery {
     }
 
 
-    public String selectJson() throws IOException{
+    public String selectJson() throws IOException {
         return select(getDslq().toJson());
     }
 
@@ -260,33 +274,15 @@ public class EsIndiceQuery {
         return selectOne(Map.class);
     }
 
-    public Map selectMap(String fields) throws IOException {
-        return selectOne(Map.class, fields);
-    }
 
-    public List<Map> selectMapList() throws IOException{
+    public List<Map> selectMapList() throws IOException {
         return selectList(Map.class).getList();
     }
-
-    public List<Map> selectMapList(String fields) throws IOException{
-        return selectList(Map.class, fields).getList();
-    }
-
 
 
     public <T> T selectOne(Class<T> clz) throws IOException {
         limit(1);
-        EsData<T> page = selectList(clz, null);
-        if (page.getListSize() > 0) {
-            return page.getList().get(0);
-        } else {
-            return null;
-        }
-    }
-
-    public <T> T selectOne(Class<T> clz, String fields) throws IOException {
-        limit(1);
-        EsData<T> page = selectList(clz, fields);
+        EsData<T> page = selectList(clz);
         if (page.getListSize() > 0) {
             return page.getList().get(0);
         } else {
@@ -296,27 +292,12 @@ public class EsIndiceQuery {
 
 
     public <T> EsData<T> selectList(Class<T> clz) throws IOException {
-        return selectList(clz, null);
-    }
-
-    public <T> EsData<T> selectList(Class<T> clz, String fields) throws IOException {
         if (queryMatch != null) {
             if (queryMatch.count() > 1) {
                 getDslq().getOrNew("query").set("multi_match", queryMatch);
             } else {
                 getDslq().getOrNew("query").set("match", queryMatch);
             }
-        }
-
-        if (PriUtils.isNotEmpty(fields)) {
-            ONode oNode1 = PriUtils.newNode();
-            EsSource s = new EsSource(oNode1);
-            if (fields.startsWith("!")) {
-                s.excludes(fields.substring(1).split(","));
-            } else {
-                s.includes(fields.split(","));
-            }
-            getDslq().set("_source", oNode1);
         }
 
         String json = select(getDslq().toJson());
@@ -334,9 +315,6 @@ public class EsIndiceQuery {
 
         return new EsData<>(total, max_score, list);
     }
-
-
-
 
 
     //
