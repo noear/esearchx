@@ -205,6 +205,3 @@ public class EsAggs {
         return this;
     }
 }
-
-//https://blog.csdn.net/ifenggege/article/details/86103918
-//https://www.cnblogs.com/duanxz/p/6528161.html
