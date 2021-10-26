@@ -214,16 +214,16 @@ public class EsIndiceQuery {
         return this;
     }
 
-    public EsIndiceQuery sourceExcludes(String fields) {
+    public EsIndiceQuery sourceExcludes(String... fields) {
         EsSource s = new EsSource(getDslq().getOrNew("_source"));
-        s.excludes(fields.substring(1).split(","));
+        s.excludes(fields);
 
         return this;
     }
 
-    public EsIndiceQuery sourceIncludes(String fields) {
+    public EsIndiceQuery sourceIncludes(String... fields) {
         EsSource s = new EsSource(getDslq().getOrNew("_source"));
-        s.includes(fields.split(","));
+        s.includes(fields);
 
         return this;
     }
