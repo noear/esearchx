@@ -14,7 +14,7 @@ import org.noear.solon.test.SolonJUnit4ClassRunner;
  */
 @RunWith(SolonJUnit4ClassRunner.class)
 public class Test5AggsSelect {
-    final String indice = "test-user_log_202110";
+    final String indice = "test-user_log";
 
 
     @Inject("${test.esx}")
@@ -49,6 +49,16 @@ public class Test5AggsSelect {
         String tmp = context.indice(indice)
                 .limit(0)
                 .aggs(a -> a.terms("level").top(1))
+                .selectJson();
+
+        System.out.println(tmp);
+    }
+
+    @Test
+    public void test3() throws Exception {
+        String tmp = context.indice(indice)
+                .limit(0)
+                .aggs(a -> a.cardinality("level"))
                 .selectJson();
 
         System.out.println(tmp);

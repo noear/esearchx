@@ -102,7 +102,7 @@ public class EsAggs {
     }
 
     /**
-     * cardinality，去重
+     * cardinality，先去重再求和
      */
     public EsAggs cardinality(String field) {
         funSet("$cardinality", field, "cardinality");
