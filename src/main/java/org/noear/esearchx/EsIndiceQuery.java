@@ -214,20 +214,6 @@ public class EsIndiceQuery {
         return this;
     }
 
-    public EsIndiceQuery sourceExcludes(String... fields) {
-        EsSource s = new EsSource(getDslq().getOrNew("_source"));
-        s.excludes(fields);
-
-        return this;
-    }
-
-    public EsIndiceQuery sourceIncludes(String... fields) {
-        EsSource s = new EsSource(getDslq().getOrNew("_source"));
-        s.includes(fields);
-
-        return this;
-    }
-
     //
     //aggs
     //
@@ -274,15 +260,25 @@ public class EsIndiceQuery {
         return selectOne(Map.class);
     }
 
+    public Map selectMap(String fields) throws IOException {
+        return selectOne(Map.class, fields);
+    }
 
     public List<Map> selectMapList() throws IOException {
         return selectList(Map.class).getList();
     }
 
+    public List<Map> selectMapList(String fields) throws IOException {
+        return selectList(Map.class, fields).getList();
+    }
 
     public <T> T selectOne(Class<T> clz) throws IOException {
+        return selectOne(clz, null);
+    }
+
+    public <T> T selectOne(Class<T> clz, String fields) throws IOException {
         limit(1);
-        EsData<T> page = selectList(clz);
+        EsData<T> page = selectList(clz, fields);
         if (page.getListSize() > 0) {
             return page.getList().get(0);
         } else {
@@ -290,13 +286,25 @@ public class EsIndiceQuery {
         }
     }
 
-
     public <T> EsData<T> selectList(Class<T> clz) throws IOException {
+        return selectList(clz, null);
+    }
+
+    public <T> EsData<T> selectList(Class<T> clz, String fields) throws IOException {
         if (queryMatch != null) {
             if (queryMatch.count() > 1) {
                 getDslq().getOrNew("query").set("multi_match", queryMatch);
             } else {
                 getDslq().getOrNew("query").set("match", queryMatch);
+            }
+        }
+
+        if(PriUtils.isNotEmpty(fields)) {
+            EsSource s = new EsSource(getDslq().getOrNew("_source"));
+            if (fields.startsWith("!")) {
+                s.excludes(fields.substring(1).split(","));
+            } else {
+                s.includes(fields.split(","));
             }
         }
 
