@@ -82,6 +82,12 @@ public class DemoApp {
                 .limit(50, 50)
                 .selectList(LogDo.class);
 
+        //脚本查询
+        EsData<LogDo> result = esx.indice(indice)
+                .where(c -> c.script("doc['tag'].value.length() >= params.len", p->p.set("len",2)))
+                .limit(10)
+                .selectList(LogDo.class);
+        
         //聚合查询
         ONode result = esx.indice(indice)
                 .limit(0)

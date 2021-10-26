@@ -225,6 +225,17 @@ public class Test2Select {
     }
 
     @Test
+    public void test_exists() throws Exception {
+
+        EsData<LogDo> result = context.indice(indice)
+                .where(c -> c.exists("tag"))
+                .limit(10)
+                .selectList(LogDo.class);
+
+        assert result.getListSize() == 10;
+    }
+
+    @Test
     public void test_script() throws Exception {
 
         EsData<LogDo> result = context.indice(indice)

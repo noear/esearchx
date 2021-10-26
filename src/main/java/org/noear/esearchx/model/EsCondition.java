@@ -182,6 +182,14 @@ public class EsCondition {
     }
 
     /**
+     * exists
+     */
+    public EsCondition exists(String field) {
+        filterSet("exists", "field", field);
+        return this;
+    }
+
+    /**
      * term
      */
     public EsCondition term(String field, Object value) {
