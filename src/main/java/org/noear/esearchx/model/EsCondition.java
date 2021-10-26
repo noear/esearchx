@@ -1,5 +1,6 @@
 package org.noear.esearchx.model;
 
+import org.noear.esearchx.PriUtils;
 import org.noear.snack.ONode;
 
 import java.util.Arrays;
@@ -52,7 +53,7 @@ public class EsCondition {
                 }
             }
         } else {
-            oNodeArray.add(new ONode().build(n -> n.getOrNew(type).set(field, value)));
+            oNodeArray.add(PriUtils.newNode().build(n -> n.getOrNew(type).set(field, value)));
         }
     }
 
@@ -144,7 +145,7 @@ public class EsCondition {
      * match_phrase slop
      */
     public EsCondition matchPhrase(String field, Object value, int slop) {
-        ONode oNode = new ONode();
+        ONode oNode = PriUtils.newNode();
         oNode.set("query", value);
         oNode.set("slop", slop);
 
@@ -165,7 +166,7 @@ public class EsCondition {
      * match_phrase_prefix slop
      */
     public EsCondition matchPhrasePrefix(String field, Object value, int slop) {
-        ONode oNode = new ONode();
+        ONode oNode = PriUtils.newNode();
         oNode.set("query", value);
         oNode.set("slop", slop);
 
@@ -186,7 +187,7 @@ public class EsCondition {
      * terms
      */
     public EsCondition terms(String field, Object... values) {
-        filterSet("terms", field, new ONode().addAll(Arrays.asList(values)));
+        filterSet("terms", field, PriUtils.newNode().addAll(Arrays.asList(values)));
         return this;
     }
 
@@ -194,7 +195,7 @@ public class EsCondition {
      * range
      */
     public EsCondition range(String field, Consumer<EsRange> range) {
-        ONode oNode1 = new ONode();
+        ONode oNode1 = PriUtils.newNode();
         EsRange r = new EsRange(oNode1);
         range.accept(r);
 
@@ -243,7 +244,7 @@ public class EsCondition {
         EsMap p = new EsMap();
         params.accept(p);
 
-        ONode oNode = new ONode();
+        ONode oNode = PriUtils.newNode();
         oNode.set("source", source);
         oNode.set("lang", lang);
         if (p.size() > 0) {
@@ -259,7 +260,7 @@ public class EsCondition {
      * 添加下级条件
      * */
     public EsCondition add(Consumer<EsCondition> condition) {
-        ONode oNode1 = new ONode();
+        ONode oNode1 = PriUtils.newNode();
         EsCondition c = new EsCondition(oNode1);
         condition.accept(c);
 

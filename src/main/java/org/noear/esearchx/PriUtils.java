@@ -1,9 +1,17 @@
 package org.noear.esearchx;
 
+import org.noear.snack.ONode;
+import org.noear.snack.core.Options;
+
 import java.nio.charset.Charset;
 import java.util.Base64;
 
-class PriUtils {
+public class PriUtils {
+    private static final Options nodeOptions = Options.def();
+    public static ONode newNode() {
+        return new ONode(nodeOptions);
+    }
+
     /**
      * 是否为空
      * */

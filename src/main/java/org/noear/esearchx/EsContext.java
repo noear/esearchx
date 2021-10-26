@@ -158,7 +158,7 @@ public class EsContext {
      * @param indiceName 索引名字
      */
     public String indiceSettings(String indiceName, Consumer<EsSetting> setting) throws IOException {
-        ONode oNode1 = new ONode();
+        ONode oNode1 = PriUtils.newNode();
         EsSetting s = new EsSetting(oNode1);
         setting.accept(s);
 
@@ -194,11 +194,11 @@ public class EsContext {
      * 索引别名处理
      */
     public String indiceAliases(Consumer<EsAliases> aliases) throws IOException {
-        ONode oNode1 = new ONode();
+        ONode oNode1 = PriUtils.newNode();
         EsAliases e = new EsAliases(oNode1);
         aliases.accept(e);
 
-        ONode oNode = new ONode().build(n -> n.set("actions", oNode1));
+        ONode oNode = PriUtils.newNode().build(n -> n.set("actions", oNode1));
 
         EsCommand cmd = new EsCommand();
         cmd.method = PriWw.method_post;

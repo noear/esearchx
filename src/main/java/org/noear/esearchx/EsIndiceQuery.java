@@ -37,7 +37,7 @@ public class EsIndiceQuery {
 
     private ONode getDslq() {
         if (dslq == null) {
-            dslq = new ONode().asObject();
+            dslq = PriUtils.newNode().asObject();
         }
 
         return dslq;
@@ -45,7 +45,7 @@ public class EsIndiceQuery {
 
     private ONode getQueryMatch() {
         if (queryMatch == null) {
-            queryMatch = new ONode().asObject();
+            queryMatch = PriUtils.newNode().asObject();
         }
 
         return queryMatch;
@@ -54,7 +54,7 @@ public class EsIndiceQuery {
 
     public EsIndiceQuery set(String field, Object value) {
         if (item == null) {
-            item = new ONode();
+            item = PriUtils.newNode();
         }
 
         item.set(field, value);
@@ -105,7 +105,7 @@ public class EsIndiceQuery {
     public <T> String insertList(List<T> docs) throws IOException {
         StringBuilder docJson = new StringBuilder();
         docs.forEach((doc) -> {
-            docJson.append(new ONode().build(n -> n.getOrNew("index").asObject()).toJson()).append("\n");
+            docJson.append(PriUtils.newNode().build(n -> n.getOrNew("index").asObject()).toJson()).append("\n");
             docJson.append(ONode.loadObj(doc).toJson()).append("\n");
         });
 
@@ -132,7 +132,7 @@ public class EsIndiceQuery {
     public <T> String upsertList(Map<String, T> docs) throws IOException {
         StringBuilder docJson = new StringBuilder();
         docs.forEach((docId, doc) -> {
-            docJson.append(new ONode().build(n -> n.getOrNew("index").set("_id", docId)).toJson()).append("\n");
+            docJson.append(PriUtils.newNode().build(n -> n.getOrNew("index").set("_id", docId)).toJson()).append("\n");
             docJson.append(ONode.loadObj(doc).toJson()).append("\n");
         });
 
@@ -152,7 +152,7 @@ public class EsIndiceQuery {
     // select
     //
     public EsIndiceQuery where(Consumer<EsCondition> condition) {
-        ONode oNode1 = new ONode();
+        ONode oNode1 = PriUtils.newNode();
         EsCondition c = new EsCondition(oNode1);
         condition.accept(c);
         getDslq().set("query", oNode1);
@@ -274,7 +274,7 @@ public class EsIndiceQuery {
         }
 
         if (PriUtils.isNotEmpty(fields)) {
-            ONode oNode1 = new ONode();
+            ONode oNode1 = PriUtils.newNode();
             EsSource s = new EsSource(oNode1);
             if (fields.startsWith("!")) {
                 s.excludes(fields.substring(1).split(","));
@@ -317,7 +317,7 @@ public class EsIndiceQuery {
     public <T> List<T> selectByIds(Class<T> clz, List<String> docIds) throws IOException {
         try {
 
-            ONode oNode = new ONode();
+            ONode oNode = PriUtils.newNode();
             oNode.getOrNew("query").getOrNew("ids").getOrNew("values").addAll(docIds);
 
             EsCommand cmd = new EsCommand();
