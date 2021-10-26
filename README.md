@@ -82,10 +82,11 @@ public class DemoApp {
                 .limit(50, 50)
                 .selectList(LogDo.class);
 
+        //聚合查询
         ONode result = esx.indice(indice)
                 .limit(0)
                 .aggs(a -> a.terms("level", t -> t.size(20))
-                        .aggs(a1 -> a1.topHits(2, s -> s.addByAes("log_fulltime"))))
+                            .aggs(a1 -> a1.topHits(2, s -> s.addByAes("log_fulltime"))))
                 .selectAggs();
     }
 }
