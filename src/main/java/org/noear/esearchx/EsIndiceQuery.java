@@ -3,6 +3,7 @@ package org.noear.esearchx;
 import org.noear.esearchx.exception.NoExistException;
 import org.noear.esearchx.model.EsCondition;
 import org.noear.esearchx.model.EsData;
+import org.noear.esearchx.model.EsSort;
 import org.noear.esearchx.model.EsSource;
 import org.noear.snack.ONode;
 
@@ -174,23 +175,12 @@ public class EsIndiceQuery {
     //排序
     //
 
-    public EsIndiceQuery orderByAsc(String field) {
-        getDslq().getOrNew("sort").getOrNew(field).set("order", "asc");
-        return this;
-    }
+    public EsIndiceQuery orderBy(Consumer<EsSort> sort) {
+        ONode oNode1 = new ONode();
+        EsSort s = new EsSort(oNode1);
+        sort.accept(s);
 
-    public EsIndiceQuery orderByDesc(String field) {
-        getDslq().getOrNew("sort").getOrNew(field).set("order", "desc");
-        return this;
-    }
-
-    public EsIndiceQuery andByAsc(String field) {
-        getDslq().getOrNew("sort").getOrNew(field).set("order", "asc");
-        return this;
-    }
-
-    public EsIndiceQuery andByDesc(String field) {
-        getDslq().getOrNew("sort").getOrNew(field).set("order", "desc");
+        getDslq().set("sort", oNode1);
         return this;
     }
 

@@ -96,7 +96,8 @@ public class Test2SelectPlus {
                                 .matchPhrasePrefix("summary", "${")
                                 .matchPhrasePrefix("summary", "#{")))
                 .limit(0, 10)
-                .orderByDesc("log_id")
+                .orderBy(s -> s.andDesc("log_id"))
+                //.orderByDesc("log_id")
                 .selectList(LogDo.class);
 
         System.out.println(result);
@@ -136,7 +137,8 @@ public class Test2SelectPlus {
         EsData<LogDo> result = context.indice(indice)
                 .where(c -> c.term("tag", "list1"))
                 .limit(5)
-                .orderByAsc("log_id")
+                .orderBy(s -> s.andAes("log_id"))
+                //.orderByAsc("log_id")
                 .onAfter(239467464128819200l)
                 .selectList(LogDo.class);
 
@@ -152,7 +154,8 @@ public class Test2SelectPlus {
         EsData<LogDo> result = context.indice(indice)
                 .where(c -> c.term("tag", "list1"))
                 .limit(0, 10)
-                .orderByDesc("log_id")
+                .orderBy(s -> s.andDesc("log_id"))
+                //.orderByDesc("log_id")
                 .selectList(LogDo.class);
 
         assert result.getListSize() == 10;
@@ -165,8 +168,9 @@ public class Test2SelectPlus {
         EsData<LogDo> result = context.indice(indice)
                 .where(c -> c.term("tag", "list1"))
                 .limit(0, 10)
-                .orderByDesc("level")
-                .andByAsc("log_id")
+                .orderBy(s -> s.andDesc("level").andAes("log_id"))
+//                .orderByDesc("level")
+//                .andByAsc("log_id")
                 .selectList(LogDo.class);
 
         assert result.getListSize() == 10;
@@ -181,8 +185,9 @@ public class Test2SelectPlus {
                         .term("tag", "list1")
                         .range("level", r -> r.gt(3)))
                 .limit(0, 10)
-                .orderByAsc("level")
-                .andByAsc("log_id")
+                .orderBy(s -> s.andAes("level").andAes("log_id"))
+//                .orderByAsc("level")
+//                .andByAsc("log_id")
                 .minScore(1)
                 .selectList(LogDo.class);
 
@@ -201,8 +206,9 @@ public class Test2SelectPlus {
                         .term("tag", "list1")
                         .range("level", r -> r.gt(3)))
                 .limit(0, 10)
-                .orderByAsc("level")
-                .andByAsc("log_id")
+                .orderBy(s -> s.andAes("level").andAes("log_id"))
+//                .orderByAsc("level")
+//                .andByAsc("log_id")
                 .selectList(LogDo.class);
 
         assert result.getListSize() == 10;
