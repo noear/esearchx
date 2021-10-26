@@ -13,7 +13,7 @@ import org.noear.solon.test.SolonJUnit4ClassRunner;
  * @author noear 2021/10/26 created
  */
 @RunWith(SolonJUnit4ClassRunner.class)
-public class Test4Sum {
+public class Test5AggsSelect {
     final String indice = "test-user_log_202110";
 
 
@@ -26,19 +26,29 @@ public class Test4Sum {
         ONode oNode = context.indice(indice)
                 .where(c -> c.range("level", r -> r.gte(3)))
                 .limit(0)
-                .aggs(a -> a.sum("xxx", "level"))
+                .aggs(a -> a.sum("level"))
                 .selectAggs();
 
         System.out.println(oNode.toJson());
 
-        System.out.println(oNode.get("xxx").get("value").getDouble());
+        System.out.println(oNode.get("$sum").get("value").getDouble());
     }
 
     @Test
     public void test1() throws Exception {
         String tmp = context.indice(indice)
                 .limit(0)
-                .aggs(a -> a.terms("xxx", "level"))
+                .aggs(a -> a.terms("level"))
+                .selectJson();
+
+        System.out.println(tmp);
+    }
+
+    @Test
+    public void test2() throws Exception {
+        String tmp = context.indice(indice)
+                .limit(0)
+                .aggs(a -> a.terms("level").top(1))
                 .selectJson();
 
         System.out.println(tmp);
