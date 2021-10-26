@@ -95,7 +95,7 @@ public class EsAggs {
     }
 
     /**
-     * cardinality，求基数（先去重再求和）
+     * cardinality，先去重再计数
      */
     public EsAggs cardinality(String field) {
         funSet(field + "_cardinality", field, "cardinality");
