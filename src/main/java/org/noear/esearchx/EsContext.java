@@ -98,8 +98,8 @@ public class EsContext {
     /**
      * 获取索引操作
      */
-    public EsIndiceQuery indice(String indiceName) {
-        return new EsIndiceQuery(this, indiceName);
+    public EsQuery indice(String indiceName) {
+        return new EsQuery(this, indiceName, false);
     }
 
     /**
@@ -212,6 +212,10 @@ public class EsContext {
     }
 
     //=======================
+
+    public EsQuery stream(String streamName){
+        return new EsQuery(this, streamName, true);
+    }
 
     /**
      * 索引数据流创建

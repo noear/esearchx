@@ -16,17 +16,19 @@ import java.util.function.Consumer;
  * @author noear
  * @since 1.0
  */
-public class EsIndiceQuery {
+public class EsQuery {
     private final EsContext context;
     private final String indiceName;
+    private final boolean isStream;
 
     private ONode dslq;
     private ONode queryMatch;
     private ONode item;
 
-    protected EsIndiceQuery(EsContext context, String indiceName) {
+    protected EsQuery(EsContext context, String indiceName, boolean isStream) {
         this.context = context;
         this.indiceName = indiceName;
+        this.isStream = isStream;
     }
 
     private PriHttpUtils getHttp(String path) {
@@ -50,7 +52,7 @@ public class EsIndiceQuery {
     }
 
 
-    public EsIndiceQuery set(String field, Object value) {
+    public EsQuery set(String field, Object value) {
         if (item == null) {
             item = PriUtils.newNode();
         }
@@ -149,7 +151,7 @@ public class EsIndiceQuery {
     //
     // select
     //
-    public EsIndiceQuery where(Consumer<EsCondition> condition) {
+    public EsQuery where(Consumer<EsCondition> condition) {
         ONode oNode1 = PriUtils.newNode();
         EsCondition c = new EsCondition(oNode1);
         condition.accept(c);
@@ -157,13 +159,13 @@ public class EsIndiceQuery {
         return this;
     }
 
-    public EsIndiceQuery limit(int start, int size) {
+    public EsQuery limit(int start, int size) {
         getDslq().set("from", start);
         getDslq().set("size", size);
         return this;
     }
 
-    public EsIndiceQuery limit(int size) {
+    public EsQuery limit(int size) {
         getDslq().set("size", size);
         return this;
     }
@@ -172,28 +174,28 @@ public class EsIndiceQuery {
     //排序
     //
 
-    public EsIndiceQuery orderBy(Consumer<EsSort> sort) {
+    public EsQuery orderBy(Consumer<EsSort> sort) {
         EsSort s = new EsSort(getDslq().getOrNew("sort").asArray());
         sort.accept(s);
         return this;
     }
 
-    public EsIndiceQuery orderByAsc(String field) {
+    public EsQuery orderByAsc(String field) {
         getDslq().getOrNew("sort").addNew().getOrNew(field).set("order", "asc");
         return this;
     }
 
-    public EsIndiceQuery orderByDesc(String field) {
+    public EsQuery orderByDesc(String field) {
         getDslq().getOrNew("sort").addNew().getOrNew(field).set("order", "desc");
         return this;
     }
 
-    public EsIndiceQuery andByAsc(String field) {
+    public EsQuery andByAsc(String field) {
         getDslq().getOrNew("sort").addNew().getOrNew(field).set("order", "asc");
         return this;
     }
 
-    public EsIndiceQuery andByDesc(String field) {
+    public EsQuery andByDesc(String field) {
         getDslq().getOrNew("sort").addNew().getOrNew(field).set("order", "desc");
         return this;
     }
@@ -201,7 +203,7 @@ public class EsIndiceQuery {
     /**
      * search_after
      */
-    public EsIndiceQuery onAfter(Object... values) {
+    public EsQuery onAfter(Object... values) {
         getDslq().getOrNew("search_after").addAll(Arrays.asList(values));
         return this;
     }
@@ -209,7 +211,7 @@ public class EsIndiceQuery {
     /**
      * min_score
      */
-    public EsIndiceQuery minScore(Object value) {
+    public EsQuery minScore(Object value) {
         getDslq().getOrNew("min_score").val(value);
         return this;
     }
@@ -218,7 +220,7 @@ public class EsIndiceQuery {
     //aggs
     //
 
-    public EsIndiceQuery aggs(Consumer<EsAggs> aggs) {
+    public EsQuery aggs(Consumer<EsAggs> aggs) {
         EsAggs a = new EsAggs(getDslq().getOrNew("aggs"));
         aggs.accept(a);
         return this;

@@ -4,7 +4,7 @@ solon.app:
   group: test
 
 test.esx:
-  url: eshost:30480
+  url: eshost:32266
 
 
 #test.esx:
