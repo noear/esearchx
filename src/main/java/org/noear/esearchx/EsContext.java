@@ -210,4 +210,49 @@ public class EsContext {
 
         return tmp;
     }
+
+    //=======================
+
+    /**
+     * 索引数据流创建
+     * */
+    public String streamCreate(String streamName) throws IOException{
+        EsCommand cmd = new EsCommand();
+        cmd.method = PriWw.method_put;
+        cmd.path = String.format("/_data_stream/%s", streamName);
+
+        String tmp = execAsBody(cmd);
+
+        return tmp;
+    }
+
+    /**
+     * 过引模板创建
+     * */
+    public String templateCreate(String templateName, String dsl) throws IOException{
+        EsCommand cmd = new EsCommand();
+        cmd.method = PriWw.method_put;
+        cmd.path = String.format("/_component_template/%s", templateName);
+        cmd.dsl = dsl;
+        cmd.dslType = PriWw.mime_json;
+
+        String tmp = execAsBody(cmd);
+
+        return tmp;
+    }
+
+    /**
+     * 索引生命周期策略
+     * */
+    public String policyCreate(String policyName, String dsl) throws IOException{
+        EsCommand cmd = new EsCommand();
+        cmd.method = PriWw.method_put;
+        cmd.path = String.format("/_ilm/policy/%s", policyName);
+        cmd.dsl = dsl;
+        cmd.dslType = PriWw.mime_json;
+
+        String tmp = execAsBody(cmd);
+
+        return tmp;
+    }
 }
