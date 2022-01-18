@@ -215,8 +215,8 @@ public class EsContext {
 
     /**
      * 索引数据流创建
-     * */
-    public String streamCreate(String streamName) throws IOException{
+     */
+    public String streamCreate(String streamName) throws IOException {
         EsCommand cmd = new EsCommand();
         cmd.method = PriWw.method_put;
         cmd.path = String.format("/_data_stream/%s", streamName);
@@ -227,12 +227,12 @@ public class EsContext {
     }
 
     /**
-     * 过引模板创建
-     * */
-    public String templateCreate(String templateName, String dsl) throws IOException{
+     * 模板创建
+     */
+    public String templateCreate(String templateName, String dsl) throws IOException {
         EsCommand cmd = new EsCommand();
         cmd.method = PriWw.method_put;
-        cmd.path = String.format("/_component_template/%s", templateName);
+        cmd.path = String.format("/_template/%s", templateName);
         cmd.dsl = dsl;
         cmd.dslType = PriWw.mime_json;
 
@@ -242,9 +242,26 @@ public class EsContext {
     }
 
     /**
-     * 索引生命周期策略
-     * */
-    public String policyCreate(String policyName, String dsl) throws IOException{
+     * 模板是否创建
+     *
+     * @param templateName 模板名称
+     */
+    public boolean templateExist(String templateName) throws IOException {
+        EsCommand cmd = new EsCommand();
+        cmd.method = PriWw.method_head;
+        cmd.path = String.format("/_template/%s", templateName);
+
+        int tmp = execAsCode(cmd);
+
+        return tmp == 200; //404不存在
+    }
+
+    /**
+     * 索引生命周期策略创建
+     *
+     * @param policyName 策略名称
+     */
+    public String policyCreate(String policyName, String dsl) throws IOException {
         EsCommand cmd = new EsCommand();
         cmd.method = PriWw.method_put;
         cmd.path = String.format("/_ilm/policy/%s", policyName);
@@ -254,5 +271,20 @@ public class EsContext {
         String tmp = execAsBody(cmd);
 
         return tmp;
+    }
+
+    /**
+     * 索引生命周期策略是否存在？
+     *
+     * @param policyName 策略名称
+     */
+    public boolean policyExist(String policyName) throws IOException {
+        EsCommand cmd = new EsCommand();
+        cmd.method = PriWw.method_head;
+        cmd.path = String.format("/_ilm/policy/%s", policyName);
+
+        int tmp = execAsCode(cmd);
+
+        return tmp == 200; //404不存在
     }
 }
