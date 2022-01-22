@@ -221,7 +221,7 @@ public class EsContext {
     /**
      * 模板创建
      */
-    public String templateCreate(String templateName, String dsl) throws IOException {
+    public String indexTemplateCreate(String templateName, String dsl) throws IOException {
         EsCommand cmd = new EsCommand();
         cmd.method = PriWw.method_put;
         cmd.path = String.format("/_index_template/%s", templateName);
@@ -239,7 +239,7 @@ public class EsContext {
      *
      * @param templateName 模板名称
      */
-    public boolean templateExist(String templateName) throws IOException {
+    public boolean indexTemplateExist(String templateName) throws IOException {
         EsCommand cmd = new EsCommand();
         cmd.method = PriWw.method_head;
         cmd.path = String.format("/_index_template/%s", templateName);
