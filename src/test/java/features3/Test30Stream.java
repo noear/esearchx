@@ -33,9 +33,9 @@ public class Test30Stream {
 
     @Test
     public void test1() throws Exception {
-        assert context.indexTemplateExist(templateNoExit) == false;
+        assert context.templateExist(templateNoExit) == false;
         assert context.policyExist(policyNoExit) == false;
-        assert context.indexTemplateExist(template);
+        assert context.templateExist(template);
     }
 
     @Test
@@ -58,7 +58,7 @@ public class Test30Stream {
         //设定翻转别名
         tmlDslNode.get("template").get("settings").get("index.lifecycle.rollover_alias").val(aliases);
 
-        String index_dsl_rst = context.indexTemplateCreate(template, tmlDslNode.toJson());
+        String index_dsl_rst = context.templateCreate(template, tmlDslNode.toJson());
         System.out.println(index_dsl_rst);
 
 
