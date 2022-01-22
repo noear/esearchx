@@ -217,18 +217,6 @@ public class EsContext {
         return new EsQuery(this, streamName, true);
     }
 
-    /**
-     * 索引数据流创建
-     */
-    public String streamCreate(String streamName) throws IOException {
-        EsCommand cmd = new EsCommand();
-        cmd.method = PriWw.method_put;
-        cmd.path = String.format("/_data_stream/%s", streamName);
-
-        String tmp = execAsBody(cmd);
-
-        return tmp;
-    }
 
     /**
      * 模板创建
