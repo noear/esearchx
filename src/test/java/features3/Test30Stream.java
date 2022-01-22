@@ -5,29 +5,27 @@ import features.model.LogDo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.noear.esearchx.EsContext;
+import org.noear.esearchx.model.EsData;
 import org.noear.snack.ONode;
 import org.noear.solon.Utils;
 import org.noear.solon.annotation.Inject;
 import org.noear.solon.test.SolonJUnit4ClassRunner;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 /**
  * @author noear 2022/1/18 created
  */
 @RunWith(SolonJUnit4ClassRunner.class)
 public class Test30Stream {
-    final String streamNoExit = "test-order_notexit";
-    final String templateNoExit = "test-order-tml_notexit";
-    final String policyNoExit = "test-order-policy_notexit";
+    final String streamNoExit = "test-demo30_notexit";
+    final String templateNoExit = "test-demo30-tml_notexit";
+    final String policyNoExit = "test-demo30-policy_notexit";
 
-    final String stream = "test-order";
-    final String template = "test-order-tml";
-    final String policy = "test-order-policy";
+    final String aliases = "test-demo30";
+    final String template = "test-demo30-tml";
+    final String policy = "test-demo30-policy";
 
 
     @Inject("${test.esx}")
@@ -53,13 +51,11 @@ public class Test30Stream {
 
         ONode tmlDslNode = ONode.loadStr(tml_dsl);
         //设定匹配模式
-        tmlDslNode.getOrNew("index_patterns").val(stream+"*");
-        //设定别名
-        //tmlDslNode.getOrNew("aliases").getOrNew(stream).asObject(); //stream 不需要别名
+        tmlDslNode.getOrNew("index_patterns").val(aliases + "-*");
         //设定策略
-        tmlDslNode.get("settings").get("index.lifecycle.name").val(policy);
+        tmlDslNode.get("template").get("settings").get("index.lifecycle.name").val(policy);
         //设定翻转别名
-        tmlDslNode.get("settings").get("index.lifecycle.rollover_alias").val(stream);
+        tmlDslNode.get("template").get("settings").get("index.lifecycle.rollover_alias").val(aliases);
 
         String index_dsl_rst = context.templateCreate(template, tmlDslNode.toJson());
         System.out.println(index_dsl_rst);
@@ -73,12 +69,38 @@ public class Test30Stream {
     Random random = new Random();
 
     @Test
-    public void test3() throws Exception {
+    public void test_add() throws Exception {
         String json = Utils.getResourceAsString("demo/log.json", "utf-8");
 
-        Map<String, ONode> docs = new LinkedHashMap<>();
 
-        for (int i = 0; i < 4; i++) {
+        LogDo logDo = new LogDo();
+        logDo.logger = "waterapi";
+        logDo.log_id = SnowflakeUtils.genId();
+        logDo.trace_id = Utils.guid();
+        logDo.class_name = this.getClass().getName();
+        logDo.thread_name = Thread.currentThread().getName();
+        logDo.tag = "map1";
+        logDo.level = (random.nextInt() % 5) + 1;
+        logDo.content = json;
+        logDo.log_date = LocalDateTime.now().toLocalDate().getDayOfYear();
+        logDo.log_fulltime = new Date();
+
+        ONode doc = ONode.loadObj(logDo).build(n -> {
+            n.set("@timestamp", logDo.log_fulltime);
+        });
+
+
+        String rst = context.stream(aliases + "-in").insert(doc);
+        System.out.println(rst);
+    }
+
+    @Test
+    public void test_addlist() throws Exception {
+        String json = Utils.getResourceAsString("demo/log.json", "utf-8");
+
+        List<ONode> docs = new ArrayList<>();
+
+        for (int i = 0; i < 20; i++) {
             LogDo logDo = new LogDo();
             logDo.logger = "waterapi";
             logDo.log_id = SnowflakeUtils.genId();
@@ -86,17 +108,42 @@ public class Test30Stream {
             logDo.class_name = this.getClass().getName();
             logDo.thread_name = Thread.currentThread().getName();
             logDo.tag = "map1";
-            logDo.level =  (random.nextInt() % 5) + 1;
+            logDo.level = (random.nextInt() % 5) + 1;
             logDo.content = json;
             logDo.log_date = LocalDateTime.now().toLocalDate().getDayOfYear();
             logDo.log_fulltime = new Date();
 
-            docs.put(Utils.guid(), ONode.loadObj(logDo).build(n->{
+            docs.add(ONode.loadObj(logDo).build(n -> {
                 n.set("@timestamp", logDo.log_fulltime);
             }));
         }
 
-        String rst = context.stream(stream).upsertList(docs);
+        String rst = context.stream(aliases + "-in").insertList(docs);
         System.out.println(rst);
+        assert rst.contains("\"errors\":false");
+    }
+
+    @Test
+    public void test_terms() throws Exception {
+        EsData<LogDo> result = context.stream(aliases + "-in")
+                .where(c -> c.terms("tag", "list1", "map1"))
+                .limit(0, 10)
+                .selectList(LogDo.class);
+
+        int rst = result.getListSize();
+        System.out.println(rst);
+        assert rst >= 10;
+    }
+
+    @Test
+    public void test_prefix() throws Exception {
+
+        EsData<LogDo> result = context.stream(aliases + "-in")
+                .where(c -> c.prefix("tag", "m"))
+                .limit(0, 10)
+                .selectList(LogDo.class);
+
+        assert result.getListSize() >= 10;
+        assert result.getList().get(0).log_id > 0;
     }
 }

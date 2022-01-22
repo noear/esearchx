@@ -1,13 +1,13 @@
 {
-  "index_patterns": "test-order*",
+  "index_patterns": "test-demo30*",
   "data_stream": {},
   "template": {
     "settings" : {
       "number_of_shards":5,
       "number_of_replicas":1,
       "refresh_interval": "3s",
-      "index.lifecycle.name":"test-order-policy",
-      "index.lifecycle.rollover_alias":"test-order"
+      "index.lifecycle.name":"test-demo30-policy",
+      "index.lifecycle.rollover_alias":"test-demo30"
     },
     "mappings": {
       "properties": {
