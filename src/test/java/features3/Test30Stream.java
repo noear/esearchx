@@ -69,12 +69,6 @@ public class Test30Stream {
     Random random = new Random();
 
     @Test
-    public void test_cteate() throws Exception {
-        String stream_rst = context.streamCreate(aliases + "-in");
-        System.out.println(stream_rst);
-    }
-
-    @Test
     public void test_add() throws Exception {
         String json = Utils.getResourceAsString("demo/log.json", "utf-8");
 
