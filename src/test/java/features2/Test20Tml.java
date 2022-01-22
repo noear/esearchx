@@ -129,7 +129,6 @@ public class Test20Tml {
 
     @Test
     public void test_terms() throws Exception {
-
         EsData<LogDo> result = context.indice(aliases)
                 .where(c -> c.terms("tag", "list1", "map1"))
                 .limit(0, 10)

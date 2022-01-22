@@ -125,7 +125,7 @@ public class Test30Stream {
 
     @Test
     public void test_terms() throws Exception {
-        EsData<LogDo> result = context.stream(aliases + "-in")
+        EsData<LogDo> result = context.indice(aliases + "-in")
                 .where(c -> c.terms("tag", "list1", "map1"))
                 .limit(0, 10)
                 .selectList(LogDo.class);
@@ -138,7 +138,7 @@ public class Test30Stream {
     @Test
     public void test_prefix() throws Exception {
 
-        EsData<LogDo> result = context.stream(aliases + "-in")
+        EsData<LogDo> result = context.indice(aliases + "-in")
                 .where(c -> c.prefix("tag", "m"))
                 .limit(0, 10)
                 .selectList(LogDo.class);
