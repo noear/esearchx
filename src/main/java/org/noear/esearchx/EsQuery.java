@@ -104,8 +104,10 @@ public class EsQuery {
 
     public <T> String insertList(List<T> docs) throws IOException {
         StringBuilder docJson = new StringBuilder();
+        String type = (isStream ? "create" : "index");
+
         docs.forEach((doc) -> {
-            docJson.append(PriUtils.newNode().build(n -> n.getOrNew("index").asObject()).toJson()).append("\n");
+            docJson.append(PriUtils.newNode().build(n -> n.getOrNew(type).asObject()).toJson()).append("\n");
             docJson.append(ONode.loadObj(doc).toJson()).append("\n");
         });
 
@@ -131,8 +133,10 @@ public class EsQuery {
 
     public <T> String upsertList(Map<String, T> docs) throws IOException {
         StringBuilder docJson = new StringBuilder();
+        String type = (isStream ? "create" : "index");
+
         docs.forEach((docId, doc) -> {
-            docJson.append(PriUtils.newNode().build(n -> n.getOrNew("index").set("_id", docId)).toJson()).append("\n");
+            docJson.append(PriUtils.newNode().build(n -> n.getOrNew(type).set("_id", docId)).toJson()).append("\n");
             docJson.append(ONode.loadObj(doc).toJson()).append("\n");
         });
 

@@ -4,6 +4,7 @@ import features.model.LogDo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.noear.esearchx.EsContext;
+import org.noear.snack.ONode;
 import org.noear.solon.Utils;
 import org.noear.solon.annotation.Inject;
 import org.noear.solon.test.SolonJUnit4ClassRunner;
@@ -46,7 +47,8 @@ public class Test1Add {
         logDo.log_fulltime = new Date();
 
 
-        context.indice(indice).upsert(Utils.guid(), logDo);
+        String rst = context.indice(indice).upsert(Utils.guid(), logDo);
+        System.out.println(rst);
     }
 
     private void test3_do(long id, String json) throws Exception {
@@ -87,12 +89,14 @@ public class Test1Add {
         logDo.class_name = this.getClass().getName();
         logDo.thread_name = Thread.currentThread().getName();
         logDo.tag = "test2";
-        logDo.level =  (random.nextInt() % 5) + 1;
+        logDo.level = (random.nextInt() % 5) + 1;
         logDo.content = json;
         logDo.log_date = LocalDateTime.now().toLocalDate().getDayOfYear();
         logDo.log_fulltime = new Date();
 
-        context.indice(indice).insert(logDo);
+        String rst = context.indice(indice).insert(logDo);
+        System.out.println(rst);
+        assert rst.contains("\"errors\":") == false;
     }
 
     @Test
@@ -109,7 +113,7 @@ public class Test1Add {
             logDo.class_name = this.getClass().getName();
             logDo.thread_name = Thread.currentThread().getName();
             logDo.tag = "map1";
-            logDo.level =  (random.nextInt() % 5) + 1;
+            logDo.level = (random.nextInt() % 5) + 1;
             logDo.content = json;
             logDo.log_date = LocalDateTime.now().toLocalDate().getDayOfYear();
             logDo.log_fulltime = new Date();
@@ -117,7 +121,9 @@ public class Test1Add {
             docs.put(Utils.guid(), logDo);
         }
 
-        context.indice(indice2).upsertList(docs);
+        String rst = context.indice(indice2).upsertList(docs);
+        System.out.println(rst);
+        assert rst.contains("\"errors\":false");
     }
 
     @Test
@@ -142,6 +148,8 @@ public class Test1Add {
             docs.add(logDo);
         }
 
-        context.indice(indice2).insertList(docs);
+        String rst = context.indice(indice2).insertList(docs);
+        System.out.println(rst);
+        assert rst.contains("\"errors\":false");
     }
 }
