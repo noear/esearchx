@@ -35,6 +35,10 @@ public class Test30Stream {
     public void test1() throws Exception {
         assert context.templateExist(templateNoExit) == false;
         assert context.policyExist(policyNoExit) == false;
+        assert context.streamExist(streamNoExit) == false;
+//        assert context.streamExist(aliases + "-in");
+
+         context.streamCreate(aliases + "-in2");
     }
 
     @Test
