@@ -53,15 +53,14 @@ public class Test20Tml {
         //设定匹配模式
         tmlDslNode.getOrNew("index_patterns").val(aliases + "-*");
         //设定别名
-        tmlDslNode.getOrNew("aliases").getOrNew(aliases).asObject(); //stream 不需要别名
+        tmlDslNode.get("template").getOrNew("aliases").getOrNew(aliases).asObject(); //stream 不需要别名
         //设定策略
-        tmlDslNode.get("settings").get("index.lifecycle.name").val(policy);
+        tmlDslNode.get("template").get("settings").get("index.lifecycle.name").val(policy);
         //设定翻转别名
-        tmlDslNode.get("settings").get("index.lifecycle.rollover_alias").val(aliases);
+        tmlDslNode.get("template").get("settings").get("index.lifecycle.rollover_alias").val(aliases);
 
         String index_dsl_rst = context.templateCreate(template, tmlDslNode.toJson());
         System.out.println(index_dsl_rst);
-
 
     }
 

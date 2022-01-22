@@ -224,11 +224,7 @@ public class EsContext {
     public String templateCreate(String templateName, String dsl) throws IOException {
         EsCommand cmd = new EsCommand();
         cmd.method = PriWw.method_put;
-        if(dsl.contains("\"template\"")){
-            cmd.path = String.format("/_index_template/%s", templateName);
-        }else{
-            cmd.path = String.format("/_template/%s", templateName);
-        }
+        cmd.path = String.format("/_index_template/%s", templateName);
 
         cmd.dsl = dsl;
         cmd.dslType = PriWw.mime_json;
@@ -246,7 +242,7 @@ public class EsContext {
     public boolean templateExist(String templateName) throws IOException {
         EsCommand cmd = new EsCommand();
         cmd.method = PriWw.method_head;
-        cmd.path = String.format("/_template/%s", templateName);
+        cmd.path = String.format("/_index_template/%s", templateName);
 
         int tmp = execAsCode(cmd);
 

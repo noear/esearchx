@@ -35,6 +35,7 @@ public class Test30Stream {
     public void test1() throws Exception {
         assert context.templateExist(templateNoExit) == false;
         assert context.policyExist(policyNoExit) == false;
+        assert context.templateExist(template);
     }
 
     @Test
