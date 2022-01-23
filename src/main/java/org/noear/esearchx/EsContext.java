@@ -75,6 +75,11 @@ public class EsContext {
         return http;
     }
 
+    /**
+     * 执行并返回结果体
+     *
+     * @param cmd 命令
+     * */
     public String execAsBody(EsCommand cmd) throws IOException {
         lastCommand = cmd;
 
@@ -85,6 +90,11 @@ public class EsContext {
         }
     }
 
+    /**
+     * 执行并返回状态码
+     *
+     * @param cmd 命令
+     * */
     public int execAsCode(EsCommand cmd) throws IOException {
         lastCommand = cmd;
 
@@ -243,6 +253,37 @@ public class EsContext {
         EsCommand cmd = new EsCommand();
         cmd.method = PriWw.method_head;
         cmd.path = String.format("/_index_template/%s", templateName);
+
+        int tmp = execAsCode(cmd);
+
+        return tmp == 200; //404不存在
+    }
+
+    /**
+     * 模板创建
+     */
+    public String componentCreate(String componentName, String dsl) throws IOException {
+        EsCommand cmd = new EsCommand();
+        cmd.method = PriWw.method_put;
+        cmd.path = String.format("/_component_template/%s", componentName);
+
+        cmd.dsl = dsl;
+        cmd.dslType = PriWw.mime_json;
+
+        String tmp = execAsBody(cmd);
+
+        return tmp;
+    }
+
+    /**
+     * 模板是否创建
+     *
+     * @param componentName 模板名称
+     */
+    public boolean componentExist(String componentName) throws IOException {
+        EsCommand cmd = new EsCommand();
+        cmd.method = PriWw.method_head;
+        cmd.path = String.format("/_component_template/%s", componentName);
 
         int tmp = execAsCode(cmd);
 
