@@ -79,7 +79,7 @@ public class EsContext {
      * 执行并返回结果体
      *
      * @param cmd 命令
-     * */
+     */
     public String execAsBody(EsCommand cmd) throws IOException {
         lastCommand = cmd;
 
@@ -94,7 +94,7 @@ public class EsContext {
      * 执行并返回状态码
      *
      * @param cmd 命令
-     * */
+     */
     public int execAsCode(EsCommand cmd) throws IOException {
         lastCommand = cmd;
 
@@ -223,7 +223,7 @@ public class EsContext {
 
     //=======================
 
-    public EsQuery stream(String streamName){
+    public EsQuery stream(String streamName) {
         return new EsQuery(this, streamName, true);
     }
 
@@ -260,6 +260,22 @@ public class EsContext {
     }
 
     /**
+     * 模板结构显示
+     *
+     * @param templateName 模板名称
+     */
+    public String templateShow(String templateName) throws IOException {
+        EsCommand cmd = new EsCommand();
+        cmd.method = PriWw.method_get;
+        cmd.path = String.format("/_index_template/%s", templateName);
+
+
+        String tmp = execAsBody(cmd);
+
+        return tmp;
+    }
+
+    /**
      * 模板创建
      */
     public String componentCreate(String componentName, String dsl) throws IOException {
@@ -288,6 +304,22 @@ public class EsContext {
         int tmp = execAsCode(cmd);
 
         return tmp == 200; //404不存在
+    }
+
+    /**
+     * 模板结构创建
+     *
+     * @param componentName 模板名称
+     */
+    public String componentShow(String componentName) throws IOException {
+        EsCommand cmd = new EsCommand();
+        cmd.method = PriWw.method_get;
+        cmd.path = String.format("/_component_template/%s", componentName);
+
+
+        String tmp = execAsBody(cmd);
+
+        return tmp;
     }
 
     /**
@@ -320,5 +352,21 @@ public class EsContext {
         int tmp = execAsCode(cmd);
 
         return tmp == 200; //404不存在
+    }
+
+    /**
+     * 索引生命结构显示
+     *
+     * @param policyName 策略名称
+     */
+    public String policyShow(String policyName) throws IOException {
+        EsCommand cmd = new EsCommand();
+        cmd.method = PriWw.method_get;
+        cmd.path = String.format("/_ilm/policy/%s", policyName);
+
+
+        String tmp = execAsBody(cmd);
+
+        return tmp;
     }
 }
