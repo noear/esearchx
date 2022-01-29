@@ -42,12 +42,16 @@ public class Test30Stream {
     public void test1_2() throws Exception{
         String policyName = "water.water_log_faas.stream-policy";
 
+        assert context.policyExist(policyName);
+
         String policy_dsl_show = context.policyShow(policyName);
         //不要用select，避免policy带"."
         ONode policyDslNode = new ONode().set("policy", ONode.load(policy_dsl_show).get(policyName).get("policy"));
         ONode minAgeNode = policyDslNode.select("policy.phases.delete.min_age");
 
         System.out.println(minAgeNode.getString());
+
+        assert minAgeNode.getString().equals("15d");
     }
 
     @Test
