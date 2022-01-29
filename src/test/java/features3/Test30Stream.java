@@ -39,6 +39,18 @@ public class Test30Stream {
     }
 
     @Test
+    public void test1_2() throws Exception{
+        String policyName = "water.water_log_faas.stream-policy";
+
+        String policy_dsl_show = context.policyShow(policyName);
+        //不要用select，避免policy带"."
+        ONode policyDslNode = new ONode().set("policy", ONode.load(policy_dsl_show).get(policyName).get("policy"));
+        ONode minAgeNode = policyDslNode.select("policy.phases.delete.min_age");
+
+        System.out.println(minAgeNode.getString());
+    }
+
+    @Test
     public void test2() throws Exception {
         //创建或者更新微略
         String policy_dsl = Utils.getResourceAsString("demo30/log-policy_dsl.json");
@@ -48,7 +60,8 @@ public class Test30Stream {
 
         String policy_dsl_show = context.policyShow(policy);
         System.out.println(policy_dsl_show);
-        ONode policy_dsl_show_tml = new ONode().set("policy", ONode.load(policy_dsl_show).select(policy+".policy"));
+        //不要用select，避免policy带"."
+        ONode policy_dsl_show_tml = new ONode().set("policy", ONode.load(policy_dsl_show).get(policy).get("policy"));
         System.out.println(policy_dsl_show_tml.toJson());
         context.policyCreate(policy, policy_dsl_show_tml.toJson());
 
