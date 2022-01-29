@@ -46,6 +46,11 @@ public class Test30Stream {
         String policy_dsl_rst = context.policyCreate(policy, policy_dsl);
         System.out.println(policy_dsl_rst);
 
+        String policy_dsl_show = context.policyShow(policy);
+        System.out.println(policy_dsl_show);
+        ONode policy_dsl_show_tml = new ONode().set("policy", ONode.load(policy_dsl_show).select(policy+".policy"));
+        System.out.println(policy_dsl_show_tml.toJson());
+        context.policyCreate(policy, policy_dsl_show_tml.toJson());
 
         //创建或者更新模板
         String tml_dsl = Utils.getResourceAsString("demo30/log-index.json");
@@ -58,9 +63,19 @@ public class Test30Stream {
         //设定翻转别名
         tmlDslNode.get("template").get("settings").get("index.lifecycle.rollover_alias").val(aliases);
 
-        String index_dsl_rst = context.templateCreate(template, tmlDslNode.toJson());
-        System.out.println(index_dsl_rst);
+        String tml_dsl_rst = context.templateCreate(template, tmlDslNode.toJson());
+        System.out.println(tml_dsl_rst);
 
+
+        //获取模板
+        String tml_dsl_show = context.templateShow(template);
+        System.out.println(tml_dsl_show);
+
+        //再次修改
+        ONode tml_dsl_show_tml = ONode.load(tml_dsl_show).select("index_templates[0].index_template");
+        System.out.println(tml_dsl_show_tml.toJson());
+        tml_dsl_rst = context.templateCreate(template, tml_dsl_show_tml.toJson());
+        System.out.println(tml_dsl_rst);
 
 //        String stream_rst = context.streamCreate(stream);
 //        System.out.println(stream_rst);
