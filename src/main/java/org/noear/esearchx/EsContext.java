@@ -346,7 +346,7 @@ public class EsContext {
      */
     public boolean policyExist(String policyName) throws IOException {
         EsCommand cmd = new EsCommand();
-        cmd.method = PriWw.method_head;
+        cmd.method = PriWw.method_get; //用 head 会出错
         cmd.path = String.format("/_ilm/policy/%s", policyName);
 
         int tmp = execAsCode(cmd);
