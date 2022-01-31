@@ -1,3 +1,6 @@
+#### 2022.01.30
+* 增加 policyExist，policyShow 接口
+
 #### 2022.01.22
 * 增加 data stream 支持
 * 增加模板与组件的创建接口
