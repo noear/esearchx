@@ -12,15 +12,15 @@ import java.util.function.Supplier;
 class PriHttpUtils {
     private final static Supplier<Dispatcher> httpClientDefaultDispatcher = () -> {
         Dispatcher temp = new Dispatcher();
-        temp.setMaxRequests(20000);
-        temp.setMaxRequestsPerHost(10000);
+        temp.setMaxRequests(Constants.HttpMaxRequests);
+        temp.setMaxRequestsPerHost(Constants.HttpMaxRequestsPerHost);
         return temp;
     };
 
     private final static OkHttpClient httpClientDefault = new OkHttpClient.Builder()
-            .connectTimeout(10, TimeUnit.SECONDS)
-            .writeTimeout(10, TimeUnit.SECONDS)
-            .readTimeout(60, TimeUnit.SECONDS)
+            .connectTimeout(Constants.HttpConnectTimeout, TimeUnit.SECONDS)
+            .writeTimeout(Constants.HttpWriteTimeout, TimeUnit.SECONDS)
+            .readTimeout(Constants.HttpReadTimeout, TimeUnit.SECONDS)
             .dispatcher(httpClientDefaultDispatcher.get())
             .build();
 
