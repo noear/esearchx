@@ -6,6 +6,9 @@ import org.noear.snack.core.Options;
 import java.nio.charset.Charset;
 import java.util.Base64;
 
+/**
+ * 内部工具（外部别用它）
+ * */
 public class PriUtils {
     private static final Options nodeOptions = Options.def();
     public static ONode newNode() {

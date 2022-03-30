@@ -1,6 +1,8 @@
 package org.noear.esearchx;
 
 /**
+ * 内部常量配置（外部别用它）
+ *
  * @author noear
  * @since 1.0
  */

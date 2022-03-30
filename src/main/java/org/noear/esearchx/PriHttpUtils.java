@@ -9,6 +9,9 @@ import java.rmi.ServerException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
+/**
+ * 内部Http请求工具（外部别用它）
+ * */
 class PriHttpUtils {
     private final static Supplier<Dispatcher> httpClientDefaultDispatcher = () -> {
         Dispatcher temp = new Dispatcher();
@@ -18,9 +21,9 @@ class PriHttpUtils {
     };
 
     private final static OkHttpClient httpClientDefault = new OkHttpClient.Builder()
-            .connectTimeout(Constants.HttpConnectTimeout, TimeUnit.SECONDS)
-            .writeTimeout(Constants.HttpWriteTimeout, TimeUnit.SECONDS)
-            .readTimeout(Constants.HttpReadTimeout, TimeUnit.SECONDS)
+            .connectTimeout(Constants.HttpConnectTimeoutSeconds, TimeUnit.SECONDS)
+            .writeTimeout(Constants.HttpWriteTimeoutSeconds, TimeUnit.SECONDS)
+            .readTimeout(Constants.HttpReadTimeoutSeconds, TimeUnit.SECONDS)
             .dispatcher(httpClientDefaultDispatcher.get())
             .build();
 
