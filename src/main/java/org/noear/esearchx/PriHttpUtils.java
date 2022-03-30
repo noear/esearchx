@@ -10,18 +10,18 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
 class PriHttpUtils {
-    private final static Supplier<Dispatcher> okhttp_dispatcher = () -> {
+    private final static Supplier<Dispatcher> httpClientDefaultDispatcher = () -> {
         Dispatcher temp = new Dispatcher();
         temp.setMaxRequests(20000);
         temp.setMaxRequestsPerHost(10000);
         return temp;
     };
 
-    private final static OkHttpClient httpClient = new OkHttpClient.Builder()
-            .connectTimeout(60 * 5, TimeUnit.SECONDS)
-            .writeTimeout(60 * 5, TimeUnit.SECONDS)
-            .readTimeout(60 * 5, TimeUnit.SECONDS)
-            .dispatcher(okhttp_dispatcher.get())
+    private final static OkHttpClient httpClientDefault = new OkHttpClient.Builder()
+            .connectTimeout(10, TimeUnit.SECONDS)
+            .writeTimeout(10, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .dispatcher(httpClientDefaultDispatcher.get())
             .build();
 
     public static PriHttpUtils http(String url) {
@@ -29,13 +29,18 @@ class PriHttpUtils {
     }
 
 
+    private final OkHttpClient _client;
     private RequestBody _body;
-
     private Request.Builder _builder;
 
 
     public PriHttpUtils(String url) {
+        this(url, httpClientDefault);
+    }
+
+    public PriHttpUtils(String url, OkHttpClient client) {
         _builder = new Request.Builder().url(url);
+        _client = client;
     }
 
 
@@ -98,7 +103,7 @@ class PriHttpUtils {
         }
 
 
-        Call call = httpClient.newCall(_builder.build());
+        Call call = _client.newCall(_builder.build());
         return call.execute();
     }
 
