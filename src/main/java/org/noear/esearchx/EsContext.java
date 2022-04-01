@@ -24,7 +24,15 @@ public class EsContext {
     private final String username;
     private final String paasword;
 
+    private String meta;
     private int version = 0;
+
+    /**
+     * 获取元信息
+     * */
+    public String getMeta() {
+        return meta;
+    }
 
     /**
      * 获取版本号
@@ -58,14 +66,27 @@ public class EsContext {
         }
         this.urls = urlAry.toArray(new String[urlAry.size()]);
 
-        this.init();
+        this.initMeta();
     }
 
-    private void init() {
+    /**
+     * 初始化元信息
+     * */
+    private void initMeta() {
         try {
-            String metaJson = getHttp("").get();
-            ONode oNode = ONode.loadStr(metaJson);
+            this.meta = getHttp("").get();
+
+            if (PriUtils.isEmpty(meta)) {
+                return;
+            }
+
+            ONode oNode = ONode.loadStr(meta);
             String verString = oNode.get("version").get("number").getString();
+
+            if (PriUtils.isEmpty(verString)) {
+                return;
+            }
+
             String varMain = verString.split("\\.")[0];
             this.version = Integer.parseInt(varMain);
         } catch (Throwable e) {
