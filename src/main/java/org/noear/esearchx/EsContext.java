@@ -23,12 +23,17 @@ public class EsContext {
     private int urlIndex;
     private final String username;
     private final String paasword;
+    public final int api;
 
     @Deprecated
     public EsCommand lastCommand;
 
     public EsContext(Properties prop) {
-        this(prop.getProperty("url"), prop.getProperty("username"), prop.getProperty("paasword"));
+        this(prop.getProperty("url"),
+                prop.getProperty("username"),
+                prop.getProperty("paasword"),
+                Integer.parseInt(prop.getProperty("api","0"))
+        );
     }
 
     public EsContext(String url) {
@@ -36,8 +41,18 @@ public class EsContext {
     }
 
     public EsContext(String url, String username, String paasword) {
+        this(url, username, paasword, 7);
+    }
+
+    public EsContext(String url, String username, String paasword, int api) {
         this.username = username;
         this.paasword = paasword;
+
+        if(api < Constants.Es7){
+            this.api = Constants.Es7;
+        }else {
+            this.api = api;
+        }
 
         List<String> urlAry = new ArrayList<>();
         for (String ser : url.split(",")) {

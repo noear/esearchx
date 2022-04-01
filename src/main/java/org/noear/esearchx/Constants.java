@@ -27,4 +27,7 @@ public class Constants {
      * 读超时（秒）
      * */
     public static int HttpReadTimeoutSeconds = 60;
+
+    public final static int Es7 = 7;
+    public final static int Es8 = 8;
 }

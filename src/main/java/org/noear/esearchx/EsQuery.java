@@ -74,6 +74,7 @@ public class EsQuery {
         cmd.dsl = doc.toJson();
         cmd.path = String.format("/%s/_doc/", indiceName);
 
+
         String tmp = context.execAsBody(cmd); //需要 post
 
         return tmp;
@@ -108,6 +109,7 @@ public class EsQuery {
 
         docs.forEach((doc) -> {
             docJson.append(PriUtils.newNode().build(n -> n.getOrNew(type).asObject()).toJson()).append("\n");
+
             docJson.append(ONode.loadObj(doc).toJson()).append("\n");
         });
 
@@ -115,7 +117,12 @@ public class EsQuery {
         cmd.method = PriWw.method_post;
         cmd.dslType = PriWw.mime_ndjson;
         cmd.dsl = docJson.toString();
-        cmd.path = String.format("/%s/_doc/_bulk", indiceName);
+
+        if (context.api > Constants.Es7) {
+            cmd.path = String.format("/%s/_bulk", indiceName); //"/_bulk";
+        } else {
+            cmd.path = String.format("/%s/_doc/_bulk", indiceName);
+        }
 
         String tmp = context.execAsBody(cmd); //需要 post
 
@@ -144,7 +151,12 @@ public class EsQuery {
         cmd.method = PriWw.method_post;
         cmd.dslType = PriWw.mime_ndjson;
         cmd.dsl = docJson.toString();
-        cmd.path = String.format("/%s/_doc/_bulk", indiceName);
+
+        if (context.api > Constants.Es7) {
+            cmd.path = String.format("/%s/_bulk", indiceName);//cmd.path = "/_bulk";
+        } else {
+            cmd.path = String.format("/%s/_doc/_bulk", indiceName);
+        }
 
         String tmp = context.execAsBody(cmd); //需要 post
 
