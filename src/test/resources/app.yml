@@ -4,7 +4,6 @@ solon.app:
   group: test
 
 test.esx:
-  api: 8
   url: eshost:32019 #8.x
 #  url: eshost:32266 #7.x
 

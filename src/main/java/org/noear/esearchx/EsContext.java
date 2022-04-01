@@ -23,17 +23,21 @@ public class EsContext {
     private int urlIndex;
     private final String username;
     private final String paasword;
-    public final int api;
+
+    private int version = 0;
+
+    /**
+     * 获取版本号
+     * */
+    public int getVersion() {
+        return version;
+    }
 
     @Deprecated
     public EsCommand lastCommand;
 
     public EsContext(Properties prop) {
-        this(prop.getProperty("url"),
-                prop.getProperty("username"),
-                prop.getProperty("paasword"),
-                Integer.parseInt(prop.getProperty("api","0"))
-        );
+        this(prop.getProperty("url"), prop.getProperty("username"), prop.getProperty("paasword"));
     }
 
     public EsContext(String url) {
@@ -41,18 +45,8 @@ public class EsContext {
     }
 
     public EsContext(String url, String username, String paasword) {
-        this(url, username, paasword, 7);
-    }
-
-    public EsContext(String url, String username, String paasword, int api) {
         this.username = username;
         this.paasword = paasword;
-
-        if(api < Constants.Es7){
-            this.api = Constants.Es7;
-        }else {
-            this.api = api;
-        }
 
         List<String> urlAry = new ArrayList<>();
         for (String ser : url.split(",")) {
@@ -63,6 +57,20 @@ public class EsContext {
             }
         }
         this.urls = urlAry.toArray(new String[urlAry.size()]);
+
+        this.init();
+    }
+
+    private void init() {
+        try {
+            String metaJson = getHttp("").get();
+            ONode oNode = ONode.loadStr(metaJson);
+            String verString = oNode.get("version").get("number").getString();
+            String varMain = verString.split("\\.")[0];
+            this.version = Integer.parseInt(varMain);
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
     }
 
     private String getUrl() {

@@ -118,7 +118,7 @@ public class EsQuery {
         cmd.dslType = PriWw.mime_ndjson;
         cmd.dsl = docJson.toString();
 
-        if (context.api > Constants.Es7) {
+        if (context.getVersion() > Constants.Es7) {
             cmd.path = String.format("/%s/_bulk", indiceName); //"/_bulk";
         } else {
             cmd.path = String.format("/%s/_doc/_bulk", indiceName);
@@ -152,7 +152,7 @@ public class EsQuery {
         cmd.dslType = PriWw.mime_ndjson;
         cmd.dsl = docJson.toString();
 
-        if (context.api > Constants.Es7) {
+        if (context.getVersion() > Constants.Es7) {
             cmd.path = String.format("/%s/_bulk", indiceName);//cmd.path = "/_bulk";
         } else {
             cmd.path = String.format("/%s/_doc/_bulk", indiceName);
