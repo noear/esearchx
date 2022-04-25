@@ -30,7 +30,7 @@ public class Test2Select {
     //EsContext context = new EsContext("eshost:30480"); //直接实例化
 
     static {
-        EsGlobal.onCommandBefore(cmd -> System.out.println("dsl:::" + cmd.dsl));
+        EsGlobal.onCommandBefore(cmd -> System.out.println("dsl:::" + cmd.getDsl()));
     }
 
     @Test

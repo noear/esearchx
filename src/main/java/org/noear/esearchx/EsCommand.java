@@ -13,10 +13,6 @@ public class EsCommand implements Serializable {
     public String path;
     public String dsl;
     public String dslType;
-    /**
-     * 执行时间
-     */
-    public transient long timespan;
 
     public EsCommand() {
         //设置默认值

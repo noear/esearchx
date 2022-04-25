@@ -128,7 +128,8 @@ public class EsContext {
         lastCommand = cmd;
         String body;
 
-        EsGlobal.applyCommandBefore(cmd);
+        EsCommandHolder holder = new EsCommandHolder(this, cmd);
+        EsGlobal.applyCommandBefore(holder);
 
         long start = System.currentTimeMillis();
         if (PriUtils.isEmpty(cmd.dsl)) {
@@ -136,9 +137,9 @@ public class EsContext {
         } else {
             body = getHttp(cmd.path).bodyTxt(cmd.dsl, cmd.dslType).execAsBody(cmd.method);
         }
-        cmd.timespan = System.currentTimeMillis() - start;
 
-        EsGlobal.applyCommandAfter(cmd);
+        holder.setTimespan(System.currentTimeMillis() - start);
+        EsGlobal.applyCommandAfter(holder);
 
         return body;
     }
@@ -152,17 +153,18 @@ public class EsContext {
         lastCommand = cmd;
         int code;
 
-        EsGlobal.applyCommandBefore(cmd);
+        EsCommandHolder holder = new EsCommandHolder(this, cmd);
+        EsGlobal.applyCommandBefore(holder);
 
         long start = System.currentTimeMillis();
         if (PriUtils.isEmpty(cmd.dsl)) {
             code = getHttp(cmd.path).execAsCode(cmd.method);
         } else {
-            code =  getHttp(cmd.path).bodyTxt(cmd.dsl, cmd.dslType).execAsCode(cmd.method);
+            code = getHttp(cmd.path).bodyTxt(cmd.dsl, cmd.dslType).execAsCode(cmd.method);
         }
-        cmd.timespan = System.currentTimeMillis() - start;
 
-        EsGlobal.applyCommandAfter(cmd);
+        holder.setTimespan(System.currentTimeMillis() - start);
+        EsGlobal.applyCommandAfter(holder);
 
         return code;
     }
