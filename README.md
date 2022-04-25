@@ -34,10 +34,11 @@ public class DemoApp {
     String tableCreateDsl = "...";
 
     public void demo() {
+        //执行前打印dsl
+        EsGlobal.onCommandBefore(cmd -> System.out.println("dsl:::" + cmd.dsl));
+        
         EsContext esx = new EsContext("localhost:30480");
         
-        //执行前打印dsl
-        esx.onCommandBefore(cmd -> System.out.println("dsl:::::" + cmd.dsl));
 
         //创建索引
         esx.indiceCreate("user_log_20200101", tableCreateDsl);

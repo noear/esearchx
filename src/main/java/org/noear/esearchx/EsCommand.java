@@ -16,7 +16,7 @@ public class EsCommand implements Serializable {
     /**
      * 执行时间
      */
-    public long timespan;
+    public transient long timespan;
 
     public EsCommand() {
         //设置默认值
