@@ -27,19 +27,6 @@ public class EsContext {
     private String meta;
     private int version = 0;
 
-    private Consumer<EsCommand> onCommandBefore;
-    private Consumer<EsCommand> onCommandAfter;
-
-    public EsContext onCommandBefore(Consumer<EsCommand> event){
-        onCommandBefore = event;
-        return this;
-    }
-
-    public EsContext onCommandAfter(Consumer<EsCommand> event){
-        onCommandAfter = event;
-        return this;
-    }
-
     /**
      * 获取元信息
      * */
@@ -141,9 +128,7 @@ public class EsContext {
         lastCommand = cmd;
         String body;
 
-        if(onCommandBefore != null) {
-            onCommandBefore.accept(cmd);
-        }
+        EsGlobal.applyCommandBefore(cmd);
 
         long start = System.currentTimeMillis();
         if (PriUtils.isEmpty(cmd.dsl)) {
@@ -153,9 +138,7 @@ public class EsContext {
         }
         cmd.timespan = System.currentTimeMillis() - start;
 
-        if(onCommandAfter != null) {
-            onCommandAfter.accept(cmd);
-        }
+        EsGlobal.applyCommandAfter(cmd);
 
         return body;
     }
@@ -169,9 +152,7 @@ public class EsContext {
         lastCommand = cmd;
         int code;
 
-        if(onCommandBefore != null) {
-            onCommandBefore.accept(cmd);
-        }
+        EsGlobal.applyCommandBefore(cmd);
 
         long start = System.currentTimeMillis();
         if (PriUtils.isEmpty(cmd.dsl)) {
@@ -181,9 +162,7 @@ public class EsContext {
         }
         cmd.timespan = System.currentTimeMillis() - start;
 
-        if(onCommandAfter != null) {
-            onCommandAfter.accept(cmd);
-        }
+        EsGlobal.applyCommandAfter(cmd);
 
         return code;
     }

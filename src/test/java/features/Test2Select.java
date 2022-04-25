@@ -4,8 +4,8 @@ import features.model.LogDo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.noear.esearchx.EsContext;
+import org.noear.esearchx.EsGlobal;
 import org.noear.esearchx.model.EsData;
-import org.noear.solon.Solon;
 import org.noear.solon.annotation.Inject;
 import org.noear.solon.test.SolonJUnit4ClassRunner;
 
@@ -25,18 +25,24 @@ public class Test2Select {
     final String indice = "test-user_log";
 
 
-    EsContext context = new EsContext(Solon.cfg().getProp("test.esx"))
-            .onCommandBefore(cmd->System.out.println("dsl:::::"+cmd.dsl));
+    @Inject("${test.esx}")
+    EsContext context;
     //EsContext context = new EsContext("eshost:30480"); //直接实例化
+
+    static {
+        EsGlobal.onCommandBefore(cmd -> System.out.println("dsl:::" + cmd.dsl));
+    }
 
     @Test
     public void test_selectById() throws Exception {
+
+
         LogDo logDo = context.indice("test-user_log_202110").selectById(LogDo.class, "1");
         assert logDo != null;
         assert logDo.log_id == 1;
 
 
-        logDo = context.indice("test-user_log_202106").selectById(LogDo.class,"1");
+        logDo = context.indice("test-user_log_202106").selectById(LogDo.class, "1");
         assert logDo == null;
     }
 

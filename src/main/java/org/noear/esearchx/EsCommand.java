@@ -15,7 +15,7 @@ public class EsCommand implements Serializable {
     public String dslType;
     /**
      * 执行时间
-     * */
+     */
     public long timespan;
 
     public EsCommand() {
