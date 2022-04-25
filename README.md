@@ -22,7 +22,7 @@
 <dependency>
     <groupId>org.noear</groupId>
     <artifactId>esearchx</artifactId>
-    <version>1.0.11</version>
+    <version>1.0.12</version>
 </dependency>
 ```
 
@@ -51,6 +51,10 @@ public class DemoApp {
         if (esx.indiceExist("user_log_20200101")) {
             esx.indiceDrop("user_log_20200101");
         }
+
+        //单条插入
+        LogDo logDo = new LogDo();
+        esx.indice("user_log").insert(logDo);
         
         //批量插入
         List<LogDo> list = new ArrayList<>();
