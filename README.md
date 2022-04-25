@@ -22,7 +22,7 @@
 <dependency>
     <groupId>org.noear</groupId>
     <artifactId>esearchx</artifactId>
-    <version>1.0.12</version>
+    <version>1.0.13</version>
 </dependency>
 ```
 

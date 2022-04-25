@@ -27,6 +27,21 @@ public class EsContext {
     private String meta;
     private int version = 0;
 
+    private Consumer<EsCommand> onCommandBefore;
+    private Consumer<EsCommand> onCommandAfter;
+
+    @Deprecated
+    public EsContext onCommandBefore(Consumer<EsCommand> event){
+        onCommandBefore = event;
+        return this;
+    }
+
+    @Deprecated
+    public EsContext onCommandAfter(Consumer<EsCommand> event){
+        onCommandAfter = event;
+        return this;
+    }
+
     /**
      * 获取元信息
      * */
@@ -126,12 +141,25 @@ public class EsContext {
      */
     public String execAsBody(EsCommand cmd) throws IOException {
         lastCommand = cmd;
+        String body;
 
-        if (PriUtils.isEmpty(cmd.dsl)) {
-            return getHttp(cmd.path).execAsBody(cmd.method);
-        } else {
-            return getHttp(cmd.path).bodyTxt(cmd.dsl, cmd.dslType).execAsBody(cmd.method);
+        if(onCommandBefore != null) {
+            onCommandBefore.accept(cmd);
         }
+
+        long start = System.currentTimeMillis();
+        if (PriUtils.isEmpty(cmd.dsl)) {
+            body = getHttp(cmd.path).execAsBody(cmd.method);
+        } else {
+            body = getHttp(cmd.path).bodyTxt(cmd.dsl, cmd.dslType).execAsBody(cmd.method);
+        }
+        cmd.timespan = System.currentTimeMillis() - start;
+
+        if(onCommandAfter != null) {
+            onCommandAfter.accept(cmd);
+        }
+
+        return body;
     }
 
     /**
@@ -141,12 +169,25 @@ public class EsContext {
      */
     public int execAsCode(EsCommand cmd) throws IOException {
         lastCommand = cmd;
+        int code;
 
-        if (PriUtils.isEmpty(cmd.dsl)) {
-            return getHttp(cmd.path).execAsCode(cmd.method);
-        } else {
-            return getHttp(cmd.path).bodyTxt(cmd.dsl, cmd.dslType).execAsCode(cmd.method);
+        if(onCommandBefore != null) {
+            onCommandBefore.accept(cmd);
         }
+
+        long start = System.currentTimeMillis();
+        if (PriUtils.isEmpty(cmd.dsl)) {
+            code = getHttp(cmd.path).execAsCode(cmd.method);
+        } else {
+            code =  getHttp(cmd.path).bodyTxt(cmd.dsl, cmd.dslType).execAsCode(cmd.method);
+        }
+        cmd.timespan = System.currentTimeMillis() - start;
+
+        if(onCommandAfter != null) {
+            onCommandAfter.accept(cmd);
+        }
+
+        return code;
     }
 
     /**
