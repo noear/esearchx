@@ -35,8 +35,9 @@ public class DemoApp {
 
     public void demo() {
         //执行前打印dsl
-        EsGlobal.onCommandBefore(cmd -> System.out.println("dsl:::" + cmd.dsl));
+        EsGlobal.onCommandBefore(cmd -> System.out.println("dsl:::" + cmd.getDsl()));
         
+        //实例化上下文
         EsContext esx = new EsContext("localhost:30480");
         
 
