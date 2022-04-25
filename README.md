@@ -60,6 +60,10 @@ public class DemoApp {
         List<LogDo> list = new ArrayList<>();
         list.add(new LogDo());
         esx.indice("user_log").insertList(list);
+
+        //单条插入或更新
+        LogDo logDo = new LogDo();
+        esx.indice("user_log").upsert("1", logDo);
         
         //批量插入或更新
         Map<String, LogDo> list = new LinkedHashMap<>();
