@@ -30,13 +30,11 @@ public class EsContext {
     private Consumer<EsCommand> onCommandBefore;
     private Consumer<EsCommand> onCommandAfter;
 
-    @Deprecated
     public EsContext onCommandBefore(Consumer<EsCommand> event){
         onCommandBefore = event;
         return this;
     }
 
-    @Deprecated
     public EsContext onCommandAfter(Consumer<EsCommand> event){
         onCommandAfter = event;
         return this;
