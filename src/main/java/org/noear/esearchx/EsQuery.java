@@ -114,7 +114,11 @@ public class EsQuery {
         docs.forEach((doc) -> {
             docJson.append(PriUtils.newNode().build(n -> n.getOrNew(type).asObject()).toJson()).append("\n");
 
-            docJson.append(ONode.loadObj(doc).toJson()).append("\n");
+            if (doc instanceof ONode) {
+                docJson.append(((ONode) doc).toJson()).append("\n");
+            } else {
+                docJson.append(ONode.loadObj(doc).toJson()).append("\n");
+            }
         });
 
         EsCommand cmd = new EsCommand();
@@ -152,7 +156,11 @@ public class EsQuery {
 
         docs.forEach((docId, doc) -> {
             docJson.append(PriUtils.newNode().build(n -> n.getOrNew(type).set("_id", docId)).toJson()).append("\n");
-            docJson.append(ONode.loadObj(doc).toJson()).append("\n");
+            if (doc instanceof ONode) {
+                docJson.append(((ONode) doc).toJson()).append("\n");
+            } else {
+                docJson.append(ONode.loadObj(doc).toJson()).append("\n");
+            }
         });
 
         EsCommand cmd = new EsCommand();
