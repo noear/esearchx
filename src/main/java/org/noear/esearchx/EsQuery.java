@@ -100,7 +100,11 @@ public class EsQuery {
     }
 
     public <T> String insert(T doc) throws IOException {
-        return insertDo(ONode.loadObj(doc));
+        if (doc instanceof ONode) {
+            return insertDo((ONode) doc);
+        } else {
+            return insertDo(ONode.loadObj(doc));
+        }
     }
 
     public <T> String insertList(List<T> docs) throws IOException {
@@ -135,7 +139,11 @@ public class EsQuery {
     }
 
     public <T> String upsert(String docId, T doc) throws IOException {
-        return upsertDo(docId, ONode.loadObj(doc));
+        if (doc instanceof ONode) {
+            return upsertDo(docId, (ONode) doc);
+        } else {
+            return upsertDo(docId, ONode.loadObj(doc));
+        }
     }
 
     public <T> String upsertList(Map<String, T> docs) throws IOException {
