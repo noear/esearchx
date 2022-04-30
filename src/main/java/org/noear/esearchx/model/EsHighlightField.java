@@ -4,7 +4,7 @@ import org.noear.snack.ONode;
 
 /**
  * @author noear
- * @since 1.0.4
+ * @since 1.0.14
  */
 public class EsHighlightField {
     private final ONode oNode;

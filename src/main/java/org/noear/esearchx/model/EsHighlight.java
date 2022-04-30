@@ -6,7 +6,7 @@ import java.util.function.Consumer;
 
 /**
  * @author noear
- * @since 1.0.4
+ * @since 1.0.14
  */
 public class EsHighlight {
     private final ONode oNode;
