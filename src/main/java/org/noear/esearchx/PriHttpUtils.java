@@ -23,7 +23,7 @@ class PriHttpUtils {
     private final static OkHttpClient httpClientDefault = new OkHttpClient.Builder()
             .connectTimeout(10, TimeUnit.SECONDS)
             .writeTimeout(10, TimeUnit.SECONDS)
-            .readTimeout(10, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
             .dispatcher(httpClientDefaultDispatcher.get())
             .addInterceptor(PriHttpInterceptor.instance)
             .build();
