@@ -15,18 +15,6 @@ public class Constants {
      * 最大同域名请求数
      * */
     public static int HttpMaxRequestsPerHost = 10000;
-    /**
-     * 连接超时（秒）
-     * */
-    public static int HttpConnectTimeoutSeconds = 10;
-    /**
-     * 写超时（秒）
-     * */
-    public static int HttpWriteTimeoutSeconds = 10;
-    /**
-     * 读超时（秒）
-     * */
-    public static int HttpReadTimeoutSeconds = 60;
 
     public final static int Es7 = 7;
     public final static int Es8 = 8;

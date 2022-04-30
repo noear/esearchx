@@ -21,10 +21,11 @@ class PriHttpUtils {
     };
 
     private final static OkHttpClient httpClientDefault = new OkHttpClient.Builder()
-            .connectTimeout(Constants.HttpConnectTimeoutSeconds, TimeUnit.SECONDS)
-            .writeTimeout(Constants.HttpWriteTimeoutSeconds, TimeUnit.SECONDS)
-            .readTimeout(Constants.HttpReadTimeoutSeconds, TimeUnit.SECONDS)
+            .connectTimeout(10, TimeUnit.SECONDS)
+            .writeTimeout(10, TimeUnit.SECONDS)
+            .readTimeout(10, TimeUnit.SECONDS)
             .dispatcher(httpClientDefaultDispatcher.get())
+            .addInterceptor(PriHttpInterceptor.instance)
             .build();
 
     public static PriHttpUtils http(String url) {
@@ -46,6 +47,21 @@ class PriHttpUtils {
         _client = client;
     }
 
+    public PriHttpUtils timeout(int timeoutSeconds) {
+        if (timeoutSeconds > 0) {
+            _builder.tag(PriHttpTimeout.class, new PriHttpTimeout(timeoutSeconds));
+        }
+
+        return this;
+    }
+
+    public PriHttpUtils timeout(int connectTimeoutSeconds, int writeTimeoutSeconds, int readTimeoutSeconds) {
+        if (connectTimeoutSeconds > 0) {
+            _builder.tag(PriHttpTimeout.class, new PriHttpTimeout(connectTimeoutSeconds, writeTimeoutSeconds, readTimeoutSeconds));
+        }
+
+        return this;
+    }
 
     //@XNote("设置请求头")
     public PriHttpUtils header(String name, String value) {
