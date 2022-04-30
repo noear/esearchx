@@ -3,12 +3,14 @@ package features;
 import features.model.LogDo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.noear.esearchx.EsCommand;
 import org.noear.esearchx.EsContext;
-import org.noear.snack.ONode;
+import org.noear.esearchx.PriWw;
 import org.noear.solon.Utils;
 import org.noear.solon.annotation.Inject;
 import org.noear.solon.test.SolonJUnit4ClassRunner;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -30,6 +32,18 @@ public class Test1Add {
 
     Random random = new Random();
 
+    public void test1() throws IOException {
+        //demo
+        EsCommand command = new EsCommand();
+        command.path = "/demo/_doc/";
+        command.method = "POST";
+        command.dsl = "";
+        command.dslType = PriWw.mime_json;
+
+        String rst = context.execAsBody(command);
+        System.out.println(rst);
+    }
+
     @Test
     public void test2() throws Exception {
         String json = Utils.getResourceAsString("demo/log.json", "utf-8");
@@ -45,7 +59,6 @@ public class Test1Add {
         logDo.content = json;
         logDo.log_date = LocalDateTime.now().toLocalDate().getDayOfYear();
         logDo.log_fulltime = new Date();
-
 
         String rst = context.indice(indice).upsert(Utils.guid(), logDo);
         System.out.println(rst);
