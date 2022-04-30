@@ -191,14 +191,26 @@ public class EsQuery {
         return this;
     }
 
+    private static final int limit_max_hits = 10000;
+
     public EsQuery limit(int start, int size) {
         getDslq().set("from", start);
         getDslq().set("size", size);
+
+        if (size >= limit_max_hits || (start + size) >= limit_max_hits) {
+            getDslq().set("track_total_hits", "true");
+        }
+
         return this;
     }
 
     public EsQuery limit(int size) {
         getDslq().set("size", size);
+
+        if (size >= limit_max_hits) {
+            getDslq().set("track_total_hits", "true");
+        }
+
         return this;
     }
 
