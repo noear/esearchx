@@ -302,6 +302,7 @@ public class Test2Select {
         Map result = context.indice(indice)
                 .where(c -> c.match("content", "tag"))
                 .highlight(h -> h.addField("content", f -> f.preTags("<em>").postTags("</em>")))
+                .timeout(10)
                 .limit(1)
                 .selectMap();
 
