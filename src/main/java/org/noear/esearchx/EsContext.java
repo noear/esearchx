@@ -133,9 +133,9 @@ public class EsContext {
 
         long start = System.currentTimeMillis();
         if (PriUtils.isEmpty(cmd.dsl)) {
-            body = getHttp(cmd.path).execAsBody(cmd.method);
+            body = getHttp(cmd.path).timeout(cmd.timeout).execAsBody(cmd.method);
         } else {
-            body = getHttp(cmd.path).bodyTxt(cmd.dsl, cmd.dslType).execAsBody(cmd.method);
+            body = getHttp(cmd.path).bodyTxt(cmd.dsl, cmd.dslType).timeout(cmd.timeout).execAsBody(cmd.method);
         }
 
         holder.setTimespan(System.currentTimeMillis() - start);
@@ -158,9 +158,9 @@ public class EsContext {
 
         long start = System.currentTimeMillis();
         if (PriUtils.isEmpty(cmd.dsl)) {
-            code = getHttp(cmd.path).execAsCode(cmd.method);
+            code = getHttp(cmd.path).timeout(cmd.timeout).execAsCode(cmd.method);
         } else {
-            code = getHttp(cmd.path).bodyTxt(cmd.dsl, cmd.dslType).execAsCode(cmd.method);
+            code = getHttp(cmd.path).bodyTxt(cmd.dsl, cmd.dslType).timeout(cmd.timeout).execAsCode(cmd.method);
         }
 
         holder.setTimespan(System.currentTimeMillis() - start);

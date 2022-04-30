@@ -14,6 +14,8 @@ public class EsCommand implements Serializable {
     public String dsl;
     public String dslType;
 
+    public transient PriHttpTimeout timeout;
+
     public EsCommand() {
         //设置默认值
         dslType = PriWw.mime_json;

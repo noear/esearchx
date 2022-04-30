@@ -47,17 +47,9 @@ class PriHttpUtils {
         _client = client;
     }
 
-    public PriHttpUtils timeout(int timeoutSeconds) {
-        if (timeoutSeconds > 0) {
-            _builder.tag(PriHttpTimeout.class, new PriHttpTimeout(timeoutSeconds));
-        }
-
-        return this;
-    }
-
-    public PriHttpUtils timeout(int connectTimeoutSeconds, int writeTimeoutSeconds, int readTimeoutSeconds) {
-        if (connectTimeoutSeconds > 0) {
-            _builder.tag(PriHttpTimeout.class, new PriHttpTimeout(connectTimeoutSeconds, writeTimeoutSeconds, readTimeoutSeconds));
+    public PriHttpUtils timeout(PriHttpTimeout timeout) {
+        if (timeout != null) {
+            _builder.tag(PriHttpTimeout.class, timeout);
         }
 
         return this;

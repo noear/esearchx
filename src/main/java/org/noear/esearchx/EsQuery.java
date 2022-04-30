@@ -69,11 +69,11 @@ public class EsQuery {
 
     private String insertDo(ONode doc) throws IOException {
         EsCommand cmd = new EsCommand();
+        cmd.timeout = timeout;
         cmd.method = PriWw.method_post;
         cmd.dslType = PriWw.mime_json;
         cmd.dsl = doc.toJson();
         cmd.path = String.format("/%s/_doc/", indiceName);
-
 
         String tmp = context.execAsBody(cmd); //需要 post
 
@@ -82,6 +82,7 @@ public class EsQuery {
 
     private String upsertDo(String docId, ONode doc) throws IOException {
         EsCommand cmd = new EsCommand();
+        cmd.timeout = timeout;
         cmd.method = PriWw.method_put;
         cmd.dslType = PriWw.mime_json;
         cmd.dsl = doc.toJson();
@@ -122,6 +123,7 @@ public class EsQuery {
         });
 
         EsCommand cmd = new EsCommand();
+        cmd.timeout = timeout;
         cmd.method = PriWw.method_post;
         cmd.dslType = PriWw.mime_ndjson;
         cmd.dsl = docJson.toString();
@@ -164,6 +166,7 @@ public class EsQuery {
         });
 
         EsCommand cmd = new EsCommand();
+        cmd.timeout = timeout;
         cmd.method = PriWw.method_post;
         cmd.dslType = PriWw.mime_ndjson;
         cmd.dsl = docJson.toString();
@@ -280,16 +283,33 @@ public class EsQuery {
         return this;
     }
 
+    PriHttpTimeout timeout;
+    public EsQuery timeout(int timeoutSeconds) {
+        if (timeoutSeconds > 0) {
+            timeout = new PriHttpTimeout(timeoutSeconds);
+        }
+
+        return this;
+    }
+
+    public EsQuery timeout(int connectTimeoutSeconds, int writeTimeoutSeconds, int readTimeoutSeconds) {
+        if (connectTimeoutSeconds > 0) {
+            timeout = new PriHttpTimeout(connectTimeoutSeconds, writeTimeoutSeconds, readTimeoutSeconds);
+        }
+
+        return this;
+    }
+
     //
     // select
     //
     public String select(String dsl) throws IOException {
         EsCommand cmd = new EsCommand();
+        cmd.timeout = timeout;
         cmd.method = PriWw.method_post;
         cmd.dslType = PriWw.mime_json;
         cmd.dsl = dsl;
         cmd.path = String.format("/%s/_search", indiceName);
-
 
         String json = context.execAsBody(cmd);
 
@@ -420,6 +440,7 @@ public class EsQuery {
     public <T> T selectById(Class<T> clz, String docId) throws IOException {
         try {
             EsCommand cmd = new EsCommand();
+            cmd.timeout = timeout;
             cmd.method = PriWw.method_get;
             cmd.path = String.format("/%s/_doc/%s", indiceName, docId);
 
@@ -449,6 +470,7 @@ public class EsQuery {
         }
 
         EsCommand cmd = new EsCommand();
+        cmd.timeout = timeout;
         cmd.method = PriWw.method_post;
         cmd.dslType = PriWw.mime_json;
         cmd.dsl = getDslq().toJson();
@@ -462,6 +484,7 @@ public class EsQuery {
 
     public boolean deleteById(String docId) throws IOException {
         EsCommand cmd = new EsCommand();
+        cmd.timeout = timeout;
         cmd.method = PriWw.method_delete;
         cmd.path = String.format("/%s/_doc/%s", indiceName, docId);
 
