@@ -271,6 +271,16 @@ public class EsQuery {
     }
 
     //
+    //highlight
+    //
+
+    public EsQuery highlight(Consumer<EsHighlight> highlight){
+        EsHighlight h = new EsHighlight(getDslq().getOrNew("highlight"));
+        highlight.accept(h);
+        return this;
+    }
+
+    //
     // select
     //
     public String select(String dsl) throws IOException {

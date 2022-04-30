@@ -49,7 +49,7 @@ public class Test2Select {
     @Test
     public void test_selectByIds() throws Exception {
         List<LogDo> result = context.indice(indice)
-                .selectByIds(LogDo.class, Arrays.asList("1","2"));
+                .selectByIds(LogDo.class, Arrays.asList("1", "2"));
 
         System.out.println(result);
 
@@ -108,6 +108,21 @@ public class Test2Select {
 
         EsData<LogDo> result = context.indice(indice)
                 .where(c -> c.match("tag", "list1"))
+                .limit(0, 10)
+                .selectList(LogDo.class);
+
+        System.out.println(result);
+
+        assert result.getListSize() == 10;
+        assert result.getList().get(0).log_id > 0;
+    }
+
+    @Test
+    public void test_match_h() throws Exception {
+
+        EsData<LogDo> result = context.indice(indice)
+                .where(c -> c.match("tag", "list1"))
+                .highlight(h->h.addField("tag", f->f.preTags("<em>").postTags("</em>").requireMatch(true)))
                 .limit(0, 10)
                 .selectList(LogDo.class);
 
@@ -246,14 +261,13 @@ public class Test2Select {
     public void test_script() throws Exception {
 
         EsData<LogDo> result = context.indice(indice)
-                .where(c -> c.script("doc['tag'].value.length() >= params.len", p->p.set("len",2)))
+                .where(c -> c.script("doc['tag'].value.length() >= params.len", p -> p.set("len", 2)))
                 .limit(10)
                 .selectList(LogDo.class);
 
         System.out.println(result);
         assert result.getListSize() == 10;
     }
-
 
 
     @Test
@@ -273,6 +287,21 @@ public class Test2Select {
     public void test_selectMap() throws Exception {
         Map result = context.indice(indice)
                 .where(c -> c.term("tag", "list1"))
+                .limit(1)
+                .selectMap();
+
+        assert result != null;
+
+        System.out.println(result);
+
+        assert result.size() >= 10;
+    }
+
+    @Test
+    public void test_selectMap_h() throws Exception {
+        Map result = context.indice(indice)
+                .where(c -> c.term("tag", "list1"))
+                .highlight(h -> h.addField("tag", f -> f.preTags("<em>").postTags("</em>").requireMatch(false)))
                 .limit(1)
                 .selectMap();
 
