@@ -300,8 +300,8 @@ public class Test2Select {
     @Test
     public void test_selectMap_h() throws Exception {
         Map result = context.indice(indice)
-                .where(c -> c.term("tag", "list1"))
-                .highlight(h -> h.addField("tag", f -> f.preTags("<em>").postTags("</em>").requireMatch(false)))
+                .where(c -> c.match("content", "tag"))
+                .highlight(h -> h.addField("content", f -> f.preTags("<em>").postTags("</em>")))
                 .limit(1)
                 .selectMap();
 

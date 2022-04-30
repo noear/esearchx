@@ -84,6 +84,13 @@ public class DemoApp {
                 .orderByDesc("log_id")
                 .limit(50)
                 .selectList(LogDo.class);
+
+        //一个结果高亮的查询
+        Map result = context.indice(indice)
+                .where(c -> c.match("content", "tag"))
+                .highlight(h -> h.addField("content", f -> f.preTags("<em>").postTags("</em>")))
+                .limit(1)
+                .selectMap();
         
         //一个复杂些的查询
         EsData<LogDo> result = esx.indice(indice)
