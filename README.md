@@ -60,6 +60,11 @@ public class DemoApp {
         //单条插入
         LogDo logDo = new LogDo();
         esx.indice("user_log").insert(logDo);
+
+        esx.indice("user_log").options(options -> {
+            //增加类型编码的插入
+            options.addEncoder(Long.class, (data, node) -> node.val().setString(String.valueOf(data)));
+        }).insert(logDo);
         
         //批量插入
         List<LogDo> list = new ArrayList<>();
