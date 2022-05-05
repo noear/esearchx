@@ -61,8 +61,10 @@ public class DemoApp {
         LogDo logDo = new LogDo();
         esx.indice("user_log").insert(logDo);
 
+        //单条插入::增加序列化选项定制
+        esx.indice("user_log").options(options).insert(logDo);
         esx.indice("user_log").options(options -> {
-            //增加类型编码的插入
+            //增加类型编码
             options.addEncoder(Long.class, (data, node) -> node.val().setString(String.valueOf(data)));
         }).insert(logDo);
         
