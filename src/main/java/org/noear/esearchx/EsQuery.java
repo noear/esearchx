@@ -3,6 +3,7 @@ package org.noear.esearchx;
 import org.noear.esearchx.exception.NoExistException;
 import org.noear.esearchx.model.*;
 import org.noear.snack.ONode;
+import org.noear.snack.core.Options;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -25,10 +26,13 @@ public class EsQuery {
     private ONode queryMatch;
     private ONode item;
 
+    private Options options;
+
     protected EsQuery(EsContext context, String indiceName, boolean isStream) {
         this.context = context;
         this.indiceName = indiceName;
         this.isStream = isStream;
+        this.options = Options.def();
     }
 
     private PriHttpUtils getHttp(String path) {
@@ -49,6 +53,23 @@ public class EsQuery {
         }
 
         return queryMatch;
+    }
+
+    private String getJson(ONode oNode){
+        return oNode.options(options).toJson();
+    }
+
+    public EsQuery options(Options options) {
+        if (options != null) {
+            this.options = options;
+        }
+
+        return this;
+    }
+
+    public EsQuery options(Consumer<Options> builder) {
+        builder.accept(options);
+        return this;
     }
 
 
@@ -72,7 +93,7 @@ public class EsQuery {
         cmd.timeout = timeout;
         cmd.method = PriWw.method_post;
         cmd.dslType = PriWw.mime_json;
-        cmd.dsl = doc.toJson();
+        cmd.dsl = getJson(doc);
         cmd.path = String.format("/%s/_doc/", indiceName);
 
         String tmp = context.execAsBody(cmd); //需要 post
@@ -85,7 +106,7 @@ public class EsQuery {
         cmd.timeout = timeout;
         cmd.method = PriWw.method_put;
         cmd.dslType = PriWw.mime_json;
-        cmd.dsl = doc.toJson();
+        cmd.dsl = getJson(doc);
         cmd.path = String.format("/%s/_doc/%s", indiceName, docId);
 
         String tmp = context.execAsBody(cmd);//需要 put
@@ -104,7 +125,7 @@ public class EsQuery {
         if (doc instanceof ONode) {
             return insertDo((ONode) doc);
         } else {
-            return insertDo(ONode.loadObj(doc));
+            return insertDo(ONode.loadObj(doc, options));
         }
     }
 
@@ -113,12 +134,12 @@ public class EsQuery {
         String type = (isStream ? "create" : "index");
 
         docs.forEach((doc) -> {
-            docJson.append(PriUtils.newNode().build(n -> n.getOrNew(type).asObject()).toJson()).append("\n");
+            docJson.append(getJson(PriUtils.newNode().build(n -> n.getOrNew(type).asObject()))).append("\n");
 
             if (doc instanceof ONode) {
-                docJson.append(((ONode) doc).toJson()).append("\n");
+                docJson.append(getJson((ONode) doc)).append("\n");
             } else {
-                docJson.append(ONode.loadObj(doc).toJson()).append("\n");
+                docJson.append(getJson(ONode.loadObj(doc, options))).append("\n");
             }
         });
 
@@ -148,7 +169,7 @@ public class EsQuery {
         if (doc instanceof ONode) {
             return upsertDo(docId, (ONode) doc);
         } else {
-            return upsertDo(docId, ONode.loadObj(doc));
+            return upsertDo(docId, ONode.loadObj(doc, options));
         }
     }
 
@@ -157,11 +178,11 @@ public class EsQuery {
         String type = (isStream ? "create" : "index");
 
         docs.forEach((docId, doc) -> {
-            docJson.append(PriUtils.newNode().build(n -> n.getOrNew(type).set("_id", docId)).toJson()).append("\n");
+            docJson.append(getJson(PriUtils.newNode().build(n -> n.getOrNew(type).set("_id", docId)))).append("\n");
             if (doc instanceof ONode) {
-                docJson.append(((ONode) doc).toJson()).append("\n");
+                docJson.append(getJson((ONode) doc)).append("\n");
             } else {
-                docJson.append(ONode.loadObj(doc).toJson()).append("\n");
+                docJson.append(getJson(ONode.loadObj(doc, options))).append("\n");
             }
         });
 
@@ -322,7 +343,7 @@ public class EsQuery {
     }
 
     public String selectJson(String fields) throws IOException {
-        if(PriUtils.isNotEmpty(fields)) {
+        if (PriUtils.isNotEmpty(fields)) {
             EsSource s = new EsSource(getDslq().getOrNew("_source"));
             if (fields.startsWith("!")) {
                 s.excludes(fields.substring(1).split(","));
@@ -331,7 +352,7 @@ public class EsQuery {
             }
         }
 
-        return select(getDslq().toJson());
+        return select(getJson(getDslq()));
     }
 
     public ONode selectNode() throws IOException {
@@ -420,7 +441,7 @@ public class EsQuery {
             ONode oNode = PriUtils.newNode();
             oNode.getOrNew("query").getOrNew("ids").getOrNew("values").addAll(docIds);
 
-            String json = select(oNode.toJson());
+            String json = select(getJson(oNode));
 
             ONode oHits = ONode.loadStr(json).get("hits");
 
@@ -473,7 +494,7 @@ public class EsQuery {
         cmd.timeout = timeout;
         cmd.method = PriWw.method_post;
         cmd.dslType = PriWw.mime_json;
-        cmd.dsl = getDslq().toJson();
+        cmd.dsl = getJson(getDslq());
         cmd.path = String.format("/%s/_delete_by_query", indiceName);
 
         String tmp = context.execAsBody(cmd);
