@@ -329,4 +329,18 @@ public class Test2Select {
         assert result.size() >= 2;
         assert result.get(0).size() >= 2;
     }
+
+    @Test
+    public void test_selectJson() throws Exception {
+        StringBuilder sql = new StringBuilder();
+        sql.append("select * from ").append(indice).append(" limit 10");
+
+        String result = context.indice(indice)
+                .sql(sql.toString())
+                .selectJson();
+
+        assert result != null;
+
+        System.out.println(result);
+    }
 }
