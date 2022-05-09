@@ -312,4 +312,20 @@ public class Test2Select {
 
         assert result.size() >= 10;
     }
+
+    @Test
+    public void test_selectSql() throws Exception {
+        StringBuilder sql = new StringBuilder();
+        sql.append("select * from ").append(indice).append(" limit 10");
+
+        List<Map> result = context.indice(indice)
+                .sql(sql.toString())
+                .selectMapList();
+
+        assert result != null;
+
+        System.out.println(result);
+
+        assert result.size() >= 10;
+    }
 }

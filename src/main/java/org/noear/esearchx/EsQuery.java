@@ -215,6 +215,19 @@ public class EsQuery {
         return this;
     }
 
+    private String _format;
+    public EsQuery sql(String sql, String format) {
+        _format = format;
+
+        getDslq().set("query", sql);
+        return this;
+    }
+
+    public EsQuery sql(String sql) {
+        return sql(sql, "json");
+    }
+
+
     private static final int limit_max_hits = 10000;
 
     public EsQuery limit(int start, int size) {
@@ -330,7 +343,12 @@ public class EsQuery {
         cmd.method = PriWw.method_post;
         cmd.dslType = PriWw.mime_json;
         cmd.dsl = dsl;
-        cmd.path = String.format("/%s/_search", indiceName);
+
+        if(PriUtils.isEmpty(_format)){
+            cmd.path = String.format("/%s/_search", indiceName);
+        }else{
+            cmd.path = String.format("/_sql?format=%s", _format);
+        }
 
         String json = context.execAsBody(cmd);
 
