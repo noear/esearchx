@@ -326,6 +326,7 @@ public class Test2Select {
 
         System.out.println(result);
 
-        assert result.size() >= 10;
+        assert result.size() >= 2;
+        assert result.get(0).size() >= 2;
     }
 }
