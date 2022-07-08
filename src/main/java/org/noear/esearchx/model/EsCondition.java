@@ -133,6 +133,26 @@ public class EsCondition {
 
 
     /**
+     * nested（nested类型的内嵌对象）
+     */
+    public EsCondition nested(String path, Consumer<EsCondition> condition) {
+        if (oNodeArray == null) {
+            oNodeArray = PriUtils.newNode().asArray();
+        }
+
+        ONode oNode1 = PriUtils.newNode();
+        EsCondition c = new EsCondition(oNode1);
+        condition.accept(c);
+        oNodeArray.addNew()
+                .getOrNew("nested")
+                .set("path", path)
+                .set("query", oNode1);
+
+        return this;
+    }
+
+
+    /**
      * match
      */
     public EsCondition match(String field, Object value) {
