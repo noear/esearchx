@@ -83,7 +83,7 @@ public class DemoApp {
         esx.indice("user_log").upsertList(list);
         
         //一个简单的查询
-        LogDo result = esx.indice("user_log").selectById("1");
+        LogDo result = esx.indice("user_log").selectById(LogDo.class, "1");
         
         //一个带条件的查询
         EsData<LogDo> result = esx.indice("user_log")
