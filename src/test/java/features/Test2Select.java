@@ -315,11 +315,8 @@ public class Test2Select {
 
     @Test
     public void test_selectSql() throws Exception {
-        StringBuilder sql = new StringBuilder();
-        sql.append("select * from ").append(indice).append(" limit 10");
-
         List<Map> result = context.indice(indice)
-                .sql(sql.toString())
+                .sql("select * from " + indice + " limit 10")
                 .selectMapList();
 
         assert result != null;
