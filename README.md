@@ -73,6 +73,9 @@ public class DemoApp {
         list.add(new LogDo());
         esx.indice("user_log").insertList(list);
 
+        //带超时设置的批量插入（单位：秒）
+        esx.indice("user_log").timeout(30).insertList(list);
+
         //单条插入或更新
         LogDo logDo = new LogDo();
         esx.indice("user_log").upsert("1", logDo);
