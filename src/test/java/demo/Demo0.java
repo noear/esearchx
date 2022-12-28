@@ -13,9 +13,15 @@ public class Demo0 {
         context.indice("").timeout(12);
     }
 
-    /*public void timeout2(){
-        EsGlobal.onCommandBefore(holder->{
-            holder.get
-        });
-    }*/
+//    public void timeout2(){
+//        EsGlobal.onCommandBefore(holder->{
+//            holder.getDsl();
+//        });
+//    }
+
+    public void test() throws Exception{
+        //原生ddl查询
+        String jsonDsl = "{...}";
+        String jsonRst = context.indice("demo1").select(jsonDsl);
+    }
 }
