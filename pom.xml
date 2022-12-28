@@ -5,7 +5,7 @@
 
     <groupId>org.noear</groupId>
     <artifactId>esearchx</artifactId>
-    <version>1.0.17</version>
+    <version>1.0.18</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -17,7 +17,7 @@
         <dependency>
             <groupId>org.noear</groupId>
             <artifactId>snack3</artifactId>
-            <version>3.2.45</version>
+            <version>3.2.50</version>
         </dependency>
 
         <dependency>

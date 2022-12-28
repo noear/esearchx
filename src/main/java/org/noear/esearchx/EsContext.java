@@ -22,7 +22,7 @@ public class EsContext {
     private final String[] urls;
     private int urlIndex;
     private final String username;
-    private final String paasword;
+    private final String password;
 
     private String meta;
     private int version = 0;
@@ -45,16 +45,39 @@ public class EsContext {
     public EsCommand lastCommand;
 
     public EsContext(Properties prop) {
-        this(prop.getProperty("url"), prop.getProperty("username"), prop.getProperty("paasword"));
+        String url = prop.getProperty("url");
+        String passwordStr = prop.getProperty("password");
+
+        if(PriUtils.isEmpty(passwordStr)){
+            //兼空旧的错误单词
+            passwordStr = prop.getProperty("paasword");
+        }
+
+
+        this.username = prop.getProperty("username");
+        this.password = passwordStr;
+
+
+        List<String> urlAry = new ArrayList<>();
+        for (String ser : url.split(",")) {
+            if (ser.contains("://")) {
+                urlAry.add(ser);
+            } else {
+                urlAry.add("http://" + ser);
+            }
+        }
+        this.urls = urlAry.toArray(new String[urlAry.size()]);
+
+        this.initMeta();
     }
 
     public EsContext(String url) {
         this(url, null, null);
     }
 
-    public EsContext(String url, String username, String paasword) {
+    public EsContext(String url, String username, String password) {
         this.username = username;
-        this.paasword = paasword;
+        this.password = password;
 
         List<String> urlAry = new ArrayList<>();
         for (String ser : url.split(",")) {
@@ -110,7 +133,7 @@ public class EsContext {
         PriHttpUtils http = PriHttpUtils.http(getUrl() + path);
 
         if (PriUtils.isNotEmpty(username)) {
-            String token = PriUtils.b64Encode(username + ":" + paasword);
+            String token = PriUtils.b64Encode(username + ":" + password);
             String auth = "Basic " + token;
 
             http.header("Authorization", auth);
