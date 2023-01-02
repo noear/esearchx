@@ -8,7 +8,7 @@ Elasticsearch ORM 框架（基于 lamabda 表达式，构建类似 sql 的体验
     <a target="_blank" href="https://search.maven.org/search?q=org.noear%20esearchx">
         <img src="https://img.shields.io/maven-central/v/org.noear/esearchx.svg?label=Maven%20Central" alt="Maven" />
     </a>
-    <a target="_blank" href="https://license.coscl.org.cn/Apache2/">
+    <a target="_blank" href="https://www.apache.org/licenses/LICENSE-2.0">
 		<img src="https://img.shields.io/:license-Apache2-blue.svg" alt="Apache 2" />
 	</a>
     <a target="_blank" href="https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html">
