@@ -27,6 +27,8 @@
 ```
 
 ```java
+import org.noear.snack.ONode;
+
 //
 // 更多的示例，可以查看 src/test/ 下的相关单测
 //
@@ -36,10 +38,10 @@ public class DemoApp {
     public void demo() {
         //执行前打印dsl
         EsGlobal.onCommandBefore(cmd -> System.out.println("dsl:::" + cmd.getDsl()));
-        
+
         //实例化上下文
         EsContext esx = new EsContext("localhost:30480");
-        
+
 
         //创建索引
         esx.indiceCreate("user_log_20200101", tableCreateDsl);
@@ -51,7 +53,7 @@ public class DemoApp {
                 .add("user_log_20200101", "user_log")
                 .add("user_log_20200102", "user_log")
                 .add("user_log_20200103", "user_log"));
-        
+
         //删除索引（如果存在就删了；当然也可以直接删）
         if (esx.indiceExist("user_log_20200101")) {
             esx.indiceDrop("user_log_20200101");
@@ -67,7 +69,7 @@ public class DemoApp {
             //增加类型编码
             options.addEncoder(Long.class, (data, node) -> node.val().setString(String.valueOf(data)));
         }).insert(logDo);
-        
+
         //批量插入
         List<LogDo> list = new ArrayList<>();
         list.add(new LogDo());
@@ -79,15 +81,15 @@ public class DemoApp {
         //单条插入或更新
         LogDo logDo = new LogDo();
         esx.indice("user_log").upsert("1", logDo);
-        
+
         //批量插入或更新
         Map<String, LogDo> list = new LinkedHashMap<>();
-        list.put("...",new LogDo());
+        list.put("...", new LogDo());
         esx.indice("user_log").upsertList(list);
-        
+
         //一个简单的查询
         LogDo result = esx.indice("user_log").selectById(LogDo.class, "1");
-        
+
         //一个带条件的查询
         EsData<LogDo> result = esx.indice("user_log")
                 .where(r -> r.term("level", 5))
@@ -101,7 +103,7 @@ public class DemoApp {
                 .highlight(h -> h.addField("content", f -> f.preTags("<em>").postTags("</em>")))
                 .limit(1)
                 .selectMap();
-        
+
         //一个复杂些的查询
         EsData<LogDo> result = esx.indice(indice)
                 .where(c -> c.useScore().must()
@@ -115,17 +117,24 @@ public class DemoApp {
 
         //脚本查询
         EsData<LogDo> result = esx.indice(indice)
-                .where(c -> c.script("doc['tag'].value.length() >= params.len", p->p.set("len",2)))
+                .where(c -> c.script("doc['tag'].value.length() >= params.len", p -> p.set("len", 2)))
                 .limit(10)
                 .selectList(LogDo.class);
-        
+
         //聚合查询
         ONode result = esx.indice(indice)
-                .where(w->w.term("tag","list1"))
+                .where(w -> w.term("tag", "list1"))
                 .limit(0)
                 .aggs(a -> a.terms("level", t -> t.size(20))
-                            .aggs(a1 -> a1.topHits(2, s -> s.addByAes("log_fulltime"))))
+                        .aggs(a1 -> a1.topHits(2, s -> s.addByAes("log_fulltime"))))
                 .selectAggs();
+
+
+        //特别复杂的，用原生dsl查
+        ONode dsl = new ONode();
+        //...
+        String resultJson = esx.indice(indice).select(dsl.toJson());
+        ONode result = ONode.load(resultJson);
     }
 }
 
