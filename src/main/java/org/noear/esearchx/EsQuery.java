@@ -240,6 +240,11 @@ public class EsQuery {
 
         return this;
     }
+    
+    public EsQuery trackTotalHits() {
+        getDslq().set("track_total_hits", "true");
+        return this;
+    }
 
     public EsQuery limit(int size) {
         getDslq().set("size", size);
@@ -437,7 +442,14 @@ public class EsQuery {
 
         ONode oHits = ONode.loadStr(json).get("hits");
 
-        long total = oHits.get("total").get("value").getLong();
+        long total;
+        //低版本es返回的json中total是一个数，而不是一个对象
+        if (context.getVersion() > 6) {
+            total = oHits.get("total").get("value").getLong();
+        } else {
+            total = oHits.get("total").getLong();
+        }
+        
         double max_score = oHits.get("oHits").getDouble();
 
         oHits.get("hits").forEach(n -> {
