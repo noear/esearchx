@@ -114,6 +114,16 @@ public class EsCondition {
     }
 
     /**
+     * 设置should条件最小匹配数
+     *
+     * bool/minimum_should_match
+     */
+    public EsCondition minimumShouldMatch(int min) {
+        oNode.getOrNew("bool").set("minimum_should_match", min);
+        return this;
+    }
+
+    /**
      * 和must相反，必须都不满足条件才可以匹配到 ！非
      *
      * bool/mustNot
