@@ -106,6 +106,7 @@ public class EsQuery {
         cmd.timeout = timeout;
         cmd.method = PriWw.method_put;
         cmd.dslType = PriWw.mime_json;
+        doc.remove("_id"); //清理_id，否则source带_id报错
         cmd.dsl = getJson(doc);
         cmd.path = String.format("/%s/_doc/%s", indiceName, docId);
 
@@ -453,7 +454,7 @@ public class EsQuery {
         double max_score = oHits.get("oHits").getDouble();
 
         oHits.get("hits").forEach(n -> {
-            n.set("_id", n.get("id"));
+            n.set("_id", n.get("_id"));
             n.set("_score", n.get("_score"));
             n.setAll(n.get("_source"));
         });
