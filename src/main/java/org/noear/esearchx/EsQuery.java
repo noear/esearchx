@@ -449,10 +449,12 @@ public class EsQuery {
         } else {
             total = oHits.get("total").getLong();
         }
-        
+
         double max_score = oHits.get("oHits").getDouble();
 
         oHits.get("hits").forEach(n -> {
+            n.set("_id", n.get("id"));
+            n.set("_score", n.get("_score"));
             n.setAll(n.get("_source"));
         });
 
