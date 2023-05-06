@@ -20,14 +20,14 @@ public class EsAggs {
     }
 
 
-    private ONode getLevl2Node(String name) {
+    private ONode getLevel2Node(String name) {
         oNodeAsField = name;
         lastLevel2Node = oNode.getOrNew(name);
         return lastLevel2Node;
     }
 
     private void funSet(String asField, String field, String funName) {
-        getLevl2Node(asField).getOrNew(funName).set("field", field);
+        getLevel2Node(asField).getOrNew(funName).set("field", field);
     }
 
     public EsAggs asField(String asField) {
@@ -47,6 +47,9 @@ public class EsAggs {
         return this;
     }
 
+    /**
+     * sum，求合（支持别名）
+     */
     public EsAggs sum(String field, String asFiled) {
         funSet(asFiled, field, "sum");
         return this;
@@ -60,6 +63,9 @@ public class EsAggs {
         return this;
     }
 
+    /**
+     * avg，求平均值（支持别名）
+     */
     public EsAggs avg(String field, String asField) {
         funSet(asField, field, "avg");
         return this;
@@ -73,6 +79,9 @@ public class EsAggs {
         return this;
     }
 
+    /**
+     * max，求最大值（支持别名）
+     */
     public EsAggs max(String field, String asField) {
         funSet(asField, field, "max");
         return this;
@@ -86,6 +95,9 @@ public class EsAggs {
         return this;
     }
 
+    /**
+     * min，求最小值（支持别名）
+     */
     public EsAggs min(String field, String asField) {
         funSet(asField, field, "min");
         return this;
@@ -99,6 +111,9 @@ public class EsAggs {
         return this;
     }
 
+    /**
+     * count，值计数（支持别名）
+     */
     public EsAggs count(String field, String asField) {
         funSet(asField, field, "value_count");
         return this;
@@ -133,6 +148,9 @@ public class EsAggs {
         return this;
     }
 
+    /**
+     * cardinality，先去重再计数（支持别名）
+     */
     public EsAggs cardinality(String field, String asField) {
         funSet(asField, field, "cardinality");
         return this;
@@ -142,14 +160,17 @@ public class EsAggs {
      * percentiles，多值聚合求百分比
      */
     public EsAggs percentiles(String field, Number[] percents) {
-        ONode oNode1 = getLevl2Node(field + "_percentiles").getOrNew("percentiles");
+        ONode oNode1 = getLevel2Node(field + "_percentiles").getOrNew("percentiles");
         oNode1.set("field", field);
         oNode1.getOrNew("percents").addAll(Arrays.asList(percents));
         return this;
     }
 
+    /**
+     * percentiles，多值聚合求百分比（支持别名）
+     */
     public EsAggs percentiles(String field, String asField, Number[] percents) {
-        ONode oNode1 = getLevl2Node(asField).getOrNew("percentiles");
+        ONode oNode1 = getLevel2Node(asField).getOrNew("percentiles");
         oNode1.set("field", field);
         oNode1.getOrNew("percents").addAll(Arrays.asList(percents));
         return this;
@@ -159,14 +180,17 @@ public class EsAggs {
      * percentiles rank
      */
     public EsAggs percentilesRank(String field, Number[] values) {
-        ONode oNode1 = getLevl2Node(field + "_percentilesRank").getOrNew("percentile_ranks");
+        ONode oNode1 = getLevel2Node(field + "_percentilesRank").getOrNew("percentile_ranks");
         oNode1.set("field", field);
         oNode1.getOrNew("values").addAll(Arrays.asList(values));
         return this;
     }
 
+    /**
+     * percentiles rank（支持别名）
+     */
     public EsAggs percentilesRank(String field, String asField, Number[] values) {
-        ONode oNode1 = getLevl2Node(asField).getOrNew("percentile_ranks");
+        ONode oNode1 = getLevel2Node(asField).getOrNew("percentile_ranks");
         oNode1.set("field", field);
         oNode1.getOrNew("values").addAll(Arrays.asList(values));
         return this;
@@ -180,6 +204,9 @@ public class EsAggs {
         return this;
     }
 
+    /**
+     * extended_stats（支持别名）
+     */
     public EsAggs extendedStats(String field, String asField) {
         funSet(asField, field, "extended_stats");
         return this;
@@ -193,6 +220,9 @@ public class EsAggs {
         return this;
     }
 
+    /**
+     * stats（支持别名）
+     */
     public EsAggs stats(String field, String asField) {
         funSet(asField, field, "stats");
         return this;
@@ -206,7 +236,7 @@ public class EsAggs {
      * filter，聚合
      */
     public EsAggs filter(Consumer<EsCondition> condition) {
-        EsCondition c = new EsCondition(getLevl2Node("$filter").getOrNew("filter"));
+        EsCondition c = new EsCondition(getLevel2Node("$filter").getOrNew("filter"));
         condition.accept(c);
         return this;
     }
@@ -215,15 +245,18 @@ public class EsAggs {
      * range，聚合
      */
     public EsAggs range(String field, Consumer<EsRanges> ranges) {
-        ONode oNode1 = getLevl2Node(field + "_range").getOrNew("range");
+        ONode oNode1 = getLevel2Node(field + "_range").getOrNew("range");
         oNode1.set("field", field);
         EsRanges t = new EsRanges(oNode1.getOrNew("ranges").asArray());
         ranges.accept(t);
         return this;
     }
 
+    /**
+     * range，聚合
+     */
     public EsAggs range(String field, String asField, Consumer<EsRanges> ranges) {
-        ONode oNode1 = getLevl2Node(asField).getOrNew("range");
+        ONode oNode1 = getLevel2Node(asField).getOrNew("range");
         oNode1.set("field", field);
         EsRanges t = new EsRanges(oNode1.getOrNew("ranges").asArray());
         ranges.accept(t);
@@ -238,6 +271,9 @@ public class EsAggs {
         return this;
     }
 
+    /**
+     * terms，聚合
+     */
     public EsAggs terms(String field, String asField) {
         terms(field, asField, null);
         return this;
@@ -245,7 +281,7 @@ public class EsAggs {
 
 
     public EsAggs terms(String field, Consumer<EsTerms> terms) {
-        ONode oNode1 = getLevl2Node(field + "_terms").getOrNew("terms");
+        ONode oNode1 = getLevel2Node(field + "_terms").getOrNew("terms");
         if (field.startsWith("$")) {
             oNode1.set("script", field.substring(1));
         } else {
@@ -259,7 +295,7 @@ public class EsAggs {
     }
 
     public EsAggs terms(String field, String asField, Consumer<EsTerms> terms) {
-        ONode oNode1 = getLevl2Node(asField).getOrNew("terms");
+        ONode oNode1 = getLevel2Node(asField).getOrNew("terms");
         if (field.startsWith("$")) {
             oNode1.set("script", field.substring(1));
         } else {
