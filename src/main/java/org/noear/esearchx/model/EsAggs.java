@@ -11,7 +11,9 @@ import java.util.function.Consumer;
  */
 public class EsAggs {
     private final ONode oNode;
-    private ONode lastLevl2Node;
+    private ONode lastLevel2Node;
+
+    private String oNodeAsField;
 
     public EsAggs(ONode oNode) {
         this.oNode = oNode;
@@ -19,14 +21,19 @@ public class EsAggs {
 
 
     private ONode getLevl2Node(String name) {
-        lastLevl2Node = oNode.getOrNew(name);
-        return lastLevl2Node;
+        oNodeAsField = name;
+        lastLevel2Node = oNode.getOrNew(name);
+        return lastLevel2Node;
     }
 
     private void funSet(String asField, String field, String funName) {
         getLevl2Node(asField).getOrNew(funName).set("field", field);
     }
 
+    public EsAggs asField(String asField) {
+        oNode.rename(oNodeAsField, asField);
+        return this;
+    }
 
     //
     //============ Metrics =============
@@ -40,11 +47,21 @@ public class EsAggs {
         return this;
     }
 
+    public EsAggs sum(String field, String asFiled) {
+        funSet(asFiled, field, "sum");
+        return this;
+    }
+
     /**
      * avg，求平均值
      */
     public EsAggs avg(String field) {
         funSet(field + "_avg", field, "avg");
+        return this;
+    }
+
+    public EsAggs avg(String field, String asField) {
+        funSet(asField, field, "avg");
         return this;
     }
 
@@ -56,6 +73,11 @@ public class EsAggs {
         return this;
     }
 
+    public EsAggs max(String field, String asField) {
+        funSet(asField, field, "max");
+        return this;
+    }
+
     /**
      * min，求最小值
      */
@@ -64,11 +86,21 @@ public class EsAggs {
         return this;
     }
 
+    public EsAggs min(String field, String asField) {
+        funSet(asField, field, "min");
+        return this;
+    }
+
     /**
      * count，值计数
      */
     public EsAggs count(String field) {
         funSet(field + "_count", field, "value_count");
+        return this;
+    }
+
+    public EsAggs count(String field, String asField) {
+        funSet(asField, field, "value_count");
         return this;
     }
 
@@ -101,11 +133,23 @@ public class EsAggs {
         return this;
     }
 
+    public EsAggs cardinality(String field, String asField) {
+        funSet(asField, field, "cardinality");
+        return this;
+    }
+
     /**
      * percentiles，多值聚合求百分比
      */
     public EsAggs percentiles(String field, Number[] percents) {
         ONode oNode1 = getLevl2Node(field + "_percentiles").getOrNew("percentiles");
+        oNode1.set("field", field);
+        oNode1.getOrNew("percents").addAll(Arrays.asList(percents));
+        return this;
+    }
+
+    public EsAggs percentiles(String field, String asField, Number[] percents) {
+        ONode oNode1 = getLevl2Node(asField).getOrNew("percentiles");
         oNode1.set("field", field);
         oNode1.getOrNew("percents").addAll(Arrays.asList(percents));
         return this;
@@ -121,6 +165,13 @@ public class EsAggs {
         return this;
     }
 
+    public EsAggs percentilesRank(String field, String asField, Number[] values) {
+        ONode oNode1 = getLevl2Node(asField).getOrNew("percentile_ranks");
+        oNode1.set("field", field);
+        oNode1.getOrNew("values").addAll(Arrays.asList(values));
+        return this;
+    }
+
     /**
      * extended_stats
      */
@@ -129,11 +180,21 @@ public class EsAggs {
         return this;
     }
 
+    public EsAggs extendedStats(String field, String asField) {
+        funSet(asField, field, "extended_stats");
+        return this;
+    }
+
     /**
      * stats
      */
     public EsAggs stats(String field) {
         funSet(field + "_stats", field, "stats");
+        return this;
+    }
+
+    public EsAggs stats(String field, String asField) {
+        funSet(asField, field, "stats");
         return this;
     }
 
@@ -147,7 +208,6 @@ public class EsAggs {
     public EsAggs filter(Consumer<EsCondition> condition) {
         EsCondition c = new EsCondition(getLevl2Node("$filter").getOrNew("filter"));
         condition.accept(c);
-
         return this;
     }
 
@@ -156,12 +216,17 @@ public class EsAggs {
      */
     public EsAggs range(String field, Consumer<EsRanges> ranges) {
         ONode oNode1 = getLevl2Node(field + "_range").getOrNew("range");
-
         oNode1.set("field", field);
-
         EsRanges t = new EsRanges(oNode1.getOrNew("ranges").asArray());
         ranges.accept(t);
+        return this;
+    }
 
+    public EsAggs range(String field, String asField, Consumer<EsRanges> ranges) {
+        ONode oNode1 = getLevl2Node(asField).getOrNew("range");
+        oNode1.set("field", field);
+        EsRanges t = new EsRanges(oNode1.getOrNew("ranges").asArray());
+        ranges.accept(t);
         return this;
     }
 
@@ -169,24 +234,41 @@ public class EsAggs {
      * terms，聚合
      */
     public EsAggs terms(String field) {
-        terms(field, null);
+        terms(field, field + "_terms");
         return this;
     }
 
+    public EsAggs terms(String field, String asField) {
+        terms(field, asField, null);
+        return this;
+    }
+
+
     public EsAggs terms(String field, Consumer<EsTerms> terms) {
         ONode oNode1 = getLevl2Node(field + "_terms").getOrNew("terms");
-
         if (field.startsWith("$")) {
             oNode1.set("script", field.substring(1));
         } else {
             oNode1.set("field", field);
         }
-
         if (terms != null) {
             EsTerms t = new EsTerms(oNode1);
             terms.accept(t);
         }
+        return this;
+    }
 
+    public EsAggs terms(String field, String asField, Consumer<EsTerms> terms) {
+        ONode oNode1 = getLevl2Node(asField).getOrNew("terms");
+        if (field.startsWith("$")) {
+            oNode1.set("script", field.substring(1));
+        } else {
+            oNode1.set("field", field);
+        }
+        if (terms != null) {
+            EsTerms t = new EsTerms(oNode1);
+            terms.accept(t);
+        }
         return this;
     }
 
@@ -195,13 +277,11 @@ public class EsAggs {
      * 添加下级条件
      */
     public EsAggs aggs(Consumer<EsAggs> aggs) {
-        if (lastLevl2Node == null) {
+        if (lastLevel2Node == null) {
             throw new IllegalArgumentException("There are no secondary nodes");
         }
-
-        EsAggs c = new EsAggs(lastLevl2Node.getOrNew("aggs"));
+        EsAggs c = new EsAggs(lastLevel2Node.getOrNew("aggs"));
         aggs.accept(c);
-
         return this;
     }
 }
