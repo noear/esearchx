@@ -48,6 +48,19 @@ public class Test5AggsSelect {
     }
 
     @Test
+    public void test_avg2() throws Exception {
+        ONode oNode = context.indice(indice)
+                .where(c -> c.range("level", r -> r.gte(3)))
+                .limit(0)
+                .aggs(a -> a.avg("level", "level"))
+                .selectAggs();
+
+        System.out.println(oNode.toJson());
+
+        assert (oNode.get("level").get("value").getDouble()) > 0l;
+    }
+
+    @Test
     public void test_min() throws Exception {
         ONode oNode = context.indice(indice)
                 .where(c -> c.range("level", r -> r.gte(3)))
@@ -58,6 +71,19 @@ public class Test5AggsSelect {
         System.out.println(oNode.toJson());
 
         assert (oNode.get("level_min").get("value").getDouble()) > 0l;
+    }
+
+    @Test
+    public void test_min2() throws Exception {
+        ONode oNode = context.indice(indice)
+                .where(c -> c.range("level", r -> r.gte(3)))
+                .limit(0)
+                .aggs(a -> a.min("level", "min"))
+                .selectAggs();
+
+        System.out.println(oNode.toJson());
+
+        assert (oNode.get("min").get("value").getDouble()) > 0l;
     }
 
     @Test
