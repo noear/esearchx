@@ -212,6 +212,9 @@ public class EsQuery {
         ONode oNode1 = PriUtils.newNode();
         EsCondition c = new EsCondition(oNode1);
         condition.accept(c);
+        if(oNode1.isNull()){
+            return this;
+        }
         getDslq().set("query", oNode1);
         return this;
     }
@@ -241,7 +244,7 @@ public class EsQuery {
 
         return this;
     }
-    
+
     public EsQuery trackTotalHits() {
         getDslq().set("track_total_hits", "true");
         return this;
