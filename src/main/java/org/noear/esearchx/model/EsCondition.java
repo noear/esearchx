@@ -173,7 +173,7 @@ public class EsCondition {
     /**
      * match
      */
-    public EsCondition match(boolean condition, String field, Object value) {
+    public EsCondition matchIf(boolean condition, String field, Object value) {
         return condition ? match(field, value) : this;
     }
 
@@ -188,7 +188,7 @@ public class EsCondition {
     /**
      * match_phrase
      */
-    public EsCondition matchPhrase(boolean condition, String field, Object value) {
+    public EsCondition matchPhraseIf(boolean condition, String field, Object value) {
         return condition ? matchPhrase(field, value) : this;
     }
 
@@ -207,7 +207,7 @@ public class EsCondition {
     /**
      * match_phrase slop
      */
-    public EsCondition matchPhrase(boolean condition, String field, Object value, int slop) {
+    public EsCondition matchPhraseIf(boolean condition, String field, Object value, int slop) {
         return condition ? matchPhrase(field, value, slop) : this;
     }
 
@@ -222,7 +222,7 @@ public class EsCondition {
     /**
      * match_phrase_prefix
      */
-    public EsCondition matchPhrasePrefix(boolean condition, String field, Object value) {
+    public EsCondition matchPhrasePrefixIf(boolean condition, String field, Object value) {
         return condition ? matchPhrasePrefix(field, value) : this;
     }
 
@@ -241,7 +241,7 @@ public class EsCondition {
     /**
      * match_phrase_prefix slop
      */
-    public EsCondition matchPhrasePrefix(boolean condition, String field, Object value, int slop) {
+    public EsCondition matchPhrasePrefixIf(boolean condition, String field, Object value, int slop) {
         return condition ? matchPhrasePrefix(field, value, slop) : this;
     }
 
@@ -256,7 +256,7 @@ public class EsCondition {
     /**
      * exists
      */
-    public EsCondition exists(boolean condition, String field) {
+    public EsCondition existsIf(boolean condition, String field) {
         return condition ? exists(field) : this;
     }
 
@@ -271,7 +271,7 @@ public class EsCondition {
     /**
      * term
      */
-    public EsCondition term(boolean condition, String field, Object value) {
+    public EsCondition termIf(boolean condition, String field, Object value) {
         return condition ? term(field, value) : this;
     }
 
@@ -294,14 +294,14 @@ public class EsCondition {
     /**
      * terms
      */
-    public EsCondition terms(boolean condition, String field, Object... values) {
+    public EsCondition termsIf(boolean condition, String field, Object... values) {
         return condition ? terms(field, (Object[]) values) : this;
     }
 
     /**
      * terms
      */
-    public EsCondition terms(boolean condition, String field, Collection<?> values) {
+    public EsCondition termsIf(boolean condition, String field, Collection<?> values) {
         return condition ? terms(field, values) : this;
     }
 
@@ -320,7 +320,7 @@ public class EsCondition {
     /**
      * range
      */
-    public EsCondition range(boolean condition, String field, Consumer<EsRange> range) {
+    public EsCondition rangeIf(boolean condition, String field, Consumer<EsRange> range) {
         return condition ? range(field, range) : this;
     }
 
@@ -336,7 +336,7 @@ public class EsCondition {
     /**
      * prefix
      */
-    public EsCondition prefix(boolean condition, String field, String value) {
+    public EsCondition prefixIf(boolean condition, String field, String value) {
         return condition ? prefix(field, value) : this;
     }
 
@@ -355,7 +355,7 @@ public class EsCondition {
      *
      * @param value *表示任意字符，?表示任意单个字符(
      */
-    public EsCondition wildcard(boolean condition, String field, String value) {
+    public EsCondition wildcardIf(boolean condition, String field, String value) {
         return condition ? wildcard(field, value) : this;
     }
 
@@ -370,7 +370,7 @@ public class EsCondition {
     /**
      * regexp
      */
-    public EsCondition regexp(boolean condition, String field, String value) {
+    public EsCondition regexpIf(boolean condition, String field, String value) {
         return condition ? regexp(field, value) : this;
     }
 
