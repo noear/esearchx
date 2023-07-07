@@ -41,6 +41,11 @@ public class EsTerms {
         return this;
     }
 
+    public EsTerms shardSize(int size) {
+        oNode.set("shard_size", size);
+        return this;
+    }
+
     /**
      * 聚合模式
      */
