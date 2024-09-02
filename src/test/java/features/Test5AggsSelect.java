@@ -1,18 +1,17 @@
 package features;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.noear.esearchx.EsContext;
 import org.noear.snack.ONode;
 import org.noear.solon.annotation.Inject;
-import org.noear.solon.test.SolonJUnit4ClassRunner;
+import org.noear.solon.test.SolonTest;
 
 /**
  * ElasticSearch 测试
  *
  * @author noear 2021/10/26 created
  */
-@RunWith(SolonJUnit4ClassRunner.class)
+@SolonTest
 public class Test5AggsSelect {
     final String indice = "test-user_log";
 

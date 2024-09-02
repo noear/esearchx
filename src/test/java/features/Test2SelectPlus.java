@@ -1,12 +1,11 @@
 package features;
 
 import features.model.LogDo;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.noear.esearchx.EsContext;
 import org.noear.esearchx.model.EsData;
 import org.noear.solon.annotation.Inject;
-import org.noear.solon.test.SolonJUnit4ClassRunner;
+import org.noear.solon.test.SolonTest;
 
 /**
  * ElasticSearch 测试
@@ -14,7 +13,7 @@ import org.noear.solon.test.SolonJUnit4ClassRunner;
  * @author noear 2021/10/22 created
  */
 
-@RunWith(SolonJUnit4ClassRunner.class)
+@SolonTest
 public class Test2SelectPlus {
 
     final String indice = "test-user_log";

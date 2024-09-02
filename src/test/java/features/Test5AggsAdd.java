@@ -1,9 +1,7 @@
 package features;
 
-import org.junit.runner.RunWith;
 import org.noear.esearchx.EsContext;
 import org.noear.solon.annotation.Inject;
-import org.noear.solon.test.SolonJUnit4ClassRunner;
 
 /**
  * ElasticSearch 测试

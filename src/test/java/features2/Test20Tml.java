@@ -2,14 +2,13 @@ package features2;
 
 import features.SnowflakeUtils;
 import features.model.LogDo;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.noear.esearchx.EsContext;
 import org.noear.esearchx.model.EsData;
 import org.noear.snack.ONode;
 import org.noear.solon.Utils;
 import org.noear.solon.annotation.Inject;
-import org.noear.solon.test.SolonJUnit4ClassRunner;
+import org.noear.solon.test.SolonTest;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -17,7 +16,7 @@ import java.util.*;
 /**
  * @author noear 2022/1/18 created
  */
-@RunWith(SolonJUnit4ClassRunner.class)
+@SolonTest
 public class Test20Tml {
     final String streamNoExit = "test-demo20_notexit";
     final String templateNoExit = "test-demo20-tml_notexit";

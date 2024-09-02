@@ -1,12 +1,11 @@
 package features;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.noear.esearchx.EsContext;
 import org.noear.snack.ONode;
 import org.noear.solon.Utils;
 import org.noear.solon.annotation.Inject;
-import org.noear.solon.test.SolonJUnit4ClassRunner;
+import org.noear.solon.test.SolonTest;
 
 import java.io.IOException;
 
@@ -15,7 +14,7 @@ import java.io.IOException;
  *
  * @author noear 2021/10/22 created
  */
-@RunWith(SolonJUnit4ClassRunner.class)
+@SolonTest
 public class Test0 {
     final String indiceNoExit = "test-user_logx";
     final String indiceNew = "test-user_log_new";
