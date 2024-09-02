@@ -136,7 +136,7 @@ public class Test2SelectPlus {
         EsData<LogDo> result = context.indice(indice)
                 .where(c -> c.term("tag", "list1"))
                 .limit(5)
-                .orderBy(s -> s.addByAes("log_id"))
+                .orderBy(s -> s.addByAsc("log_id"))
                 //.orderByAsc("log_id")
                 .onAfter(239467464128819200l)
                 .selectList(LogDo.class);
@@ -167,7 +167,7 @@ public class Test2SelectPlus {
         EsData<LogDo> result = context.indice(indice)
                 .where(c -> c.term("tag", "list1"))
                 .limit(0, 10)
-                .orderBy(s -> s.addByDesc("level").addByAes("log_id"))
+                .orderBy(s -> s.addByDesc("level").addByAsc("log_id"))
 //                .orderByDesc("level")
 //                .andByAsc("log_id")
                 .selectList(LogDo.class);

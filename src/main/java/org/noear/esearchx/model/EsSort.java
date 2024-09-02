@@ -13,11 +13,12 @@ public class EsSort {
         this.oNode = oNode;
     }
 
+    /**
+     * @deprecated 2024-09-02
+     */
     @Deprecated
     public EsSort addByAes(String field) {
-        oNode.addNew().getOrNew(field).set("order", "asc");
-
-        return this;
+        return addByAsc(field);
     }
 
     public EsSort addByAsc(String field) {
