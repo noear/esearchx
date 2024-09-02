@@ -1,6 +1,7 @@
 
 #### 2024.09.02
 
+* 新增 EsSort:addByAsc 替代 addByAes
 * snack3 升为 3.2.109
 
 #### 2023.07.06
