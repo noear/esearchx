@@ -7,6 +7,7 @@ import org.noear.esearchx.EsContext;
 import org.noear.esearchx.PriWw;
 import org.noear.solon.Utils;
 import org.noear.solon.annotation.Inject;
+import org.noear.solon.core.util.ResourceUtil;
 import org.noear.solon.test.SolonTest;
 
 import java.io.IOException;
@@ -45,7 +46,7 @@ public class Test1Add {
 
     @Test
     public void test2() throws Exception {
-        String json = Utils.getResourceAsString("demo/log.json", "utf-8");
+        String json = ResourceUtil.getResourceAsString("demo/log.json", "utf-8");
 
         LogDo logDo = new LogDo();
         logDo.logger = "waterapi";
@@ -81,7 +82,7 @@ public class Test1Add {
 
     @Test
     public void test3() throws Exception {
-        String json = Utils.getResourceAsString("demo/log.json", "utf-8");
+        String json = ResourceUtil.getResourceAsString("demo/log.json", "utf-8");
 
         test3_do(1, json);
         test3_do(2, json);
@@ -92,7 +93,7 @@ public class Test1Add {
 
     @Test
     public void test4() throws Exception {
-        String json = Utils.getResourceAsString("demo/log.json", "utf-8");
+        String json = ResourceUtil.getResourceAsString("demo/log.json", "utf-8");
 
         LogDo logDo = new LogDo();
         logDo.logger = "waterapi";
@@ -113,7 +114,7 @@ public class Test1Add {
 
     @Test
     public void test5() throws Exception {
-        String json = Utils.getResourceAsString("demo/log.json", "utf-8");
+        String json = ResourceUtil.getResourceAsString("demo/log.json", "utf-8");
 
         Map<String, LogDo> docs = new LinkedHashMap<>();
 
@@ -140,7 +141,7 @@ public class Test1Add {
 
     @Test
     public void test6() throws Exception {
-        String json = Utils.getResourceAsString("demo/log.json", "utf-8");
+        String json = ResourceUtil.getResourceAsString("demo/log.json", "utf-8");
 
         List<LogDo> docs = new ArrayList<>();
 

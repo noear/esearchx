@@ -5,6 +5,7 @@ import org.noear.esearchx.EsContext;
 import org.noear.snack.ONode;
 import org.noear.solon.Utils;
 import org.noear.solon.annotation.Inject;
+import org.noear.solon.core.util.ResourceUtil;
 import org.noear.solon.test.SolonTest;
 
 import java.io.IOException;
@@ -40,7 +41,7 @@ public class Test0 {
 
         assert context.indiceExist(indiceNew) == false;
 
-        String dsl = Utils.getResourceAsString("demo/log.json", "utf-8");
+        String dsl = ResourceUtil.getResourceAsString("demo/log.json", "utf-8");
         context.indiceCreate(indiceNew, dsl);
 
 
@@ -60,7 +61,7 @@ public class Test0 {
 
     private void test2Create(String name) throws IOException {
         if (context.indiceExist(name) == false) {
-            String dsl = Utils.getResourceAsString("demo/log.json", "utf-8");
+            String dsl = ResourceUtil.getResourceAsString("demo/log.json", "utf-8");
             context.indiceCreate(name, dsl);
         }
 

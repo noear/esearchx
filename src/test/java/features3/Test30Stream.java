@@ -8,6 +8,7 @@ import org.noear.esearchx.model.EsData;
 import org.noear.snack.ONode;
 import org.noear.solon.Utils;
 import org.noear.solon.annotation.Inject;
+import org.noear.solon.core.util.ResourceUtil;
 import org.noear.solon.test.SolonTest;
 
 import java.time.LocalDateTime;
@@ -56,7 +57,7 @@ public class Test30Stream {
     @Test
     public void test2() throws Exception {
         //创建或者更新微略
-        String policy_dsl = Utils.getResourceAsString("demo30/log-policy_dsl.json");
+        String policy_dsl = ResourceUtil.getResourceAsString("demo30/log-policy_dsl.json");
 
         String policy_dsl_rst = context.policyCreate(policy, policy_dsl);
         System.out.println(policy_dsl_rst);
@@ -69,7 +70,7 @@ public class Test30Stream {
         context.policyCreate(policy, policy_dsl_show_tml.toJson());
 
         //创建或者更新模板
-        String tml_dsl = Utils.getResourceAsString("demo30/log-index.json");
+        String tml_dsl = ResourceUtil.getResourceAsString("demo30/log-index.json");
 
         ONode tmlDslNode = ONode.loadStr(tml_dsl);
         //设定匹配模式
@@ -102,7 +103,7 @@ public class Test30Stream {
 
     @Test
     public void test_add() throws Exception {
-        String json = Utils.getResourceAsString("demo/log.json", "utf-8");
+        String json = ResourceUtil.getResourceAsString("demo/log.json", "utf-8");
 
 
         LogDo logDo = new LogDo();
@@ -128,7 +129,7 @@ public class Test30Stream {
 
     @Test
     public void test_addlist() throws Exception {
-        String json = Utils.getResourceAsString("demo/log.json", "utf-8");
+        String json = ResourceUtil.getResourceAsString("demo/log.json", "utf-8");
 
         List<ONode> docs = new ArrayList<>();
 
