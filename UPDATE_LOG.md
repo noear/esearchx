@@ -1,4 +1,10 @@
 
+
+#### 2024.11.06
+
+* 增加 histogram，dateHistogram
+* snack3 升为 3.2.120
+
 #### 2024.09.02
 
 * 新增 EsSort:addByAsc 替代 addByAes

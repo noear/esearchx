@@ -53,7 +53,7 @@ Elasticsearch ORM 框架（基于 lamabda 表达式，构建类似 sql 的体验
 <dependency>
     <groupId>org.noear</groupId>
     <artifactId>esearchx</artifactId>
-    <version>1.0.26</version>
+    <version>1.0.27</version>
 </dependency>
 ```
 
