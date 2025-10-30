@@ -1,7 +1,7 @@
 package org.noear.esearchx;
 
-import org.noear.snack.ONode;
-import org.noear.snack.core.Options;
+import org.noear.snack4.ONode;
+import org.noear.snack4.Options;
 
 import java.nio.charset.Charset;
 import java.util.Base64;
@@ -10,7 +10,7 @@ import java.util.Base64;
  * 内部工具（外部别用它）
  * */
 public class PriUtils {
-    private static final Options nodeOptions = Options.def();
+    private static final Options nodeOptions = Options.of();
     public static ONode newNode() {
         return new ONode(nodeOptions);
     }

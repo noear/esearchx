@@ -5,7 +5,7 @@ import features.model.LogDo;
 import org.junit.jupiter.api.Test;
 import org.noear.esearchx.EsContext;
 import org.noear.esearchx.model.EsData;
-import org.noear.snack.ONode;
+import org.noear.snack4.ONode;
 import org.noear.solon.Utils;
 import org.noear.solon.annotation.Inject;
 import org.noear.solon.core.util.ResourceUtil;
@@ -39,14 +39,14 @@ public class Test30Stream {
     }
 
     @Test
-    public void test1_2() throws Exception{
+    public void test1_2() throws Exception {
         String policyName = "water.water_log_faas.stream-policy";
 
         assert context.policyExist(policyName);
 
         String policy_dsl_show = context.policyShow(policyName);
         //不要用select，避免policy带"."
-        ONode policyDslNode = new ONode().set("policy", ONode.load(policy_dsl_show).get(policyName).get("policy"));
+        ONode policyDslNode = new ONode().set("policy", ONode.ofJson(policy_dsl_show).get(policyName).get("policy"));
         ONode minAgeNode = policyDslNode.select("policy.phases.delete.min_age");
 
         System.out.println(minAgeNode.getString());
@@ -65,20 +65,20 @@ public class Test30Stream {
         String policy_dsl_show = context.policyShow(policy);
         System.out.println(policy_dsl_show);
         //不要用select，避免policy带"."
-        ONode policy_dsl_show_tml = new ONode().set("policy", ONode.load(policy_dsl_show).get(policy).get("policy"));
+        ONode policy_dsl_show_tml = new ONode().set("policy", ONode.ofJson(policy_dsl_show).get(policy).get("policy"));
         System.out.println(policy_dsl_show_tml.toJson());
         context.policyCreate(policy, policy_dsl_show_tml.toJson());
 
         //创建或者更新模板
         String tml_dsl = ResourceUtil.getResourceAsString("demo30/log-index.json");
 
-        ONode tmlDslNode = ONode.loadStr(tml_dsl);
+        ONode tmlDslNode = ONode.ofJson(tml_dsl);
         //设定匹配模式
-        tmlDslNode.getOrNew("index_patterns").val(aliases + "-*");
+        tmlDslNode.getOrNew("index_patterns").setValue(aliases + "-*");
         //设定策略
-        tmlDslNode.get("template").get("settings").get("index.lifecycle.name").val(policy);
+        tmlDslNode.get("template").get("settings").get("index.lifecycle.name").setValue(policy);
         //设定翻转别名
-        tmlDslNode.get("template").get("settings").get("index.lifecycle.rollover_alias").val(aliases);
+        tmlDslNode.get("template").get("settings").get("index.lifecycle.rollover_alias").setValue(aliases);
 
         String tml_dsl_rst = context.templateCreate(template, tmlDslNode.toJson());
         System.out.println(tml_dsl_rst);
@@ -89,7 +89,7 @@ public class Test30Stream {
         System.out.println(tml_dsl_show);
 
         //再次修改
-        ONode tml_dsl_show_tml = ONode.load(tml_dsl_show).select("index_templates[0].index_template");
+        ONode tml_dsl_show_tml = ONode.ofJson(tml_dsl_show).select("index_templates[0].index_template");
         System.out.println(tml_dsl_show_tml.toJson());
         tml_dsl_rst = context.templateCreate(template, tml_dsl_show_tml.toJson());
         System.out.println(tml_dsl_rst);
@@ -118,7 +118,7 @@ public class Test30Stream {
         logDo.log_date = LocalDateTime.now().toLocalDate().getDayOfYear();
         logDo.log_fulltime = new Date();
 
-        ONode doc = ONode.loadObj(logDo).build(n -> {
+        ONode doc = ONode.ofBean(logDo).then(n -> {
             n.set("@timestamp", logDo.log_fulltime);
         });
 
@@ -146,7 +146,7 @@ public class Test30Stream {
             logDo.log_date = LocalDateTime.now().toLocalDate().getDayOfYear();
             logDo.log_fulltime = new Date();
 
-            docs.add(ONode.loadObj(logDo).build(n -> {
+            docs.add(ONode.ofBean(logDo).then(n -> {
                 n.set("@timestamp", logDo.log_fulltime);
             }));
         }

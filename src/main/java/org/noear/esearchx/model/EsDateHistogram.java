@@ -1,7 +1,7 @@
 package org.noear.esearchx.model;
 
 import java.util.function.Consumer;
-import org.noear.snack.ONode;
+import org.noear.snack4.ONode;
 
 /**
  * 1.参数合法性，由使用者自己判断 2.暂不支持 Scripts，需要 runtime_mappings 的支持

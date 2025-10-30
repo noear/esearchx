@@ -1,7 +1,7 @@
 package org.noear.esearchx.model;
 
 import org.noear.esearchx.PriUtils;
-import org.noear.snack.ONode;
+import org.noear.snack4.ONode;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -55,7 +55,7 @@ public class EsCondition {
                 }
             }
         } else {
-            oNodeArray.add(PriUtils.newNode().build(n -> n.getOrNew(type).set(field, value)));
+            oNodeArray.add(PriUtils.newNode().then(n -> n.getOrNew(type).set(field, value)));
         }
     }
 

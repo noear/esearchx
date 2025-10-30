@@ -5,7 +5,7 @@ import features.model.LogDo;
 import org.junit.jupiter.api.Test;
 import org.noear.esearchx.EsContext;
 import org.noear.esearchx.model.EsData;
-import org.noear.snack.ONode;
+import org.noear.snack4.ONode;
 import org.noear.solon.Utils;
 import org.noear.solon.annotation.Inject;
 import org.noear.solon.core.util.ResourceUtil;
@@ -50,15 +50,15 @@ public class Test20Tml {
         //创建或者更新模板
         String tml_dsl = ResourceUtil.getResourceAsString("demo20/log-index.json");
 
-        ONode tmlDslNode = ONode.loadStr(tml_dsl);
+        ONode tmlDslNode = ONode.ofJson(tml_dsl);
         //设定匹配模式
-        tmlDslNode.getOrNew("index_patterns").val(aliases + "-*");
+        tmlDslNode.getOrNew("index_patterns").setValue(aliases + "-*");
         //设定别名
         tmlDslNode.get("template").getOrNew("aliases").getOrNew(aliases).asObject(); //stream 不需要别名
         //设定策略
-        tmlDslNode.get("template").get("settings").get("index.lifecycle.name").val(policy);
+        tmlDslNode.get("template").get("settings").get("index.lifecycle.name").setValue(policy);
         //设定翻转别名
-        tmlDslNode.get("template").get("settings").get("index.lifecycle.rollover_alias").val(aliases);
+        tmlDslNode.get("template").get("settings").get("index.lifecycle.rollover_alias").setValue(aliases);
 
         String index_dsl_rst = context.templateCreate(template, tmlDslNode.toJson());
         System.out.println(index_dsl_rst);
@@ -85,7 +85,7 @@ public class Test20Tml {
         logDo.log_date = LocalDateTime.now().toLocalDate().getDayOfYear();
         logDo.log_fulltime = new Date();
 
-        ONode doc = ONode.loadObj(logDo).build(n -> {
+        ONode doc = ONode.ofBean(logDo).then(n -> {
             n.set("@timestamp", logDo.log_fulltime);
         });
 
@@ -114,7 +114,7 @@ public class Test20Tml {
             logDo.log_date = LocalDateTime.now().toLocalDate().getDayOfYear();
             logDo.log_fulltime = new Date();
 
-            docs.add(ONode.loadObj(logDo).build(n -> {
+            docs.add(ONode.ofBean(logDo).then(n -> {
                 n.set("@timestamp", logDo.log_fulltime);
             }));
         }

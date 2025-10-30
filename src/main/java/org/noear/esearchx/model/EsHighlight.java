@@ -1,6 +1,6 @@
 package org.noear.esearchx.model;
 
-import org.noear.snack.ONode;
+import org.noear.snack4.ONode;
 
 import java.util.function.Consumer;
 

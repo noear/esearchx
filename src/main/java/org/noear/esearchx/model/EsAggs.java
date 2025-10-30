@@ -2,7 +2,7 @@ package org.noear.esearchx.model;
 
 import java.util.Arrays;
 import java.util.function.Consumer;
-import org.noear.snack.ONode;
+import org.noear.snack4.ONode;
 
 /**
  * @author noear

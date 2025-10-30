@@ -2,8 +2,7 @@ package features;
 
 import org.junit.jupiter.api.Test;
 import org.noear.esearchx.EsContext;
-import org.noear.snack.ONode;
-import org.noear.solon.Utils;
+import org.noear.snack4.ONode;
 import org.noear.solon.annotation.Inject;
 import org.noear.solon.core.util.ResourceUtil;
 import org.noear.solon.test.SolonTest;
@@ -72,7 +71,7 @@ public class Test0 {
     public void test2() throws Exception {
         test2Create(indice);
 
-        context.indiceSettings(indice, s->s.setRefreshInterval("5s"));
+        context.indiceSettings(indice, s -> s.setRefreshInterval("5s"));
     }
 
     @Test
@@ -100,10 +99,10 @@ public class Test0 {
     public void test5() throws Exception {
         String json = context.indiceShow(indice);
         System.out.println(json);
-        ONode oNode = ONode.loadStr(json);
+        ONode oNode = ONode.ofJson(json);
 
-        assert oNode.get(indice).contains("mappings");
-        assert oNode.get(indice).contains("settings");
+        assert oNode.get(indice).hasKey("mappings");
+        assert oNode.get(indice).hasKey("settings");
 
         ////
         try {

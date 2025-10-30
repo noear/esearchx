@@ -20,6 +20,9 @@ Elasticsearch ORM 框架（基于 lamabda 表达式，构建类似 sql 的体验
     <a target="_blank" href="https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html">
 		<img src="https://img.shields.io/badge/JDK-17-green.svg" alt="jdk-17" />
 	</a>
+<a target="_blank" href="https://www.oracle.com/java/technologies/javase/jdk21-archive-downloads.html">
+		<img src="https://img.shields.io/badge/JDK-21-green.svg" alt="jdk-21" />
+	</a>
     <br />
     <a target="_blank" href='https://gitee.com/noear/esearchx/stargazers'>
 		<img src='https://gitee.com/noear/esearchx/badge/star.svg' alt='gitee star'/>
@@ -58,7 +61,7 @@ Elasticsearch ORM 框架（基于 lamabda 表达式，构建类似 sql 的体验
 ```
 
 ```java
-import org.noear.snack.ONode;
+import org.noear.snack4.ONode;
 
 //
 // 更多的示例，可以查看 src/test/ 下的相关单测

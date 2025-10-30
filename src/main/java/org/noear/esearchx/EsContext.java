@@ -4,7 +4,7 @@ package org.noear.esearchx;
 import org.noear.esearchx.exception.NoExistException;
 import org.noear.esearchx.model.EsAliases;
 import org.noear.esearchx.model.EsSetting;
-import org.noear.snack.ONode;
+import org.noear.snack4.ONode;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -103,7 +103,7 @@ public class EsContext {
                 return;
             }
 
-            ONode oNode = ONode.loadStr(meta);
+            ONode oNode = ONode.ofJson(meta);
             String verString = oNode.get("version").get("number").getString();
 
             if (PriUtils.isEmpty(verString)) {
@@ -295,7 +295,7 @@ public class EsContext {
         EsAliases e = new EsAliases(oNode1);
         aliases.accept(e);
 
-        ONode oNode = PriUtils.newNode().build(n -> n.set("actions", oNode1));
+        ONode oNode = PriUtils.newNode().then(n -> n.set("actions", oNode1));
 
         EsCommand cmd = new EsCommand();
         cmd.method = PriWw.method_post;

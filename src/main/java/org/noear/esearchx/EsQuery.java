@@ -2,14 +2,15 @@ package org.noear.esearchx;
 
 import org.noear.esearchx.exception.NoExistException;
 import org.noear.esearchx.model.*;
-import org.noear.snack.ONode;
-import org.noear.snack.core.Options;
+import org.noear.snack4.ONode;
+import org.noear.snack4.Options;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * ElasticSearch 查询构建器
@@ -32,7 +33,7 @@ public class EsQuery {
         this.context = context;
         this.indiceName = indiceName;
         this.isStream = isStream;
-        this.options = Options.def();
+        this.options = Options.of();
     }
 
     private PriHttpUtils getHttp(String path) {
@@ -55,7 +56,7 @@ public class EsQuery {
         return queryMatch;
     }
 
-    private String getJson(ONode oNode){
+    private String getJson(ONode oNode) {
         return oNode.options(options).toJson();
     }
 
@@ -82,12 +83,11 @@ public class EsQuery {
         return this;
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// /////////////////////////////////////////////////////////////////////////////////////////////////
 
     //
     // insert
     //
-
     private String insertDo(ONode doc) throws IOException {
         EsCommand cmd = new EsCommand();
         cmd.timeout = timeout;
@@ -126,7 +126,7 @@ public class EsQuery {
         if (doc instanceof ONode) {
             return insertDo((ONode) doc);
         } else {
-            return insertDo(ONode.loadObj(doc, options));
+            return insertDo(ONode.ofBean(doc, options));
         }
     }
 
@@ -135,12 +135,12 @@ public class EsQuery {
         String type = (isStream ? "create" : "index");
 
         docs.forEach((doc) -> {
-            docJson.append(getJson(PriUtils.newNode().build(n -> n.getOrNew(type).asObject()))).append("\n");
+            docJson.append(getJson(PriUtils.newNode().then(n -> n.getOrNew(type).asObject()))).append("\n");
 
             if (doc instanceof ONode) {
                 docJson.append(getJson((ONode) doc)).append("\n");
             } else {
-                docJson.append(getJson(ONode.loadObj(doc, options))).append("\n");
+                docJson.append(getJson(ONode.ofBean(doc, options))).append("\n");
             }
         });
 
@@ -170,7 +170,7 @@ public class EsQuery {
         if (doc instanceof ONode) {
             return upsertDo(docId, (ONode) doc);
         } else {
-            return upsertDo(docId, ONode.loadObj(doc, options));
+            return upsertDo(docId, ONode.ofBean(doc, options));
         }
     }
 
@@ -179,11 +179,11 @@ public class EsQuery {
         String type = (isStream ? "create" : "index");
 
         docs.forEach((docId, doc) -> {
-            docJson.append(getJson(PriUtils.newNode().build(n -> n.getOrNew(type).set("_id", docId)))).append("\n");
+            docJson.append(getJson(PriUtils.newNode().then(n -> n.getOrNew(type).set("_id", docId)))).append("\n");
             if (doc instanceof ONode) {
                 docJson.append(getJson((ONode) doc)).append("\n");
             } else {
-                docJson.append(getJson(ONode.loadObj(doc, options))).append("\n");
+                docJson.append(getJson(ONode.ofBean(doc, options))).append("\n");
             }
         });
 
@@ -212,7 +212,7 @@ public class EsQuery {
         ONode oNode1 = PriUtils.newNode();
         EsCondition c = new EsCondition(oNode1);
         condition.accept(c);
-        if(oNode1.isNull()){
+        if (oNode1.isNull()) {
             return this;
         }
         getDslq().set("query", oNode1);
@@ -220,6 +220,7 @@ public class EsQuery {
     }
 
     private String _format;
+
     public EsQuery sql(String sql, String format) {
         _format = format;
 
@@ -302,7 +303,7 @@ public class EsQuery {
      * min_score
      */
     public EsQuery minScore(Object value) {
-        getDslq().getOrNew("min_score").val(value);
+        getDslq().getOrNew("min_score").setValue(value);
         return this;
     }
 
@@ -320,13 +321,14 @@ public class EsQuery {
     //highlight
     //
 
-    public EsQuery highlight(Consumer<EsHighlight> highlight){
+    public EsQuery highlight(Consumer<EsHighlight> highlight) {
         EsHighlight h = new EsHighlight(getDslq().getOrNew("highlight"));
         highlight.accept(h);
         return this;
     }
 
     PriHttpTimeout timeout;
+
     public EsQuery timeout(int timeoutSeconds) {
         if (timeoutSeconds > 0) {
             timeout = new PriHttpTimeout(timeoutSeconds);
@@ -353,9 +355,9 @@ public class EsQuery {
         cmd.dslType = PriWw.mime_json;
         cmd.dsl = dsl;
 
-        if(PriUtils.isEmpty(_format)){
+        if (PriUtils.isEmpty(_format)) {
             cmd.path = String.format("/%s/_search", indiceName);
-        }else{
+        } else {
             cmd.path = String.format("/_sql?format=%s", _format);
         }
 
@@ -383,11 +385,11 @@ public class EsQuery {
     }
 
     public ONode selectNode() throws IOException {
-        return ONode.loadStr(selectJson());
+        return ONode.ofJson(selectJson());
     }
 
     public ONode selectNode(String fields) throws IOException {
-        return ONode.loadStr(selectJson(fields));
+        return ONode.ofJson(selectJson(fields));
     }
 
     public ONode selectAggs() throws IOException {
@@ -435,7 +437,7 @@ public class EsQuery {
 
     public <T> EsData<T> selectList(Class<T> clz, String fields) throws IOException {
         if (queryMatch != null) {
-            if (queryMatch.count() > 1) {
+            if (queryMatch.size() > 1) {
                 getDslq().getOrNew("query").set("multi_match", queryMatch);
             } else {
                 getDslq().getOrNew("query").set("match", queryMatch);
@@ -444,7 +446,7 @@ public class EsQuery {
 
         String json = selectJson(fields);
 
-        ONode oHits = ONode.loadStr(json).get("hits");
+        ONode oHits = ONode.ofJson(json).get("hits");
 
         long total;
         //低版本es返回的json中total是一个数，而不是一个对象
@@ -456,13 +458,16 @@ public class EsQuery {
 
         double max_score = oHits.get("oHits").getDouble();
 
-        oHits.get("hits").forEach(n -> {
+        oHits.get("hits").getArray().forEach(n -> {
             n.set("_id", n.get("_id"));
             n.set("_score", n.get("_score"));
-            n.setAll(n.get("_source"));
+            n.setAll(n.get("_source").getObject());
         });
 
-        List<T> list = oHits.get("hits").toObjectList(clz);
+        List<T> list = oHits.get("hits").getArray()
+                .stream()
+                .<T>map(n -> n.toBean(clz))
+                .collect(Collectors.toList());
 
         return new EsData<>(total, max_score, list);
     }
@@ -479,13 +484,16 @@ public class EsQuery {
 
             String json = select(getJson(oNode));
 
-            ONode oHits = ONode.loadStr(json).get("hits");
+            ONode oHits = ONode.ofJson(json).get("hits");
 
-            oHits.get("hits").forEach(n -> {
-                n.setAll(n.get("_source"));
+            oHits.get("hits").getArray().forEach(n -> {
+                n.setAll(n.get("_source").getObject());
             });
 
-            return oHits.get("hits").toObjectList(clz);
+            return oHits.get("hits").getArray()
+                    .stream()
+                    .<T>map(n -> n.toBean(clz))
+                    .collect(Collectors.toList());
         } catch (NoExistException e) {
             return null;
         }
@@ -503,10 +511,10 @@ public class EsQuery {
 
             String tmp = context.execAsBody(cmd);
 
-            ONode oItem = ONode.loadStr(tmp);
-            oItem.setAll(oItem.get("_source"));
+            ONode oItem = ONode.ofJson(tmp);
+            oItem.setAll(oItem.get("_source").getObject());
 
-            return oItem.toObject(clz);
+            return oItem.toBean(clz);
         } catch (NoExistException e) {
             return null;
         }
@@ -519,7 +527,7 @@ public class EsQuery {
 
     public String delete() throws IOException {
         if (queryMatch != null) {
-            if (queryMatch.count() > 1) {
+            if (queryMatch.size() > 1) {
                 getDslq().getOrNew("query").set("multi_match", queryMatch);
             } else {
                 getDslq().getOrNew("query").set("match", queryMatch);
