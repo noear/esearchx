@@ -4,13 +4,13 @@ import org.noear.esearchx.exception.NoExistException;
 import org.noear.esearchx.model.*;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
+import org.noear.snack4.codec.TypeRef;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 /**
  * ElasticSearch 查询构建器
@@ -464,10 +464,7 @@ public class EsQuery {
             n.setAll(n.get("_source").getObject());
         });
 
-        List<T> list = oHits.get("hits").getArray()
-                .stream()
-                .<T>map(n -> n.toBean(clz))
-                .collect(Collectors.toList());
+        List<T> list = oHits.get("hits").toBean(TypeRef.listOf(clz));
 
         return new EsData<>(total, max_score, list);
     }
@@ -490,10 +487,7 @@ public class EsQuery {
                 n.setAll(n.get("_source").getObject());
             });
 
-            return oHits.get("hits").getArray()
-                    .stream()
-                    .<T>map(n -> n.toBean(clz))
-                    .collect(Collectors.toList());
+            return oHits.get("hits").toBean(TypeRef.listOf(clz));
         } catch (NoExistException e) {
             return null;
         }
