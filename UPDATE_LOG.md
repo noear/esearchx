@@ -3,6 +3,7 @@
 
 * 调整 EsQusery 所有 json 操作都关联自定义 options
 * snack4 升为 4.0.30
+* okhttp 升为 4.12.0
 
 #### 1.1.2
 
