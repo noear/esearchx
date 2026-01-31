@@ -385,11 +385,11 @@ public class EsQuery {
     }
 
     public ONode selectNode() throws IOException {
-        return ONode.ofJson(selectJson());
+        return ONode.ofJson(selectJson(), options);
     }
 
     public ONode selectNode(String fields) throws IOException {
-        return ONode.ofJson(selectJson(fields));
+        return ONode.ofJson(selectJson(fields), options);
     }
 
     public ONode selectAggs() throws IOException {
@@ -446,7 +446,7 @@ public class EsQuery {
 
         String json = selectJson(fields);
 
-        ONode oHits = ONode.ofJson(json).get("hits");
+        ONode oHits = ONode.ofJson(json, options).get("hits");
 
         long total;
         //低版本es返回的json中total是一个数，而不是一个对象
@@ -481,7 +481,7 @@ public class EsQuery {
 
             String json = select(getJson(oNode));
 
-            ONode oHits = ONode.ofJson(json).get("hits");
+            ONode oHits = ONode.ofJson(json, options).get("hits");
 
             oHits.get("hits").getArray().forEach(n -> {
                 n.setAll(n.get("_source").getObject());
@@ -505,7 +505,7 @@ public class EsQuery {
 
             String tmp = context.execAsBody(cmd);
 
-            ONode oItem = ONode.ofJson(tmp);
+            ONode oItem = ONode.ofJson(tmp, options);
             oItem.setAll(oItem.get("_source").getObject());
 
             return oItem.toBean(clz);
