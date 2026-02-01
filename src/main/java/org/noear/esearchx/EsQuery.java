@@ -481,17 +481,13 @@ public class EsQuery {
 
             String json = select(getJson(oNode));
 
-            ONode oHits = ONode.ofJson(json).get("hits");
+            ONode oHits = ONode.ofJson(json, options).get("hits");
 
             oHits.get("hits").getArray().forEach(n -> {
-                n.setAll(n.get("_source").getObject());
+                n.setAll((n.hasKey("_source") ? n.get("_source") : n.get("source")).getObject());
             });
 
-            Object mHits = oHits.get("hits").toBean();
-            List<T> list = ONode.ofBean(mHits, options)
-                    .toBean(TypeRef.listOf(clz));
-
-            return list;
+            return oHits.get("hits").toBean(TypeRef.listOf(clz));
         } catch (NoExistException e) {
             return null;
         }
