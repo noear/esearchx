@@ -446,7 +446,7 @@ public class EsQuery {
 
         String json = selectJson(fields);
 
-        ONode oHits = ONode.ofJson(json, options).get("hits");
+        ONode oHits = ONode.ofJson(json).get("hits");
 
         long total;
         //低版本es返回的json中total是一个数，而不是一个对象
@@ -464,7 +464,9 @@ public class EsQuery {
             n.setAll(n.get("_source").getObject());
         });
 
-        List<T> list = oHits.get("hits").toBean(TypeRef.listOf(clz));
+        Object mHits = oHits.get("hits").toBean();
+        List<T> list = ONode.ofBean(mHits, options)
+                .toBean(TypeRef.listOf(clz));
 
         return new EsData<>(total, max_score, list);
     }
