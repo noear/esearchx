@@ -505,14 +505,15 @@ public class EsQuery {
 
             String tmp = context.execAsBody(cmd);
 
-            ONode oItem = ONode.ofJson(tmp);
-            oItem.setAll(oItem.get("_source").getObject());
+            ONode oItem = ONode.ofJson(tmp, options);
 
-            Object mItem = oItem.toBean();
-            T item = ONode.ofBean(mItem, options)
-                    .toBean(clz);
+            if (oItem.hasKey("_source")) {
+                oItem.setAll(oItem.get("_source").getObject());
+            } else {
+                oItem.setAll(oItem.get("source").getObject());
+            }
 
-            return item;
+            return oItem.toBean(clz);
         } catch (NoExistException e) {
             return null;
         }
